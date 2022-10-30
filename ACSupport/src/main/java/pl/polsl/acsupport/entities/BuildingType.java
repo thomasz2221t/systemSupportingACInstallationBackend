@@ -3,7 +3,8 @@ package pl.polsl.acsupport.entities;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -12,7 +13,6 @@ import java.util.Set;
 @Entity(name="building_types")
 public class BuildingType extends BaseEntity{
 
-    @Column
     private String name;
 
     @OneToMany(mappedBy = "type")

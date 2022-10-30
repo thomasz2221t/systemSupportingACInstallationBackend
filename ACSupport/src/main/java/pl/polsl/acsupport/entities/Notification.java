@@ -17,7 +17,6 @@ public class Notification extends BaseEntity{
     @Column(name="event_type")
     private EventType eventType;
 
-    @Column
     private String message;
 
     @ManyToMany(mappedBy = "notifications")

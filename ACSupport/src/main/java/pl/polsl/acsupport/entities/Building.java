@@ -13,14 +13,12 @@ import java.util.Set;
 @Entity(name = "buildings")
 public class Building extends BaseEntity{
 
-    @Column
     private String name;
 
     @Column(name="image_path")
     private String imagePath;
 
     @NotNull
-    @Column
     private String street;
 
     @NotNull
@@ -28,14 +26,11 @@ public class Building extends BaseEntity{
     private String postCode;
 
     @NotNull
-    @Column
     private String city;
 
     @NotNull
-    @Column
     private String region;
 
-    @Column
     private String description;
 
     @ManyToOne

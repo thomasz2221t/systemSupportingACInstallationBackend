@@ -12,7 +12,6 @@ import java.util.Set;
 @Entity(name = "roles")
 public class Role extends BaseEntity{
 
-    @Column
     private String name;
 
     @ManyToMany(mappedBy="roles")

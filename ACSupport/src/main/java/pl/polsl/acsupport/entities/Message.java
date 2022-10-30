@@ -3,8 +3,10 @@ package pl.polsl.acsupport.entities;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
-import java.util.HashSet;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -13,7 +15,6 @@ import java.util.Set;
 @Entity(name="message")
 public class Message extends BaseEntity {
 
-    @Column
     private String message;
 
     @ManyToOne

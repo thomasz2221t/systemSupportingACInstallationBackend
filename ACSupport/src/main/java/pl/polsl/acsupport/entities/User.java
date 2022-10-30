@@ -17,7 +17,6 @@ public class User extends BaseEntity{
     @NotNull
     private String login;
 
-    @Column
     @NotNull
     private String password;
 
@@ -33,7 +32,6 @@ public class User extends BaseEntity{
     @NotNull
     private String email;
 
-    @Column
     @NotNull
     private String telephone;
 
@@ -53,4 +51,8 @@ public class User extends BaseEntity{
             inverseJoinColumns = {@JoinColumn(name="message_id") }
     )
     private Set<Message> messages = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<Offer> offers = new LinkedHashSet<>();
+
 }
