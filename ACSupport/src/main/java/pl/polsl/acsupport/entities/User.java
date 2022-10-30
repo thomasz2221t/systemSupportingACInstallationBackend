@@ -3,9 +3,10 @@ package pl.polsl.acsupport.entities;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,4 +36,14 @@ public class User extends BaseEntity{
     @Column
     @NotNull
     private String telephone;
+
+    @OneToMany(mappedBy="user")
+    private Set<Building> buildings = new LinkedHashSet<>();
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_roles",
+            joinColumns = { @JoinColumn(name="user_id") },
+            inverseJoinColumns = { @JoinColumn(name="role_id") }
+    )
+    private Set<Role> roles = new LinkedHashSet<>();
 }
