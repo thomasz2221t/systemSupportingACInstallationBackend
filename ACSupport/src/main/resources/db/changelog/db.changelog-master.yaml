@@ -1,3 +1,5 @@
 databaseChangeLog:
   - include:
       file: db/changelog/add_buildings_user_entities.yaml
+  - include:
+      file: db/changelog/add_buildingtype_chat_notifications_entities.yaml

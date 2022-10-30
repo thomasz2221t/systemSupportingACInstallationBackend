@@ -44,4 +44,19 @@ public class Building extends BaseEntity{
 
     @OneToMany(mappedBy="building")
     private Set<Room> rooms = new LinkedHashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name="building_types_id")
+    private BuildingType type;
+
+    @OneToOne
+    @JoinColumn(name="chat_id")
+    private Chat chat;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "building_notifications",
+                joinColumns = {@JoinColumn(name="building_id")},
+                inverseJoinColumns = {@JoinColumn(name = "notifications_id")}
+    )
+    private Set<Notification> notifications = new LinkedHashSet<>();
 }
