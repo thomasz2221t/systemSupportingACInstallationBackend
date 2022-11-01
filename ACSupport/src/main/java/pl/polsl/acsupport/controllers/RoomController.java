@@ -7,38 +7,44 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import pl.polsl.acsupport.dtos.BuildingTypeDto;
-import pl.polsl.acsupport.services.BuildingTypeService;
+import pl.polsl.acsupport.dtos.RoomDto;
+import pl.polsl.acsupport.services.RoomService;
 
 @RequiredArgsConstructor
-@RequestMapping("/buildingtype")
+@RequestMapping("/room")
 @RestController
 @Validated
-public class BuildingTypeController {
+public class RoomController {
 
-    private final BuildingTypeService buildingTypeService;
+    private final RoomService roomService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<BuildingTypeDto> findAll(@PageableDefault Pageable pageable){
-        return buildingTypeService.findAll(pageable);
+    public Page<RoomDto> findAllRooms(@PageableDefault Pageable pageable){
+        return roomService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public BuildingTypeDto findBuildingType(@PathVariable Long id){
-        return buildingTypeService.get(id);
+    public RoomDto findRoom(@PathVariable Long id){
+        return roomService.get(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Long create(@RequestBody BuildingTypeDto buildingTypeDto){
-        return buildingTypeService.create(buildingTypeDto).getId();
+    public Long create(@RequestBody RoomDto roomDto){
+        return roomService.create(roomDto).getId();
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void update(@PathVariable Long id, @RequestBody RoomDto roomDto){
+        roomService.update(id, roomDto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable Long id){
-        buildingTypeService.delete(id);
+        roomService.delete(id);
     }
 }

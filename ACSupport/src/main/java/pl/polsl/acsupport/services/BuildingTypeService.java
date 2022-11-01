@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.polsl.acsupport.dtos.BuildingDto;
 import pl.polsl.acsupport.dtos.BuildingTypeDto;
 import pl.polsl.acsupport.entities.BuildingType;
 import pl.polsl.acsupport.repositories.BuildingTypeRepository;
