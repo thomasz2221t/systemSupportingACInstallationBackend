@@ -7,44 +7,44 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import pl.polsl.acsupport.dtos.UserDto;
-import pl.polsl.acsupport.services.UserService;
+import pl.polsl.acsupport.dtos.BuildingDto;
+import pl.polsl.acsupport.services.BuildingService;
 
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/building")
 @RestController
 @Validated
-public class UserController {
+public class BuildingController {
 
-    private final UserService userService;
+    private final BuildingService buildingService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<UserDto> findAllUsers(@PageableDefault Pageable pageable){
-        return userService.findAll(pageable);
+    public Page<BuildingDto> findAllBuildings(@PageableDefault Pageable pageable){
+        return buildingService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto findUser(@PathVariable Long id){
-        return userService.get(id);
+    public BuildingDto findBuilding(@PathVariable Long id){
+        return buildingService.get(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Long create(@RequestBody UserDto userDto){
-        return userService.create(userDto).getId();
+    public Long create(@RequestBody BuildingDto buildingDto){
+        return buildingService.create(buildingDto).getId();
     }
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable Long id, @RequestBody UserDto userDto){
-        userService.update(id, userDto);
+    public void update(@PathVariable Long id, @RequestBody BuildingDto buildingDto){
+        buildingService.update(id, buildingDto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable Long id){
-        userService.delete(id);
+        buildingService.delete(id);
     }
 }
