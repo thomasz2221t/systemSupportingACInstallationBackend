@@ -27,17 +27,18 @@ public class BuildingService {
         return buildingRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Building with given id not found"));
     }
-
     public BuildingDto get(Long id){
         final Building building = findById(id);
         return new BuildingDto(building);
     }
 
+    @Transactional
     public Building create(BuildingDto buildingDto){
         Building building = new Building();
         return setDataFromDto(buildingDto, building);
     }
 
+    @Transactional
     public Building update(Long id, BuildingDto buildingDto){
         Building building = findById(id);
         return setDataFromDto(buildingDto, building);
@@ -54,6 +55,7 @@ public class BuildingService {
         return buildingRepository.save(building);
     }
 
+    @Transactional
     public void delete(Long id){
         buildingRepository.delete(findById(id));
     }
