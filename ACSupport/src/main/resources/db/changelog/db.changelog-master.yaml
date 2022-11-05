@@ -1,7 +1,13 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/add_buildings_user_entities.yaml
+      file: db/changelog/add-building-user-room-entities.yaml
   - include:
-      file: db/changelog/add_buildingtype_chat_notifications_entities.yaml
+      file: db/changelog/add-chat-message-notification-entities.yaml
   - include:
-      file: db/changelog/add_service_offers_equipment_entities.yaml
+      file: db/changelog/add-role-permission-entities.yaml
+  - include:
+      file: db/changelog/add-service-servicetype-entities.yaml
+  - include:
+      file: db/changelog/add-offer-offertype-equipment-entities.yaml
+  - include:
+      file: db/changelog/add-bootstraping-entry-entity.yaml

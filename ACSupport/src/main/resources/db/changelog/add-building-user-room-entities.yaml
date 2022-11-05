@@ -1,0 +1,195 @@
+databaseChangeLog:
+- changeSet:
+    id: 1667607209284-1
+    author: 0_0 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: building_typesPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: name
+            type: VARCHAR(255)
+        tableName: building_types
+- changeSet:
+    id: 1667607209284-2
+    author: 0_0 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: buildingsPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: city
+            type: VARCHAR(255)
+        - column:
+            name: description
+            type: VARCHAR(255)
+        - column:
+            name: image_path
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: post_code
+            type: VARCHAR(255)
+        - column:
+            name: region
+            type: VARCHAR(255)
+        - column:
+            name: street
+            type: VARCHAR(255)
+        - column:
+            name: building_types_id
+            type: BIGINT
+        - column:
+            name: user_id
+            type: BIGINT
+        tableName: buildings
+- changeSet:
+    id: 1667607209284-3
+    author: 0_0 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: roomsPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: area_height
+            type: numeric(19, 2)
+        - column:
+            name: area_width
+            type: numeric(19, 2)
+        - column:
+            name: description
+            type: VARCHAR(255)
+        - column:
+            name: height
+            type: numeric(19, 2)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: building_id
+            type: BIGINT
+        tableName: rooms
+- changeSet:
+    id: 1667607209284-4
+    author: 0_0 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: usersPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: email
+            type: VARCHAR(255)
+        - column:
+            name: first_name
+            type: VARCHAR(255)
+        - column:
+            name: last_name
+            type: VARCHAR(255)
+        - column:
+            name: login
+            type: VARCHAR(255)
+        - column:
+            name: password
+            type: VARCHAR(255)
+        - column:
+            name: telephone
+            type: VARCHAR(255)
+        tableName: users
+- changeSet:
+    id: 1667607209284-5
+    author: 0_0 (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: email
+        constraintName: UC_USERSEMAIL_COL
+        tableName: users
+- changeSet:
+    id: 1667607209284-6
+    author: 0_0 (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: login
+        constraintName: UC_USERSLOGIN_COL
+        tableName: users
+- changeSet:
+    id: 1667607209284-7
+    author: 0_0 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: building_types_id
+        baseTableName: buildings
+        constraintName: FK846c0v4npo5blxp6055hvrn3g
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: building_types
+        validate: true
+- changeSet:
+    id: 1667607209284-8
+    author: 0_0 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: buildings
+        constraintName: FKb8f64sh3o6hqh134s7wn8nr72
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: users
+        validate: true
+- changeSet:
+    id: 1667607209284-9
+    author: 0_0 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: building_id
+        baseTableName: rooms
+        constraintName: FKojgn0sxhkfxd7pmmojnem9r4q
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: buildings
+        validate: true
+

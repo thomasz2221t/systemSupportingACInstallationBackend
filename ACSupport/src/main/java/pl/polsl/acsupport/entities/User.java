@@ -54,5 +54,4 @@ public class User extends BaseEntity{
 
     @OneToMany(mappedBy = "user")
     private Set<Offer> offers = new LinkedHashSet<>();
-
 }

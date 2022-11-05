@@ -1,0 +1,146 @@
+databaseChangeLog:
+- changeSet:
+    id: 1667608299694-1
+    author: 0_0 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: installer_equipmentPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: description
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: price
+            type: numeric(19, 2)
+        - column:
+            name: producer
+            type: VARCHAR(255)
+        tableName: installer_equipment
+- changeSet:
+    id: 1667608299694-2
+    author: 0_0 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: offer_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: installer_equipment_id
+            type: BIGINT
+        tableName: offer_installer_equipment
+- changeSet:
+    id: 1667608299694-3
+    author: 0_0 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: offersPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: cost
+            type: numeric(19, 2)
+        - column:
+            name: dates_begining
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: dates_end
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: status_type
+            type: VARCHAR(255)
+        - column:
+            name: user_id
+            type: BIGINT
+        tableName: offers
+- changeSet:
+    id: 1667608299694-4
+    author: 0_0 (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: offer_id
+            type: int8
+        tableName: services
+- changeSet:
+    id: 1667608299694-5
+    author: 0_0 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: offer_id
+        baseTableName: services
+        constraintName: FK2ehkxf0aak13ao4b0ngqt2tc8
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: offers
+        validate: true
+- changeSet:
+    id: 1667608299694-6
+    author: 0_0 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: offer_id
+        baseTableName: offer_installer_equipment
+        constraintName: FK9f5pipj7cjlpob4ttj8sy4ya6
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: offers
+        validate: true
+- changeSet:
+    id: 1667608299694-7
+    author: 0_0 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: offers
+        constraintName: FK9yilcimbeupq2lyrqr1nlrjyb
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: users
+        validate: true
+- changeSet:
+    id: 1667608299694-8
+    author: 0_0 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: installer_equipment_id
+        baseTableName: offer_installer_equipment
+        constraintName: FKsxncaf1wr3ees8rrn4hfngtgo
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: installer_equipment
+        validate: true
+

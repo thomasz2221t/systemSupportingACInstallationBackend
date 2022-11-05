@@ -1,0 +1,23 @@
+databaseChangeLog:
+- changeSet:
+    id: 1667608846620-1
+    author: 0_0 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: bootstraping_entryPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: label
+            type: VARCHAR(255)
+        tableName: bootstraping_entry
+
