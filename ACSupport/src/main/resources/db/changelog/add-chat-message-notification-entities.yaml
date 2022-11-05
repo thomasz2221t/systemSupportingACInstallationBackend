@@ -1,0 +1,194 @@
+databaseChangeLog:
+- changeSet:
+    id: 1667607521246-1
+    author: 0_0 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: building_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: notifications_id
+            type: BIGINT
+        tableName: building_notifications
+- changeSet:
+    id: 1667607521246-2
+    author: 0_0 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: chatsPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        tableName: chats
+- changeSet:
+    id: 1667607521246-3
+    author: 0_0 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: messagePK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: message
+            type: VARCHAR(255)
+        - column:
+            name: chat_id
+            type: BIGINT
+        tableName: message
+- changeSet:
+    id: 1667607521246-4
+    author: 0_0 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: notificationsPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: event_type
+            type: VARCHAR(255)
+        - column:
+            name: message
+            type: VARCHAR(255)
+        tableName: notifications
+- changeSet:
+    id: 1667607521246-5
+    author: 0_0 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: user_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: message_id
+            type: BIGINT
+        tableName: user_messages
+- changeSet:
+    id: 1667607521246-6
+    author: 0_0 (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: chat_id
+            type: int8
+        tableName: buildings
+- changeSet:
+    id: 1667607521246-7
+    author: 0_0 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: chat_id
+        baseTableName: message
+        constraintName: FK42x69hym7joy0ffxtkuq82wnc
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: chats
+        validate: true
+- changeSet:
+    id: 1667607521246-8
+    author: 0_0 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: notifications_id
+        baseTableName: building_notifications
+        constraintName: FK5q7tv5puulh7cc78bumtu25on
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: notifications
+        validate: true
+- changeSet:
+    id: 1667607521246-9
+    author: 0_0 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: message_id
+        baseTableName: user_messages
+        constraintName: FKcsfdjnij89lpvgno5o6g89nn1
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: message
+        validate: true
+- changeSet:
+    id: 1667607521246-10
+    author: 0_0 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: building_id
+        baseTableName: building_notifications
+        constraintName: FKfppj6u0v6qp0dtx86h8n0boov
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: buildings
+        validate: true
+- changeSet:
+    id: 1667607521246-11
+    author: 0_0 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: chat_id
+        baseTableName: buildings
+        constraintName: FKmeej1yce0a6yo17xrr2dcg2lw
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: chats
+        validate: true
+- changeSet:
+    id: 1667607521246-12
+    author: 0_0 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: user_messages
+        constraintName: FKsstxxo7oo9kphadgpvg98n8qd
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: users
+        validate: true
+

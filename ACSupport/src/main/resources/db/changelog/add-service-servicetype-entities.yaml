@@ -1,0 +1,206 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1667607994695-1
+      author: 0_0 (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: room_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: service_id
+                  type: BIGINT
+            tableName: room_services
+  - changeSet:
+      id: 1667607994695-2
+      author: 0_0 (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: room_typePK
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+            tableName: room_type
+  - changeSet:
+      id: 1667607994695-3
+      author: 0_0 (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: service_typesPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+            tableName: service_types
+  - changeSet:
+      id: 1667607994695-4
+      author: 0_0 (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: servicesPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: service_type_id
+                  type: BIGINT
+            tableName: services
+  - changeSet:
+      id: 1667607994695-5
+      author: 0_0 (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: services_id
+                  type: BIGINT
+              - column:
+                  name: dates_begining
+                  type: TIMESTAMP WITHOUT TIME ZONE
+            tableName: services_datesBegining
+  - changeSet:
+      id: 1667607994695-6
+      author: 0_0 (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: services_id
+                  type: BIGINT
+              - column:
+                  name: dates_end
+                  type: TIMESTAMP WITHOUT TIME ZONE
+            tableName: services_datesEnd
+  - changeSet:
+      id: 1667607994695-7
+      author: 0_0 (generated)
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: room_type_id
+                  type: int8
+            tableName: rooms
+  - changeSet:
+      id: 1667607994695-8
+      author: 0_0 (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: services_id
+            baseTableName: services_datesEnd
+            constraintName: FK3srwjwjkk5jb46erkgfc460bi
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: services
+            validate: true
+  - changeSet:
+      id: 1667607994695-9
+      author: 0_0 (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: service_type_id
+            baseTableName: services
+            constraintName: FK9htmf3b0pfrtfr35mduky2qrb
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: service_types
+            validate: true
+  - changeSet:
+      id: 1667607994695-10
+      author: 0_0 (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: room_type_id
+            baseTableName: rooms
+            constraintName: FKbpj0f3wbck1eefnny9wyy5w1o
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: room_type
+            validate: true
+  - changeSet:
+      id: 1667607994695-11
+      author: 0_0 (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: room_id
+            baseTableName: room_services
+            constraintName: FKewq1euu8r5i0c2f1ejfout7ty
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: rooms
+            validate: true
+  - changeSet:
+      id: 1667607994695-12
+      author: 0_0 (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: services_id
+            baseTableName: services_datesBegining
+            constraintName: FKkp2jwtocjqkerbn4kd9x9gorf
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: services
+            validate: true
+  - changeSet:
+      id: 1667607994695-13
+      author: 0_0 (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: service_id
+            baseTableName: room_services
+            constraintName: FKrvoqlh9yqrup1v41ejfevv6po
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: services
+            validate: true
+
+

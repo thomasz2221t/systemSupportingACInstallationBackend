@@ -17,5 +17,4 @@ public class RoomType extends BaseEntity {
 
     @OneToMany(mappedBy = "type")
     private Set<Room> rooms = new LinkedHashSet<>();
-
 }
