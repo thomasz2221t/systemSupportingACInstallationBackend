@@ -1,0 +1,12 @@
+databaseChangeLog:
+- changeSet:
+    id: 1667690929859-1
+    author: 0_0 (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: enabled
+            type: boolean
+        tableName: users
+
