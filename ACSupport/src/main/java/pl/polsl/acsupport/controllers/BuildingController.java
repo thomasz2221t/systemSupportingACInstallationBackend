@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.polsl.acsupport.dtos.BuildingDto;
@@ -18,12 +19,14 @@ public class BuildingController {
 
     private final BuildingService buildingService;
 
+    @PreAuthorize("hasAuthority('FIND_BUILDING')")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<BuildingDto> findAllBuildings(@PageableDefault Pageable pageable){
         return buildingService.findAll(pageable);
     }
 
+    @PreAuthorize("hasAuthority('FIND_BUILDING')")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public BuildingDto findBuilding(@PathVariable Long id){

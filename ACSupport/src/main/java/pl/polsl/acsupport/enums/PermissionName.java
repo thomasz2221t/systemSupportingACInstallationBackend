@@ -1,4 +1,6 @@
 package pl.polsl.acsupport.enums;
 
 public enum PermissionName {
+    FIND_BUILDING,
+
 }
