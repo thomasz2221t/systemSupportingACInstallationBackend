@@ -14,6 +14,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import pl.polsl.acsupport.filters.JWTAuthenticationFilter;
 import pl.polsl.acsupport.filters.JWTAuthorizationFilter;
 
@@ -59,6 +62,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(new JWTAuthorizationFilter(authenticationManager()),
                         UsernamePasswordAuthenticationFilter.class);
 
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource(){
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+
+        return source;
     }
 
     @Override
