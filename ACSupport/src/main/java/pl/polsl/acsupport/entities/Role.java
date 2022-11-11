@@ -2,8 +2,10 @@ package pl.polsl.acsupport.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.polsl.acsupport.enums.RoleName;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -12,7 +14,9 @@ import java.util.Set;
 @Entity(name = "roles")
 public class Role extends BaseEntity{
 
-    private String name;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private RoleName name;
 
     @ManyToMany(mappedBy="roles")
     private Set<User> users = new LinkedHashSet<>();
