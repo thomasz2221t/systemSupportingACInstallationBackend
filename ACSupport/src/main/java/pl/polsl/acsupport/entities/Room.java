@@ -19,7 +19,7 @@ public class Room extends BaseEntity{
     private BigDecimal areaWidth;
 
     @Column(name = "area_height")
-    private BigDecimal areHeight;
+    private BigDecimal areaHeight;
 
     private BigDecimal height;
 

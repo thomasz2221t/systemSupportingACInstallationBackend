@@ -33,18 +33,21 @@ public class BuildingController {
         return buildingService.get(id);
     }
 
+    @PreAuthorize("hasAuthority('CREATE_BUILDING')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Long create(@RequestBody BuildingDto buildingDto){
         return buildingService.create(buildingDto).getId();
     }
 
+    @PreAuthorize("hasAuthority('UPDATE_BUILDING')")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable Long id, @RequestBody BuildingDto buildingDto){
         buildingService.update(id, buildingDto);
     }
 
+    @PreAuthorize("hasAuthority('DELETE_BUILDING')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable Long id){

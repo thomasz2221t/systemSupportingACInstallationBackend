@@ -6,13 +6,23 @@ import org.springframework.stereotype.Service;
 import pl.polsl.acsupport.bootstraping.enums.BootStrapingLabel;
 import pl.polsl.acsupport.dtos.BuildingDto;
 import pl.polsl.acsupport.dtos.BuildingTypeDto;
+import pl.polsl.acsupport.dtos.RoomDto;
 import pl.polsl.acsupport.dtos.UserDto;
-import pl.polsl.acsupport.entities.Building;
-import pl.polsl.acsupport.entities.BuildingType;
-import pl.polsl.acsupport.entities.User;
+import pl.polsl.acsupport.entities.*;
+import pl.polsl.acsupport.enums.PermissionName;
+import pl.polsl.acsupport.enums.RoleName;
+import pl.polsl.acsupport.repositories.PermissionRepository;
+import pl.polsl.acsupport.repositories.RoleRepository;
 import pl.polsl.acsupport.services.BuildingService;
 import pl.polsl.acsupport.services.BuildingTypeService;
+import pl.polsl.acsupport.services.RoomService;
 import pl.polsl.acsupport.services.UserService;
+
+import java.math.BigDecimal;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import static pl.polsl.acsupport.enums.PermissionName.*;
 
 @Profile("development")
 @Service
@@ -27,12 +37,23 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
     @Autowired
     BuildingTypeService buildingTypeService;
 
+    @Autowired
+    RoomService roomService;
+
+    @Autowired
+    PermissionRepository permissionRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
+
     @Override
     protected void populateDatabase(){
         super.populateDatabase();
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_BUILDINGS, this::createDefaultBuildings);
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_USERS, this::createDefaultUsers);
+        bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_ROLES, this::createDefaultRoles);
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_BUILDING_TYPES, this::createDefaultBuildingTypes);
+        bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_ROOMS, this::createDefaultRooms);
     }
 
     private void createDefaultBuildings(){
@@ -105,6 +126,50 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         userService.create(new UserDto(client1));
     }
 
+    private Permission addPermissions(PermissionName name) {
+        Permission permission = new Permission();
+        permission.setName(name);
+        return permissionRepository.save(permission);
+    }
+
+    private void createDefaultRoles(){
+        Role roleClient= new Role();
+        roleClient.setName(RoleName.CLIENT);
+        Set<Permission> permissionsClient = new LinkedHashSet<>();
+        permissionsClient.add(addPermissions(FIND_BUILDING));
+        permissionsClient.add(addPermissions(CREATE_BUILDING));
+        permissionsClient.add(addPermissions(UPDATE_BUILDING));
+        permissionsClient.add(addPermissions(DELETE_BUILDING));
+        permissionsClient.add(addPermissions(FIND_BUILDING_TYPE));
+        permissionsClient.add(addPermissions(FIND_ROOM));
+        permissionsClient.add(addPermissions(CREATE_ROOM));
+        permissionsClient.add(addPermissions(UPDATE_ROOM));
+        permissionsClient.add(addPermissions(DELETE_ROOM));
+        permissionsClient.add(addPermissions(FIND_USER));
+        permissionsClient.add(addPermissions(UPDATE_USER));
+        permissionsClient.add(addPermissions(DELETE_USER));
+        roleClient.setPermissions(permissionsClient);
+        roleRepository.save(roleClient);
+
+        Role roleOperator = new Role();
+        roleOperator.setName(RoleName.OPERATOR);
+        Set<Permission> permissionsOperator = new LinkedHashSet<>();
+        permissionsOperator.addAll(permissionsClient);
+        permissionsOperator.add(addPermissions(CREATE_BUILDING_TYPE));
+        permissionsOperator.add(addPermissions(DELETE_BUILDING_TYPE));
+        permissionsClient.add(addPermissions(CREATE_USER));
+        roleOperator.setPermissions(permissionsOperator);
+        roleRepository.save(roleOperator);
+
+        Role roleAdmin = new Role();
+        roleAdmin.setName(RoleName.ADMIN);
+        Set<Permission> permissionsAdmin = new LinkedHashSet<>();
+        permissionsAdmin.addAll(permissionsOperator);
+        //permissionsAdmin.add(addPermissions(ADD_OPERATOR));
+        roleAdmin.setPermissions(permissionsAdmin);
+        roleRepository.save(roleAdmin);
+    }
+
     private void createDefaultBuildingTypes(){
         BuildingType buildingType1 = new BuildingType();
         buildingType1.setName("Budynek mieszkalny");
@@ -117,5 +182,64 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         BuildingType buildingType3 = new BuildingType();
         buildingType3.setName("Budynek pełniący firmę handlowo-usługową");
         buildingTypeService.create(new BuildingTypeDto(buildingType3));
+    }
+
+    private void createDefaultRooms(){
+        Room room1 = new Room();
+        room1.setName("Pomieszczenie usługowe pierkania");
+        room1.setAreaWidth(BigDecimal.valueOf(20));
+        room1.setAreaHeight(BigDecimal.valueOf(30));
+        room1.setHeight(BigDecimal.valueOf(3));
+        room1.setDescription("Pomieszczenie usługowe");
+        roomService.create(new RoomDto(room1));
+
+        Room room2 = new Room();
+        room2.setName("Pomieszczenie produkcyjne pierkania");
+        room2.setAreaWidth(BigDecimal.valueOf(15));
+        room2.setAreaHeight(BigDecimal.valueOf(20));
+        room2.setHeight(BigDecimal.valueOf(3));
+        room2.setDescription("Pomieszczenie usługowe");
+        roomService.create(new RoomDto(room2));
+
+        Room room3 = new Room();
+        room3.setName("Pomieszczenie główne");
+        room3.setAreaWidth(BigDecimal.valueOf(40));
+        room3.setAreaHeight(BigDecimal.valueOf(30));
+        room3.setHeight(BigDecimal.valueOf(2.8));
+        room3.setDescription("Miejsce w którym przebywa wiele osób");
+        roomService.create(new RoomDto(room3));
+
+        Room room4 = new Room();
+        room4.setName("Pomieszczenie magazynowe");
+        room4.setAreaWidth(BigDecimal.valueOf(5));
+        room4.setAreaHeight(BigDecimal.valueOf(2));
+        room4.setHeight(BigDecimal.valueOf(2.8));
+        room4.setDescription("Magazyn na zapleczu");
+        roomService.create(new RoomDto(room4));
+
+        Room room5 = new Room();
+        room5.setName("Główny hall dworca");
+        room5.setAreaWidth(BigDecimal.valueOf(100));
+        room5.setAreaHeight(BigDecimal.valueOf(200));
+        room5.setHeight(BigDecimal.valueOf(10));
+        room5.setDescription("Główne pomieszczenie dworcowe");
+        roomService.create(new RoomDto(room5));
+
+        Room room6 = new Room();
+        room6.setName("Pokój gościnny");
+        room6.setAreaWidth(BigDecimal.valueOf(30));
+        room6.setAreaHeight(BigDecimal.valueOf(5));
+        room6.setHeight(BigDecimal.valueOf(2.5));
+        room6.setDescription("Pokój gościnny z patio");
+        roomService.create(new RoomDto(room6));
+
+        Room room7 = new Room();
+        room7.setName("Serwerownia");
+        room7.setAreaWidth(BigDecimal.valueOf(10));
+        room7.setAreaHeight(BigDecimal.valueOf(8));
+        room7.setHeight(BigDecimal.valueOf(2.5));
+        room7.setDescription("Serwerownia w składziku");
+        roomService.create(new RoomDto(room7));
+
     }
 }
