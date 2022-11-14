@@ -21,7 +21,7 @@ public class Role extends BaseEntity{
     @ManyToMany(mappedBy="roles")
     private Set<User> users = new LinkedHashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "role_permissions",
             joinColumns = { @JoinColumn(name="role_id") },
             inverseJoinColumns = { @JoinColumn(name="permission_id") }

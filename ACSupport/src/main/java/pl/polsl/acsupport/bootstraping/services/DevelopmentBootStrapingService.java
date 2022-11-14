@@ -2,6 +2,8 @@ package pl.polsl.acsupport.bootstraping.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.polsl.acsupport.bootstraping.enums.BootStrapingLabel;
 import pl.polsl.acsupport.dtos.BuildingDto;
@@ -13,11 +15,13 @@ import pl.polsl.acsupport.enums.PermissionName;
 import pl.polsl.acsupport.enums.RoleName;
 import pl.polsl.acsupport.repositories.PermissionRepository;
 import pl.polsl.acsupport.repositories.RoleRepository;
+import pl.polsl.acsupport.repositories.UserRepository;
 import pl.polsl.acsupport.services.BuildingService;
 import pl.polsl.acsupport.services.BuildingTypeService;
 import pl.polsl.acsupport.services.RoomService;
 import pl.polsl.acsupport.services.UserService;
 
+import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -35,6 +39,9 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
     UserService userService;
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     BuildingTypeService buildingTypeService;
 
     @Autowired
@@ -46,6 +53,8 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
     @Autowired
     RoleRepository roleRepository;
 
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     @Override
     protected void populateDatabase(){
         super.populateDatabase();
@@ -54,6 +63,7 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_ROLES, this::createDefaultRoles);
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_BUILDING_TYPES, this::createDefaultBuildingTypes);
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_ROOMS, this::createDefaultRooms);
+        bootStrapingEntryService.createIfNotExists(BootStrapingLabel.ASSIGN_USER_TO_ROLES, this::assignDefaultUsersToDefaultRoles);
     }
 
     private void createDefaultBuildings(){
@@ -97,33 +107,33 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
     private void createDefaultUsers(){
         User admin = new User();
         admin.setLogin("admin");
-        admin.setPassword("inzynier");
+        admin.setPassword(passwordEncoder.encode("inzynier"));
         admin.setFirstName("Jan");
         admin.setLastName("Kowalski");
         admin.setEmail("jan_kowalski@gmail.com");
         admin.setTelephone("666999888");
         admin.setEnabled(true);
-        userService.create(new UserDto(admin));
+        userRepository.save(admin);
 
         User operator1 = new User();
         operator1.setLogin("operator1");
-        operator1.setPassword("inzynier");
+        operator1.setPassword(passwordEncoder.encode("inzynier"));
         operator1.setFirstName("Mateusz");
         operator1.setLastName("Nowak");
         operator1.setEmail("mateusz_nowak@gmail.com");
         operator1.setTelephone("000111222");
         operator1.setEnabled(true);
-        userService.create(new UserDto(operator1));
+        userRepository.save(operator1);
 
         User client1 = new User();
         client1.setLogin("client1");
-        client1.setPassword("inzynier");
+        client1.setPassword(passwordEncoder.encode("inzynier"));
         client1.setFirstName("Mariusz");
         client1.setLastName("Brzęczyszczykiewicz");
         client1.setEmail("mariusz_brzeczyszczykiewicz@gmail.com");
         client1.setTelephone("333444555");
         client1.setEnabled(true);
-        userService.create(new UserDto(client1));
+        userRepository.save(client1);
     }
 
     private Permission addPermissions(PermissionName name) {
@@ -168,6 +178,28 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         //permissionsAdmin.add(addPermissions(ADD_OPERATOR));
         roleAdmin.setPermissions(permissionsAdmin);
         roleRepository.save(roleAdmin);
+    }
+
+    private void assignDefaultUsersToDefaultRoles(){
+        Set<Role> adminRoles = new LinkedHashSet<>();
+        Set<Role> operatorRoles = new LinkedHashSet<>();
+        Set<Role> clientRoles = new LinkedHashSet<>();
+
+        Role adminRole = roleRepository.findByName(RoleName.ADMIN).orElseThrow(EntityNotFoundException::new);
+        Role operatorRole = roleRepository.findByName(RoleName.OPERATOR).orElseThrow(EntityNotFoundException::new);
+        Role clientRole = roleRepository.findByName(RoleName.CLIENT).orElseThrow(EntityNotFoundException::new);
+
+        adminRoles.add(adminRole);
+        operatorRoles.add(operatorRole);
+        clientRoles.add(clientRole);
+
+        User admin = userRepository.findUserByLogin("admin").orElseThrow(EntityNotFoundException::new);
+        User operator1 = userRepository.findUserByLogin("operator1").orElseThrow(EntityNotFoundException::new);
+        User client1 = userRepository.findUserByLogin("client1").orElseThrow(EntityNotFoundException::new);
+
+        admin.setRoles(adminRoles);
+        operator1.setRoles(operatorRoles);
+        client1.setRoles(clientRoles);
     }
 
     private void createDefaultBuildingTypes(){
