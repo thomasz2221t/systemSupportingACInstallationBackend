@@ -1,0 +1,40 @@
+.login-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  //left: 0px;
+  //top: 0px;
+  background-color: #3298d1;
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+  .white-polygon {
+    position: absolute;
+    //width: 831.76px;
+    //height: 1245.36px;
+    //left: 327.77px;
+    top: -180px;
+    //background: #fafafa;
+    transform: rotate(45.08deg);
+    //width: 0;
+    //height: 0;
+    border-left: 400px solid transparent;
+    border-right: 400px solid transparent;
+    border-bottom: 800px solid #fafafa;
+  }
+
+  .red-polygon {
+    position: absolute;
+    // width: 892.71px;
+    // height: 1165.7px;
+    left: 309px;
+    top: 130px;
+    // background: #fd3131;
+    transform: rotate(45.08deg);
+    //width: 0;
+    height: -10px;
+    border-left: 400px solid transparent;
+    border-right: 400px solid transparent;
+    border-bottom: 800px solid #fd3131;
+  }
+}
