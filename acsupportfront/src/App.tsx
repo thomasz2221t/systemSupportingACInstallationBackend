@@ -1,7 +1,8 @@
 import React from "react";
-//import logo from "./logo.svg";
-import "./App.css";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { LoginPage } from "./pages/LoginPage/LoginPage";
+import { BuildingsPage } from "./pages/BuildingsPage/BuildingsPage";
+import "./App.css";
 
 function App() {
   return (
@@ -21,7 +22,13 @@ function App() {
             Learn React
           </a>
         </header>*/}
-        <LoginPage />
+        <Router>
+          <Link to="/" />
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/obiekty" element={<BuildingsPage />} />
+          </Routes>
+        </Router>
       </div>
     </>
   );
