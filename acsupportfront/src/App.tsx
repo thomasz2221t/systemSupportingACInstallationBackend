@@ -24,10 +24,10 @@ function App() {
           </a>
         </header>*/}
         <Router>
-          <Link to="/" />
           <Routes>
-            <Route path="/" element={<LoginPage />} />
-            <Route path="/obiekty" element={<BuildingsPage />} />
+            <Route path="/" element={<LoginPage />}>
+              <Route path="/obiekty" element={<BuildingsPage />} />
+            </Route>
           </Routes>
         </Router>
       </div>
