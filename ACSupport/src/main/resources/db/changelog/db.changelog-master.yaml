@@ -11,3 +11,5 @@ databaseChangeLog:
       file: db/changelog/add-offer-offertype-equipment-entities.yaml
   - include:
       file: db/changelog/add-bootstraping-entry-entity.yaml
+  - include:
+      file: db/changelog/add-enabled-field-in-user-entity.yaml

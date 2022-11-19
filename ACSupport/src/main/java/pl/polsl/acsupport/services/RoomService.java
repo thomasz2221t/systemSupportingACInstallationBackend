@@ -38,7 +38,7 @@ public class RoomService {
         Room room = new Room();
         room.setName(roomDto.getName());
         room.setAreaWidth(roomDto.getAreaWidth());
-        room.setAreHeight(roomDto.getAreaHeight());
+        room.setAreaHeight(roomDto.getAreaHeight());
         room.setHeight(roomDto.getHeight());
         room.setDescription(roomDto.getDescription());
         return roomRepository.save(room);
@@ -49,7 +49,7 @@ public class RoomService {
         Room room = findById(id);
         room.setName(roomDto.getName());
         room.setAreaWidth(roomDto.getAreaWidth());
-        room.setAreHeight(roomDto.getAreaHeight());
+        room.setAreaHeight(roomDto.getAreaHeight());
         room.setHeight(roomDto.getHeight());
         room.setDescription(roomDto.getDescription());
         return roomRepository.save(room);

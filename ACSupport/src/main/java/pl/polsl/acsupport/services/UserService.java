@@ -39,6 +39,7 @@ public class UserService {
     public User create(UserDto userDto){
         final User user = new User();
         user.setLogin(userDto.getLogin());
+        user.setPassword(userDto.getPassword());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
@@ -50,6 +51,7 @@ public class UserService {
     public User update(Long id, UserDto userDto){
         final User user = findById(id);
         user.setLogin(userDto.getLogin());
+        user.setPassword(userDto.getPassword());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());

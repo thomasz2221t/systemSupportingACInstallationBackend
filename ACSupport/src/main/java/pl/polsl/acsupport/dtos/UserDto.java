@@ -21,6 +21,9 @@ public class UserDto {
     private String login;
 
     @NotNull
+    private String password;
+
+    @NotNull
     private String firstName;
 
     @NotNull
@@ -36,6 +39,7 @@ public class UserDto {
     public UserDto(User user){
         this.id = user.getId();
         this.login = user.getLogin();
+        this.password = user.getPassword();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();

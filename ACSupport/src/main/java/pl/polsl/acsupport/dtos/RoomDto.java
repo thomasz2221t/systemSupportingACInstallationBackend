@@ -30,7 +30,7 @@ public class RoomDto {
         this.id = room.getId();
         this.name = room.getName();
         this.areaWidth = room.getAreaWidth();
-        this.areaHeight = room.getAreHeight();
+        this.areaHeight = room.getAreaHeight();
         this.height = room.getHeight();
         this.description = room.getDescription();
     }

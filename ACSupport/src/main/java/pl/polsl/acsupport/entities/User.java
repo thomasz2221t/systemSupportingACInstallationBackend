@@ -35,10 +35,13 @@ public class User extends BaseEntity{
     @NotNull
     private String telephone;
 
+    @Column(name = "enabled")
+    private boolean enabled;
+
     @OneToMany(mappedBy="user")
     private Set<Building> buildings = new LinkedHashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = { @JoinColumn(name="user_id") },
             inverseJoinColumns = { @JoinColumn(name="role_id") }
