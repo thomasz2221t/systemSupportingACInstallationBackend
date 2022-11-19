@@ -1,19 +1,33 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
-import { Link, Navigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AuthService from "services/auth/AuthService";
 import "./LoginWindow.scss";
-import { BuildingsPage } from "pages/BuildingsPage/BuildingsPage";
+import { UserRoles } from "utils/UserRoles";
 
 export const defaultTypeData = {
   login: "",
   password: "",
+  loading: false,
+  message: "",
 };
 
 function LoginWindow() {
   const [data, setData] = useState(defaultTypeData);
   const [, setIsTypeRequestSent] = useState<boolean>(false);
-  let location = useLocation();
+  const navigate = useNavigate();
+  //let location = useLocation();
+
+  /*useEffect(() => {
+    setState(AuthService.checkIfUserLogged());
+  }, []);
+
+  useEffect(() => {
+    console.log(state.redirect);
+    if (state.redirect) {
+      navigate(`${state.redirect}`);
+    }
+  }, []);*/
 
   async function handleUpdateData(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -21,14 +35,46 @@ function LoginWindow() {
     console.log(data.password);
     setIsTypeRequestSent(true);
 
-    AuthService.login(data.login, data.password).then(() => {
-      console.log("link");
-      console.log(AuthService.getCurrentUser());
-      //<Link to="/obiekty" />;
-      //<Redirect to="/obiekty" />;
-      //props.history.push("/obiekty");
-      <Navigate to="/obiekty" state={{ from: location }} />;
-    });
+    AuthService.login(data.login, data.password).then(
+      () => {
+        console.log("link");
+        console.log(AuthService.getCurrentUser());
+        //<Link to="/obiekty" />;
+        //<Redirect to="/obiekty" />;
+        //props.history.push("/obiekty");
+        //<Navigate to="/obiekty" state={{ from: location }} />;
+        if (AuthService.getCurrentUserRoles()) {
+          switch (AuthService.getCurrentUserRoles()[0]) {
+            case UserRoles.ADMIN:
+              navigate("/obiekty");
+              break;
+            case UserRoles.OPERATOR:
+              navigate("/obiekty");
+              break;
+            case UserRoles.CLIENT:
+              navigate("/obiekty");
+              break;
+          }
+        } else {
+          console.log("no permission to log");
+        }
+      }
+      /*(error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+
+        setData({
+          login: data.login,
+          password: data.password,
+          loading: false,
+          message: resMessage,
+        });
+      }*/
+    );
   }
 
   return (
@@ -48,7 +94,6 @@ function LoginWindow() {
               icon="mdi:user-circle-outline"
               color="#4e4e4e"
               height="32"
-              //onClick={() => setOpenParameterTypeForm(true)
             />
             <input
               className="login-input"
@@ -68,7 +113,6 @@ function LoginWindow() {
               icon="material-symbols:key-outline-rounded"
               color="#4e4e4e"
               height="32"
-              //onClick={() => setOpenParameterTypeForm(true)
             />
             <input
               className="password-input"

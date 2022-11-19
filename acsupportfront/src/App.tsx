@@ -25,9 +25,8 @@ function App() {
         </header>*/}
         <Router>
           <Routes>
-            <Route path="/" element={<LoginPage />}>
-              <Route path="/obiekty" element={<BuildingsPage />} />
-            </Route>
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/obiekty" element={<BuildingsPage />} />
           </Routes>
         </Router>
       </div>
