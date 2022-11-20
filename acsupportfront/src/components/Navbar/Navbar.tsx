@@ -1,5 +1,7 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useMatch, useNavigate, useResolvedPath } from "react-router-dom";
+import CustomLinkFirst from "./CustomLinkFirst";
+import CustomLinkSingle from "./CustomLinkSingle";
 
 import "./Navbar.scss";
 
@@ -25,9 +27,15 @@ export default function Navbar() {
         </div>
         <div className="navbar-elements">
           <ul>
-            <li>Informacje o budynkach</li>
-            <li>Usługa i oferta</li>
-            <li>Szczegóły zamówienia</li>
+            <CustomLinkFirst linky={"/obiekty"}>
+              Informacje o budynkach
+            </CustomLinkFirst>
+            <CustomLinkSingle linky={"/uslugi"}>
+              Usługa i oferta
+            </CustomLinkSingle>
+            <CustomLinkSingle linky={"/szczegoly"}>
+              Szczegóły zamówienia
+            </CustomLinkSingle>
           </ul>
         </div>
       </div>
