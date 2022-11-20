@@ -1,3 +1,11 @@
+.footer {
+  width: 970px;
+  height: 94px;
+  position: relative;
+  left: 235px;
+  top: 583px;
+}
+
 .footer text {
   font-family: "Calibri";
   font-family: "Inter";
@@ -7,4 +15,9 @@
   line-height: 20px;
   text-align: center;
   color: #777070;
+}
+
+.media {
+  justify-content: space-between;
+  padding: 0px 10px 0px 53px;
 }
