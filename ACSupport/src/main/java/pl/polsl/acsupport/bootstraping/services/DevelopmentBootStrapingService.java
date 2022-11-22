@@ -167,7 +167,6 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         permissionsOperator.addAll(permissionsClient);
         permissionsOperator.add(addPermissions(CREATE_BUILDING_TYPE));
         permissionsOperator.add(addPermissions(DELETE_BUILDING_TYPE));
-        permissionsClient.add(addPermissions(CREATE_USER));
         roleOperator.setPermissions(permissionsOperator);
         roleRepository.save(roleOperator);
 
@@ -175,7 +174,7 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         roleAdmin.setName(RoleName.ADMIN);
         Set<Permission> permissionsAdmin = new LinkedHashSet<>();
         permissionsAdmin.addAll(permissionsOperator);
-        //permissionsAdmin.add(addPermissions(ADD_OPERATOR));
+        permissionsAdmin.add(addPermissions(CREATE_USER));
         roleAdmin.setPermissions(permissionsAdmin);
         roleRepository.save(roleAdmin);
     }
