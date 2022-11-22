@@ -2,14 +2,19 @@ package pl.polsl.acsupport.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.polsl.acsupport.dtos.BuildingDto;
 import pl.polsl.acsupport.entities.Building;
+import pl.polsl.acsupport.entities.User;
 import pl.polsl.acsupport.repositories.BuildingRepository;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -17,6 +22,8 @@ import javax.persistence.EntityNotFoundException;
 public class BuildingService {
 
     final private BuildingRepository buildingRepository;
+
+    final private UserService userService;
 
     public Page<BuildingDto> findAll(Pageable pageable){
         final Page<Building> buildings = buildingRepository.findAll(pageable);
@@ -58,5 +65,12 @@ public class BuildingService {
     @Transactional
     public void delete(Long id){
         buildingRepository.delete(findById(id));
+    }
+
+    public Page<BuildingDto>findUserBuildings(Long userId){
+        User user = userService.findById(userId);
+        Set<Building> buildings = user.getBuildings();
+        List<BuildingDto> buildingDtos = buildings.stream().map(BuildingDto::new).collect(Collectors.toList());
+        return new PageImpl<>(buildingDtos);
     }
 }

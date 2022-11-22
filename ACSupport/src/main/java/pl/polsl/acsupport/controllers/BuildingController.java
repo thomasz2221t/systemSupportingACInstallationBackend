@@ -53,4 +53,11 @@ public class BuildingController {
     public void delete(@PathVariable Long id){
         buildingService.delete(id);
     }
+
+    @PreAuthorize("hasAuthority('FIND_BUILDING')")
+    @GetMapping("/user/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<BuildingDto> findUserBuildings(@PathVariable Long userId){
+        return buildingService.findUserBuildings(userId);
+    }
 }

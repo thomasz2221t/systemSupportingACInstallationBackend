@@ -13,6 +13,7 @@ import pl.polsl.acsupport.dtos.UserDto;
 import pl.polsl.acsupport.entities.*;
 import pl.polsl.acsupport.enums.PermissionName;
 import pl.polsl.acsupport.enums.RoleName;
+import pl.polsl.acsupport.repositories.BuildingRepository;
 import pl.polsl.acsupport.repositories.PermissionRepository;
 import pl.polsl.acsupport.repositories.RoleRepository;
 import pl.polsl.acsupport.repositories.UserRepository;
@@ -53,6 +54,9 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    BuildingRepository buildingRepository;
+
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
@@ -64,6 +68,7 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_BUILDING_TYPES, this::createDefaultBuildingTypes);
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_ROOMS, this::createDefaultRooms);
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.ASSIGN_USER_TO_ROLES, this::assignDefaultUsersToDefaultRoles);
+        bootStrapingEntryService.createIfNotExists(BootStrapingLabel.ASSIGN_DEFAULT_USERS_TO_DEFAULT_BUILDINGS,this::assignDefaultUsersToDefaultBuildings);
     }
 
     private void createDefaultBuildings(){
@@ -272,5 +277,18 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         room7.setDescription("Serwerownia w składziku");
         roomService.create(new RoomDto(room7));
 
+    }
+
+    public void assignDefaultUsersToDefaultBuildings(){
+        User client1 = userRepository.findUserByLogin("client1").orElseThrow(EntityNotFoundException::new);
+        Building building1 = buildingService.findById(1L);
+        building1.setUser(client1);
+        buildingRepository.save(building1);
+        Building building2 = buildingService.findById(2L);
+        building2.setUser(client1);
+        buildingRepository.save(building2);
+        Building building3 = buildingService.findById(3L);
+        building3.setUser(client1);
+        buildingRepository.save(building3);
     }
 }
