@@ -1,7 +1,6 @@
 import axios from "axios";
 import { UserType } from "types/UserType";
-
-const API_URL = "http://localhost:8080";
+import API_URL from "utils/ApiUrl";
 
 const login = (login: string, password: string) => {
   console.log("JWT");
@@ -26,8 +25,10 @@ const login = (login: string, password: string) => {
         console.log(response.data);
         console.log(response.data.token);
         console.log(response.data.roles);
+        localStorage.setItem("userId", JSON.stringify(response.data.id));
         localStorage.setItem("user", JSON.stringify(response.data.token));
         localStorage.setItem("roles", JSON.stringify(response.data.roles));
+        localStorage.setItem("token", JSON.stringify(response.data));
         console.log(JSON.parse(localStorage.getItem("user")!));
         console.log(JSON.parse(localStorage.getItem("roles")!));
       }
@@ -45,6 +46,10 @@ const register = (props: UserType) => {
   });
 };
 
+const getCurrentUserId = () => {
+  return JSON.parse(localStorage.getItem("userId")!);
+};
+
 const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem("user")!);
 };
@@ -53,12 +58,17 @@ const getCurrentUserRoles = () => {
   return JSON.parse(localStorage.getItem("roles")!);
 };
 
+const getWholeToken = () => {
+  return JSON.parse(localStorage.getItem("token")!);
+};
+
 const AuthService = {
   login,
   logout,
   register,
   getCurrentUser,
   getCurrentUserRoles,
+  getCurrentUserId,
 };
 
 export default AuthService;
