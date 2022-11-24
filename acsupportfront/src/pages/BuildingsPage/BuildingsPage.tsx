@@ -3,70 +3,48 @@ import Navbar from "components/Navbar/Navbar";
 import Footer from "components/Footer/Footer";
 import BuildingTile from "components/BuildingTile/BuildingTile";
 import UserAccount from "components/UserAccount/UserAccount";
-import gettingUserRequest from "services/BuildingService";
+import getUserBuildings from "services/BuildingService";
 import AuthService from "services/auth/AuthService";
 import BuildingType from "types/BuildingType";
 
 import "./BuildingsPage.scss";
 
-const exampleBuilding = [
-  {
-    id: 0,
-    name: "",
-    imagePath: "",
-    street: "",
-    postCode: "",
-    city: "",
-    region: "",
-    descirpiton: "",
-  },
-  {
-    id: 1,
-    name: "",
-    imagePath: "",
-    street: "",
-    postCode: "",
-    city: "",
-    region: "",
-    descirpiton: "",
-  },
-];
-
 export function BuildingsPage() {
-  const [userBuildings, setUserBuildings] =
-    useState<BuildingType[]>(exampleBuilding);
-  const [userId, setUserId] = useState<number>();
+  const [userBuildings, setUserBuildings] = useState<BuildingType[]>([]);
+  const [userId, setUserId] = useState<number>(AuthService.getCurrentUserId());
 
   const handleGetingUserBuildings = async (userId: number) => {
-    await gettingUserRequest(userId).then((response) => {
-      setUserBuildings(response.data);
+    await getUserBuildings(userId).then((response) => {
+      console.log(response.data);
+      console.log(response.data.content);
+      setUserBuildings(response.data.content);
     });
   };
 
   useEffect(() => {
-    setUserId(AuthService.getCurrentUserId());
-    handleGetingUserBuildings(1);
-  });
+    handleGetingUserBuildings(userId);
+  }, []);
 
-  const handleBuildingTileMapping = () => {
-    return userBuildings.map((building, id) => {
+  const buildingsTable = userBuildings
+    .sort((a, b) => a.id - b.id)
+    //.slice(page * elementsPerPage, page * elementsPerPage + elementsPerPage)
+    .map((data, id) => {
       return (
         <BuildingTile
-          id={building.id}
-          name={building.name}
-          city={building.city}
-          street={building.street}
+          id={id}
+          name={data.name}
+          city={data.city}
+          street={data.street}
         />
       );
     });
-  };
 
   return (
     <>
       <div>
         <Navbar />
         <UserAccount />
-        <div className="buildings">{handleBuildingTileMapping()}</div>
+        <div className="buildings">{buildingsTable}</div>
         <Footer />
       </div>
     </>

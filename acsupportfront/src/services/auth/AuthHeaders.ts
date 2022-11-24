@@ -1,7 +1,10 @@
-const user = JSON.parse(localStorage.getItem("token")!);
+import AuthService from "./AuthService";
+
+const user = AuthService.getCurrentUser();
 
 export default function authHeader() {
-  return { Authorization: "Bearer " + user.accessToken };
+  console.log(user);
+  return { Authorization: "Bearer " + user };
 }
 
 export function getTokenFromLocalStorage() {
