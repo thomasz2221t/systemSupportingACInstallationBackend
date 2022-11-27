@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import Navbar from "components/Navbar/Navbar";
 import Footer from "components/Footer/Footer";
 import BuildingTile from "components/BuildingTile/BuildingTile";
@@ -28,10 +29,10 @@ export function BuildingsPage() {
   const buildingsTable = userBuildings
     .sort((a, b) => a.id - b.id)
     //.slice(page * elementsPerPage, page * elementsPerPage + elementsPerPage)
-    .map((data, id) => {
+    .map((data) => {
       return (
         <BuildingTile
-          id={id}
+          id={data.id}
           name={data.name}
           city={data.city}
           street={data.street}

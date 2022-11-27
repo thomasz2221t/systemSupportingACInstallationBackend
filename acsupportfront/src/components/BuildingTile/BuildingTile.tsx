@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import "./BuildingTile.scss";
 
@@ -15,10 +16,17 @@ export default function BuildingTile({
   street,
 }: BuildingTileProps) {
   const exampleBuilding = require("../../images/exampleBuilding.jpg");
+  const navigate = useNavigate();
+
+  const handleBuildingClick = () => {
+    if (id) {
+      navigate(`obiekt/${id}`);
+    }
+  };
 
   return (
     <>
-      <div className="building-tile">
+      <div className="building-tile" onClick={handleBuildingClick}>
         <img
           src={exampleBuilding}
           width="184"

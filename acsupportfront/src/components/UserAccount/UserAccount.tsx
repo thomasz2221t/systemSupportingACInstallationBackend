@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Menu, MenuItem, ListItemIcon, Button } from "@mui/material";
-import { UserType } from "types/UserType";
 import { Link } from "react-router-dom";
-import AuthService from "services/auth/AuthService";
+import { Menu, MenuItem, ListItemIcon, Button } from "@mui/material";
 import Logout from "@mui/icons-material/Logout";
+
+import { UserType } from "types/UserType";
+import AuthService from "services/auth/AuthService";
 import getUserBody from "services/UserService";
 
 import "./UserAccount.scss";
@@ -32,10 +33,12 @@ export default function UserAccount() {
   const open = Boolean(anchorEl);
 
   useEffect(() => {
-    handleGetingUserBuildings(userId);
+    if (userId) {
+      handleGettingUserBody(userId);
+    }
   }, []);
 
-  const handleGetingUserBuildings = async (userId: number) => {
+  const handleGettingUserBody = async (userId: number) => {
     await getUserBody(userId).then((response) => {
       console.log(response.data);
       setUserBody(response.data);
