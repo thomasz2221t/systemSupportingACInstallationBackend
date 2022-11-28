@@ -2,22 +2,103 @@
   position: relative;
   width: 1053px;
   height: 512px;
-  display: flex;
+  display: grid;
   background: #3298d1;
   border-radius: 18px;
+  grid-template-columns: 20px 1fr 1fr 1fr 1fr 20px;
+  grid-template-rows: 20px 1fr 1fr 1fr 1fr 1fr 20px;
+  gap: 10px;
 
-  #building-name {
-    top: 10px;
-    bottom: 10px;
+  .building-name-form {
+    height: 85px;
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    align-items: center;
+    grid-column: 2/4;
   }
+
+  .building-type {
+    height: 85px;
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    grid-column: 2/4;
+    grid-row: 3;
+  }
+
+  .building-street {
+    height: 85px;
+    display: inline-grid;
+    text-align: left;
+    align-items: center;
+    grid-column: 2/4;
+    grid-row: 4;
+  }
+
+  .building-post-code {
+    height: 85px;
+    display: inline-grid;
+    text-align: left;
+    align-items: center;
+    grid-column: 2;
+    grid-row: 5;
+  }
+
+  .building-city {
+    height: 85px;
+    display: inline-grid;
+    text-align: left;
+    align-items: center;
+    grid-column: 3;
+    grid-row: 5;
+  }
+
+  .building-region {
+    height: 85px;
+    display: inline-grid;
+    text-align: left;
+    align-items: center;
+    grid-column: 2/4;
+    grid-row: 6;
+  }
+
+  .building-form-img {
+    display: block;
+    align-items: center;
+    grid-column: 4/6;
+    grid-row: 2/4;
+  }
+
+  .building-additional-info {
+    height: 85px;
+    text-align: left;
+    align-items: center;
+    grid-column: 4/6;
+    grid-row: 4;
+  }
+}
+
+.building-form-header {
+  margin-bottom: 5px;
 }
 
 .building-details-form text {
   font-family: "Segoe UI";
   font-style: normal;
-  font-weight: 600;
-  font-size: 20px;
+  font-weight: 500;
+  font-size: 18px;
   line-height: 24px;
-  text-align: center;
-  color: #000000;
+  color: #ffffff;
+}
+
+.MuiFormLabel-root.Mui-focused {
+  color: #f1e717 !important;
+}
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #f1e717 !important;
+}
+
+.MuiFilledInput-input {
+  color: #ffffff !important;
 }

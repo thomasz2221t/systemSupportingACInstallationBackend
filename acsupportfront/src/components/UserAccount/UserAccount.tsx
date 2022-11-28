@@ -21,7 +21,7 @@ const USER_BODY_ITEMS = {
 
 export default function UserAccount() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [userId, setUserId] = useState<number>(AuthService.getCurrentUserId());
+  const [userId, setUserId] = useState<number>();
   const [userBody, setUserBody] = useState<UserType>(USER_BODY_ITEMS);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -46,7 +46,13 @@ export default function UserAccount() {
   };
 
   useEffect(() => {
-    handleGettingUserBody(userId);
+    setUserId(AuthService.getCurrentUserId());
+  }, []);
+
+  useEffect(() => {
+    if (userId) {
+      handleGettingUserBody(userId);
+    }
   }, [userId]);
 
   return (

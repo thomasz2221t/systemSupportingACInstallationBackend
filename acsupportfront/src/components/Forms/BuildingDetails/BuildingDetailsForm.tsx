@@ -1,5 +1,6 @@
 import React from "react";
 import { Select, TextField } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
 import "./BuildingDetailsForm.scss";
 
@@ -14,72 +15,84 @@ export type buildingDetailsFormProp = {
   additionalInfo: string;
 };
 
+const styles = makeStyles({
+  notchedOutline: { borderColor: "#f0f !important" },
+});
+
 export function BuildingDetailsForm({ id }: buildingDetailsFormProp) {
   const exampleBuilding = require("../../../images/exampleBuilding.jpg");
+  const style = styles();
 
   return (
     <>
       <div className="building-details-form">
-        <div className="building-name">
-          <text id="building-name-header">Nazwa budynku</text>
-          <TextField
-            id={"building-name-text"}
-            label="Nazwa budynku"
-            variant="outlined"
-          />
+        <div className="building-name-form">
+          <text className="building-form-header">Nazwa budynku</text>
+          <TextField label="Nazwa budynku" variant="filled" fullWidth />
         </div>
         <div className="building-type">
-          <text id="building-type-header">Typ budynku</text>
-          <Select id="building-type-text" />
+          <text className="building-form-header">Typ budynku</text>
+          <Select id="building-type-text" size="small" />
         </div>
         <div className="building-street">
-          <text id="building-street-header">Ulica</text>
+          <text className="building-form-header">Ulica</text>
           <TextField
-            id={"building-street-text"}
+            className="building-form-header"
             label="Ulica"
-            variant="outlined"
+            variant="filled"
+            fullWidth
           />
         </div>
         <div className="building-post-code">
-          <text id="building-post-code-header">Kod pocztowy</text>
+          <text className="building-form-header">Kod pocztowy</text>
           <TextField
-            id="building-post-code-text"
+            className="building-form-header"
             label="Kod pocztowy"
-            variant="outlined"
+            variant="filled"
+            fullWidth
           />
         </div>
         <div className="building-city">
-          <text id="building-city-header">Miasto</text>
+          <text className="building-form-header">Miasto</text>
           <TextField
-            id="building-city-text"
+            className="building-form-header"
             label="Miasto"
-            variant="outlined"
+            variant="filled"
+            fullWidth
           />
         </div>
         <div className="building-region">
-          <text id="building-region-header-text">Województwo</text>
+          <text className="building-form-header">Województwo</text>
           <TextField
             id="building-region-text"
             label="Województwo"
-            variant="outlined"
+            variant="filled"
+            fullWidth
           />
         </div>
-        <div className="building-img">
+        <div className="building-form-img">
           <img
             src={exampleBuilding}
-            width="184"
-            height="115"
-            //className="building-img"
+            width="280"
+            height="170"
+            className="building-form-image"
           />
         </div>
         <div className="building-additional-info">
-          <text id="building-additional-info-header">
+          <text className="building-form-header">
             Dodatkowe informacje o budynku
           </text>
           <TextField
-            id="building-additional-info-text"
+            className="building-form-header"
             label="Dodatkowe informacje o budynku"
-            variant="outlined"
+            variant="filled"
+            fullWidth
+            multiline
+            inputProps={{
+              style: {
+                height: "122px",
+              },
+            }}
           />
         </div>
       </div>

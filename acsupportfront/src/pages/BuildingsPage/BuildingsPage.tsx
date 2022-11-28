@@ -13,7 +13,7 @@ import "./BuildingsPage.scss";
 
 export function BuildingsPage() {
   const [userBuildings, setUserBuildings] = useState<BuildingType[]>([]);
-  const [userId, setUserId] = useState<number>(AuthService.getCurrentUserId());
+  const [userId, setUserId] = useState<number>();
 
   const handleGetingUserBuildings = async (userId: number) => {
     await getUserBuildings(userId).then((response) => {
@@ -24,7 +24,13 @@ export function BuildingsPage() {
   };
 
   useEffect(() => {
-    handleGetingUserBuildings(userId);
+    setUserId(AuthService.getCurrentUserId());
+  }, []);
+
+  useEffect(() => {
+    if (userId) {
+      handleGetingUserBuildings(userId);
+    }
   }, [userId]);
 
   const buildingsTable = userBuildings

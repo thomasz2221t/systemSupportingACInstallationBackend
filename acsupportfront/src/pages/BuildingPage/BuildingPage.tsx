@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "@mui/material";
 
 import { BuildingDetailsForm } from "components/Forms/BuildingDetails/BuildingDetailsForm";
 import Navbar from "components/Navbar/Navbar";
@@ -28,6 +29,27 @@ export function BuildingPage(/*{ buildingId }: BuildingsIdProp*/) {
           region={""}
           additionalInfo={""}
         />
+        <Button
+          style={{
+            position: "relative",
+            marginTop: 32,
+            left: -82,
+            width: 1064,
+            height: 53,
+            backgroundColor: "#D6E900",
+            color: "#ffffff",
+            borderRadius: 18,
+            padding: "18px 36px",
+            fontSize: "18px",
+            fontFamily: "Segoe UI",
+            fontStyle: "normal",
+            fontWeight: 500,
+            lineHeight: 24,
+          }}
+          variant="contained"
+        >
+          Zarządzaj pomieszczeniami
+        </Button>
       </div>
       <Footer />
     </>
