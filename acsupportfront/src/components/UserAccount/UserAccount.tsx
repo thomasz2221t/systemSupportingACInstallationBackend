@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, MenuItem, ListItemIcon, Button } from "@mui/material";
 import Logout from "@mui/icons-material/Logout";
 
@@ -8,13 +8,6 @@ import AuthService from "services/auth/AuthService";
 import getUserBody from "services/UserService";
 
 import "./UserAccount.scss";
-
-export const USER_MENU_ITEMS = [
-  {
-    title: "Wyloguj się",
-    url: "/logout",
-  },
-];
 
 const USER_BODY_ITEMS = {
   id: 0,
@@ -28,22 +21,10 @@ const USER_BODY_ITEMS = {
 
 export default function UserAccount() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [userId] = useState<number>(AuthService.getCurrentUserId());
+  const [userId, setUserId] = useState<number>(AuthService.getCurrentUserId());
   const [userBody, setUserBody] = useState<UserType>(USER_BODY_ITEMS);
   const open = Boolean(anchorEl);
-
-  useEffect(() => {
-    if (userId) {
-      handleGettingUserBody(userId);
-    }
-  }, []);
-
-  const handleGettingUserBody = async (userId: number) => {
-    await getUserBody(userId).then((response) => {
-      console.log(response.data);
-      setUserBody(response.data);
-    });
-  };
+  const navigate = useNavigate();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -52,6 +33,21 @@ export default function UserAccount() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogout = () => {
+    AuthService.logout();
+  };
+
+  const handleGettingUserBody = async (userId: number) => {
+    await getUserBody(userId).then((response) => {
+      console.log(response.data);
+      setUserBody(response.data);
+    });
+  };
+
+  useEffect(() => {
+    handleGettingUserBody(userId);
+  }, [userId]);
 
   return (
     <>
@@ -63,7 +59,7 @@ export default function UserAccount() {
           aria-expanded={open ? "true" : undefined}
           onClick={handleClick}
         >
-          {`użytkownik ${userBody?.firstName} ${userBody?.lastName}`}
+          {`użytkownik ${userBody.firstName} ${userBody.lastName}`}
         </Button>
         <Menu
           anchorEl={anchorEl}
@@ -102,9 +98,15 @@ export default function UserAccount() {
         >
           <MenuItem>
             <ListItemIcon>
-              <Logout fontSize="small" />
+              <Logout
+                fontSize="small"
+                onClick={() => {
+                  handleLogout();
+                  navigate("/");
+                }}
+              />
             </ListItemIcon>
-            <Link to="/" className="logout-link">
+            <Link to="/" className="logout-link" onClick={handleLogout}>
               Wyloguj się
             </Link>
           </MenuItem>

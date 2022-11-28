@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import { UserType } from "types/UserType";
 import Navbar from "components/Navbar/Navbar";
 import Footer from "components/Footer/Footer";
 import BuildingTile from "components/BuildingTile/BuildingTile";
@@ -24,7 +25,7 @@ export function BuildingsPage() {
 
   useEffect(() => {
     handleGetingUserBuildings(userId);
-  }, []);
+  }, [userId]);
 
   const buildingsTable = userBuildings
     .sort((a, b) => a.id - b.id)
@@ -42,12 +43,10 @@ export function BuildingsPage() {
 
   return (
     <>
-      <div>
-        <Navbar />
-        <UserAccount />
-        <div className="buildings">{buildingsTable}</div>
-        <Footer />
-      </div>
+      <Navbar />
+      <UserAccount />
+      <div className="buildings">{buildingsTable}</div>
+      <Footer />
     </>
   );
 }
