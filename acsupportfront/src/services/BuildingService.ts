@@ -9,4 +9,15 @@ const getUserBuildings = (userId: number) => {
   });
 };
 
-export default getUserBuildings;
+const getBuilding = (buildingId: number) => {
+  return axios.get(`${API_URL}/building/${buildingId}`, {
+    headers: authHeader(),
+  });
+};
+
+const UserService = {
+  getUserBuildings,
+  getBuilding,
+};
+
+export default UserService;

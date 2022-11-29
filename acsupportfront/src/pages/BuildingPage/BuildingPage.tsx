@@ -1,27 +1,60 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { BuildingDetailsForm } from "components/Forms/BuildingDetails/BuildingDetailsForm";
 import Navbar from "components/Navbar/Navbar";
 import Footer from "components/Footer/Footer";
 import UserAccount from "components/UserAccount/UserAccount";
+import BuildingType from "types/BuildingType";
+import BuildingService from "services/BuildingService";
 
 import "./BuildingPage.scss";
-import { useNavigate, useParams } from "react-router-dom";
 
-/*export type BuildingsIdProp = {
-  buildingId: number;
-};*/
+const DEFAULT_BUILDING_OBJECT = {
+  id: 0,
+  name: "",
+  imagePath: "",
+  street: "",
+  postCode: "",
+  city: "",
+  region: "",
+  descirpiton: "",
+};
 
-export function BuildingPage(/*{ buildingId }: BuildingsIdProp*/) {
+export function BuildingPage() {
   const [buildingId, setBuildingId] = useState<number>(0);
+  const [buildingBody, setBuildingBody] = useState<BuildingType>(
+    DEFAULT_BUILDING_OBJECT
+  );
   const { id } = useParams();
   const navigate = useNavigate();
+
+  /*const handleFetchingBuildingsData = async (buildingId: number) => {
+    const received = axios
+      .get(`${API_URL}/building/${buildingId}`, authHeader())
+      .then((response) => {
+        setBuildingBody(response.data);
+        console.log(response.data);
+      });
+    return received;
+  };*/
+  const handleGettingBuildingsData = async (buildingId: number) => {
+    await BuildingService.getBuilding(buildingId).then((response) => {
+      console.log(response.data);
+      console.log(response.data.content);
+      setBuildingBody(response.data.content);
+    });
+  };
 
   useEffect(() => {
     console.log(id);
     setBuildingId(Number(id));
-  }, [id]);
+  }, []); //[id]
+
+  useEffect(() => {
+    handleGettingBuildingsData(buildingId);
+  }, [buildingId]);
 
   const handleRoomButtonClick = () => {
     navigate(`pomieszczenia`);
@@ -33,14 +66,14 @@ export function BuildingPage(/*{ buildingId }: BuildingsIdProp*/) {
       <UserAccount />
       <div className="building-details">
         <BuildingDetailsForm
-          id={buildingId}
-          name={""}
+          id={buildingBody.id}
+          name={buildingBody.name}
           type={""}
-          street={""}
-          postCode={""}
-          city={""}
-          region={""}
-          additionalInfo={""}
+          street={buildingBody.street}
+          postCode={buildingBody.postCode}
+          city={buildingBody.city}
+          region={buildingBody.region}
+          additionalInfo={buildingBody.descirpiton}
         />
         <Button
           style={{

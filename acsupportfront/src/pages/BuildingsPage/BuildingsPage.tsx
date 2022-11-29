@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 
-import { UserType } from "types/UserType";
 import Navbar from "components/Navbar/Navbar";
 import Footer from "components/Footer/Footer";
 import BuildingTile from "components/BuildingTile/BuildingTile";
 import UserAccount from "components/UserAccount/UserAccount";
-import getUserBuildings from "services/BuildingService";
 import AuthService from "services/auth/AuthService";
 import BuildingType from "types/BuildingType";
+import BuildingService from "services/BuildingService";
 
 import "./BuildingsPage.scss";
 
@@ -16,7 +15,7 @@ export function BuildingsPage() {
   const [userId, setUserId] = useState<number>();
 
   const handleGetingUserBuildings = async (userId: number) => {
-    await getUserBuildings(userId).then((response) => {
+    await BuildingService.getUserBuildings(userId).then((response) => {
       console.log(response.data);
       console.log(response.data.content);
       setUserBuildings(response.data.content);
@@ -28,9 +27,11 @@ export function BuildingsPage() {
   }, []);
 
   useEffect(() => {
-    if (userId) {
-      handleGetingUserBuildings(userId);
-    }
+    handleGetingUserBuildings(userId!);
+    const interval = setInterval(() => {
+      handleGetingUserBuildings(userId!);
+    }, 10000);
+    return () => clearInterval(interval);
   }, [userId]);
 
   const buildingsTable = userBuildings

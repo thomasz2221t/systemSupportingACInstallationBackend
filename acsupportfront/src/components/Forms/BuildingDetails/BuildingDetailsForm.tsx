@@ -19,7 +19,16 @@ const styles = makeStyles({
   notchedOutline: { borderColor: "#f0f !important" },
 });
 
-export function BuildingDetailsForm({ id }: buildingDetailsFormProp) {
+export function BuildingDetailsForm({
+  id,
+  name,
+  type,
+  street,
+  postCode,
+  city,
+  region,
+  additionalInfo,
+}: buildingDetailsFormProp) {
   const exampleBuilding = require("../../../images/exampleBuilding.jpg");
   const style = styles();
 
@@ -28,7 +37,15 @@ export function BuildingDetailsForm({ id }: buildingDetailsFormProp) {
       <div className="building-details-form">
         <div className="building-name-form">
           <text className="building-form-header">Nazwa budynku</text>
-          <TextField label="Nazwa budynku" variant="filled" fullWidth />
+          <TextField
+            label="Nazwa budynku"
+            variant="filled"
+            fullWidth
+            defaultValue={`${name}`}
+            /*InputProps={{
+              readOnly: true,
+            }}*/
+          />
         </div>
         <div className="building-type">
           <text className="building-form-header">Typ budynku</text>
@@ -41,6 +58,10 @@ export function BuildingDetailsForm({ id }: buildingDetailsFormProp) {
             label="Ulica"
             variant="filled"
             fullWidth
+            defaultValue={street}
+            InputProps={{
+              readOnly: true,
+            }}
           />
         </div>
         <div className="building-post-code">
@@ -50,6 +71,10 @@ export function BuildingDetailsForm({ id }: buildingDetailsFormProp) {
             label="Kod pocztowy"
             variant="filled"
             fullWidth
+            defaultValue={postCode}
+            InputProps={{
+              readOnly: true,
+            }}
           />
         </div>
         <div className="building-city">
@@ -59,6 +84,10 @@ export function BuildingDetailsForm({ id }: buildingDetailsFormProp) {
             label="Miasto"
             variant="filled"
             fullWidth
+            defaultValue={city}
+            InputProps={{
+              readOnly: true,
+            }}
           />
         </div>
         <div className="building-region">
@@ -68,6 +97,10 @@ export function BuildingDetailsForm({ id }: buildingDetailsFormProp) {
             label="Województwo"
             variant="filled"
             fullWidth
+            defaultValue={region}
+            InputProps={{
+              readOnly: true,
+            }}
           />
         </div>
         <div className="building-form-img">
@@ -88,7 +121,9 @@ export function BuildingDetailsForm({ id }: buildingDetailsFormProp) {
             variant="filled"
             fullWidth
             multiline
+            defaultValue={additionalInfo}
             inputProps={{
+              readOnly: true,
               style: {
                 height: "122px",
               },
