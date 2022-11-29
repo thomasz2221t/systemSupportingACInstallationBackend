@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 
 import { BuildingDetailsForm } from "components/Forms/BuildingDetails/BuildingDetailsForm";
@@ -7,20 +7,33 @@ import Footer from "components/Footer/Footer";
 import UserAccount from "components/UserAccount/UserAccount";
 
 import "./BuildingPage.scss";
+import { useNavigate, useParams } from "react-router-dom";
 
 /*export type BuildingsIdProp = {
   buildingId: number;
 };*/
 
 export function BuildingPage(/*{ buildingId }: BuildingsIdProp*/) {
-  console.log("strona budynku");
+  const [buildingId, setBuildingId] = useState<number>(0);
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(id);
+    setBuildingId(Number(id));
+  }, [id]);
+
+  const handleRoomButtonClick = () => {
+    navigate(`pomieszczenia`);
+  };
+
   return (
     <>
       <Navbar />
       <UserAccount />
       <div className="building-details">
         <BuildingDetailsForm
-          id={1}
+          id={buildingId}
           name={""}
           type={""}
           street={""}
@@ -47,6 +60,7 @@ export function BuildingPage(/*{ buildingId }: BuildingsIdProp*/) {
             lineHeight: 24,
           }}
           variant="contained"
+          onClick={handleRoomButtonClick}
         >
           Zarządzaj pomieszczeniami
         </Button>

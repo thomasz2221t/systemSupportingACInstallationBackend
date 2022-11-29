@@ -6,6 +6,7 @@ import { BuildingsPage } from "./pages/BuildingsPage/BuildingsPage";
 import { BuildingPage } from "pages/BuildingPage/BuildingPage";
 
 import "./App.css";
+import { RoomPage } from "pages/RoomPage/RoomPage";
 //import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
@@ -31,6 +32,10 @@ function App() {
             <Route path="/" element={<LoginPage />} />
             <Route path="/obiekty" element={<BuildingsPage />} />
             <Route path="/obiekty/obiekt/:id" element={<BuildingPage />} />
+            <Route
+              path="/obiekty/obiekt/:id/pomieszczenia"
+              element={<RoomPage />}
+            />
           </Routes>
         </Router>
       </div>
