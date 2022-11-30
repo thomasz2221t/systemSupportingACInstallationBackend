@@ -15,7 +15,7 @@ export type roomDetailsFormProp = {
   additionalInfo: string;
 };
 
-export function RoomDetailsForm({ id }: roomDetailsFormProp) {
+export function RoomDetailsForm({ id, name, purpose, areaX, areaY, height, powerGiveOut, numberOfPeople, additionalInfo }: roomDetailsFormProp) {
   return (
     <>
       <div className="room-details-form">
@@ -26,6 +26,7 @@ export function RoomDetailsForm({ id }: roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
+            value={name}
             InputProps={{
               readOnly: true,
             }}
@@ -38,6 +39,7 @@ export function RoomDetailsForm({ id }: roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
+            value={purpose}
             InputProps={{
               readOnly: true,
             }}
@@ -50,6 +52,7 @@ export function RoomDetailsForm({ id }: roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
+            value={areaX}
             InputProps={{
               readOnly: true,
             }}
@@ -62,6 +65,7 @@ export function RoomDetailsForm({ id }: roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
+            value={areaY}
             InputProps={{
               readOnly: true,
             }}
@@ -74,6 +78,7 @@ export function RoomDetailsForm({ id }: roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
+            value={height}
             InputProps={{
               readOnly: true,
             }}
@@ -86,6 +91,7 @@ export function RoomDetailsForm({ id }: roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
+            value={powerGiveOut}
             InputProps={{
               readOnly: true,
             }}
@@ -98,6 +104,7 @@ export function RoomDetailsForm({ id }: roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
+            value={numberOfPeople}
             InputProps={{
               readOnly: true,
             }}
@@ -110,6 +117,7 @@ export function RoomDetailsForm({ id }: roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
+            value={additionalInfo}
             InputProps={{
               readOnly: true,
             }}

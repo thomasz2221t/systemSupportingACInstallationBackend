@@ -30,20 +30,11 @@ export function BuildingPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  /*const handleFetchingBuildingsData = async (buildingId: number) => {
-    const received = axios
-      .get(`${API_URL}/building/${buildingId}`, authHeader())
-      .then((response) => {
-        setBuildingBody(response.data);
-        console.log(response.data);
-      });
-    return received;
-  };*/
   const handleGettingBuildingsData = async (buildingId: number) => {
     await BuildingService.getBuilding(buildingId).then((response) => {
       console.log(response.data);
       console.log(response.data.content);
-      setBuildingBody(response.data.content);
+      setBuildingBody(response.data);
     });
   };
 

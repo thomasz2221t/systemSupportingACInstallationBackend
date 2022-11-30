@@ -32,6 +32,9 @@ export function BuildingDetailsForm({
   const exampleBuilding = require("../../../images/exampleBuilding.jpg");
   const style = styles();
 
+  console.log(name)
+  console.log(street)
+  console.log(postCode)
   return (
     <>
       <div className="building-details-form">
@@ -41,10 +44,10 @@ export function BuildingDetailsForm({
             label="Nazwa budynku"
             variant="filled"
             fullWidth
-            defaultValue={`${name}`}
-            /*InputProps={{
+            value={name}
+            InputProps={{
               readOnly: true,
-            }}*/
+            }}
           />
         </div>
         <div className="building-type">
@@ -58,7 +61,7 @@ export function BuildingDetailsForm({
             label="Ulica"
             variant="filled"
             fullWidth
-            defaultValue={street}
+            value={street}
             InputProps={{
               readOnly: true,
             }}
@@ -71,7 +74,7 @@ export function BuildingDetailsForm({
             label="Kod pocztowy"
             variant="filled"
             fullWidth
-            defaultValue={postCode}
+            value={postCode}
             InputProps={{
               readOnly: true,
             }}
@@ -84,7 +87,7 @@ export function BuildingDetailsForm({
             label="Miasto"
             variant="filled"
             fullWidth
-            defaultValue={city}
+            value={city}
             InputProps={{
               readOnly: true,
             }}
@@ -97,7 +100,7 @@ export function BuildingDetailsForm({
             label="Województwo"
             variant="filled"
             fullWidth
-            defaultValue={region}
+            value={region}
             InputProps={{
               readOnly: true,
             }}
@@ -121,7 +124,7 @@ export function BuildingDetailsForm({
             variant="filled"
             fullWidth
             multiline
-            defaultValue={additionalInfo}
+            value={additionalInfo}
             inputProps={{
               readOnly: true,
               style: {

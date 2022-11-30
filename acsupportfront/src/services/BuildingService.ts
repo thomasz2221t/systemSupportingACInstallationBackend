@@ -15,9 +15,9 @@ const getBuilding = (buildingId: number) => {
   });
 };
 
-const UserService = {
+const BuildingService = {
   getUserBuildings,
   getBuilding,
 };
 
-export default UserService;
+export default BuildingService;
