@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.polsl.acsupport.dtos.BuildingDto;
 import pl.polsl.acsupport.entities.Building;
+import pl.polsl.acsupport.entities.Room;
 import pl.polsl.acsupport.entities.User;
 import pl.polsl.acsupport.repositories.BuildingRepository;
+import pl.polsl.acsupport.repositories.RoomRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -24,6 +26,10 @@ public class BuildingService {
     final private BuildingRepository buildingRepository;
 
     final private UserService userService;
+
+    final private RoomService roomService;
+
+    final private RoomRepository roomRepository;
 
     public Page<BuildingDto> findAll(Pageable pageable){
         final Page<Building> buildings = buildingRepository.findAll(pageable);
@@ -72,5 +78,20 @@ public class BuildingService {
         Set<Building> buildings = user.getBuildings();
         List<BuildingDto> buildingDtos = buildings.stream().map(BuildingDto::new).collect(Collectors.toList());
         return new PageImpl<>(buildingDtos);
+    }
+
+    @Transactional
+    public void assignRoomToBuilding(Long buildingId, Long roomId){
+        Building building = findById(buildingId);
+        Room room = roomService.findById(roomId);
+
+        Set<Room> buildingRoom = building.getRooms();
+        buildingRoom.add(room);
+        building.setRooms(buildingRoom);
+
+        room.setBuilding(building);
+
+        buildingRepository.save(building);
+        roomRepository.save(room);
     }
 }

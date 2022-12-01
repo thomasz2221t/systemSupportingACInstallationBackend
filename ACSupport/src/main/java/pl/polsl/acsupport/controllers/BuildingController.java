@@ -60,4 +60,10 @@ public class BuildingController {
     public Page<BuildingDto> findUserBuildings(@PathVariable Long userId){
         return buildingService.findUserBuildings(userId);
     }
+
+    @PreAuthorize("hasAuthority('UPDATE_BUILDING')")
+    @PatchMapping("/assignroom/{buildingId}")
+    public void assignRoomToBuilding(@PathVariable Long buildingId, @RequestBody Long roomId){
+        buildingService.assignRoomToBuilding(buildingId, roomId);
+    }
 }
