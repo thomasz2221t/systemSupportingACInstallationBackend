@@ -1,5 +1,5 @@
 import React from "react";
-import LoginWindow from "components/LoginWindow";
+import LoginWindow from "components/LoginWindow/LoginWindow";
 import "./LoginPage.scss";
 
 export function LoginPage() {

@@ -1,7 +1,12 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { BuildingsPage } from "./pages/BuildingsPage/BuildingsPage";
+import { BuildingPage } from "pages/BuildingPage/BuildingPage";
+import { RoomPage } from "pages/RoomPage/RoomPage";
+import { ServicePage } from "pages/ServicePage/ServicePage";
+
 import "./App.css";
 //import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -27,6 +32,12 @@ function App() {
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/obiekty" element={<BuildingsPage />} />
+            <Route path="/obiekty/obiekt/:id" element={<BuildingPage />} />
+            <Route
+              path="/obiekty/obiekt/:id/pomieszczenia"
+              element={<RoomPage />}
+            />
+            <Route path="/uslugi" element={<ServicePage />} />
           </Routes>
         </Router>
       </div>

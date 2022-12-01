@@ -1,0 +1,87 @@
+.room-details-form {
+  position: relative;
+  width: 1132px;
+  height: 538px;
+  background: #d6e900;
+  display: grid;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 18px;
+  grid-template-columns: 20px 1fr 1fr 20px;
+  grid-template-rows: 30px 1fr 1fr 1fr 1fr 50px 20px;
+  column-gap: 29px;
+  row-gap: 10px;
+
+  .room-name {
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .room-purpose {
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  .room-area-x {
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  .room-area-y {
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    grid-column: 3;
+    grid-row: 3;
+  }
+
+  .room-height {
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    grid-column: 2;
+    grid-row: 4;
+  }
+
+  .room-power-giveout {
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    grid-column: 3;
+    grid-row: 4;
+  }
+
+  .room-people-number {
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    grid-column: 2;
+    grid-row: 5;
+  }
+
+  .room-additional-info {
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    grid-column: 3;
+    grid-row: 5;
+  }
+}
+
+.room-details-form text {
+  font-family: "Segoe UI";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: #000000;
+  margin-left: 5px;
+}

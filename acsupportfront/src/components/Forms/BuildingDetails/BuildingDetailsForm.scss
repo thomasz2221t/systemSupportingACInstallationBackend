@@ -1,0 +1,104 @@
+.building-details-form {
+  position: relative;
+  width: 1053px;
+  height: 512px;
+  display: grid;
+  background: #3298d1;
+  border-radius: 18px;
+  grid-template-columns: 20px 1fr 1fr 1fr 1fr 20px;
+  grid-template-rows: 20px 1fr 1fr 1fr 1fr 1fr 20px;
+  gap: 10px;
+
+  .building-name-form {
+    height: 85px;
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    align-items: center;
+    grid-column: 2/4;
+  }
+
+  .building-type {
+    height: 85px;
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    grid-column: 2/4;
+    grid-row: 3;
+  }
+
+  .building-street {
+    height: 85px;
+    display: inline-grid;
+    text-align: left;
+    align-items: center;
+    grid-column: 2/4;
+    grid-row: 4;
+  }
+
+  .building-post-code {
+    height: 85px;
+    display: inline-grid;
+    text-align: left;
+    align-items: center;
+    grid-column: 2;
+    grid-row: 5;
+  }
+
+  .building-city {
+    height: 85px;
+    display: inline-grid;
+    text-align: left;
+    align-items: center;
+    grid-column: 3;
+    grid-row: 5;
+  }
+
+  .building-region {
+    height: 85px;
+    display: inline-grid;
+    text-align: left;
+    align-items: center;
+    grid-column: 2/4;
+    grid-row: 6;
+  }
+
+  .building-form-img {
+    display: block;
+    align-items: center;
+    grid-column: 4/6;
+    grid-row: 2/4;
+  }
+
+  .building-additional-info {
+    height: 85px;
+    text-align: left;
+    align-items: center;
+    grid-column: 4/6;
+    grid-row: 4;
+  }
+}
+
+.building-form-header {
+  margin-bottom: 5px;
+}
+
+.building-details-form text {
+  font-family: "Segoe UI";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: #000000;
+}
+
+.MuiFormLabel-root.Mui-focused {
+  color: #46ff09 !important;
+}
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #46ff09 !important;
+}
+
+.MuiFilledInput-input {
+  color: #000000 !important;
+}
