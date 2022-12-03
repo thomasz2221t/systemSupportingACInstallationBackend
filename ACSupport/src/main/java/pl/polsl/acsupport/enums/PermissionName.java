@@ -15,5 +15,9 @@ public enum PermissionName {
     FIND_USER,
     CREATE_USER,
     UPDATE_USER,
-    DELETE_USER
+    DELETE_USER,
+    FIND_ROOM_TYPE,
+    CREATE_ROOM_TYPE,
+    DELETE_ROOM_TYPE,
+
 }

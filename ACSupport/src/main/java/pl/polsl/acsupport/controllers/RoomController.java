@@ -53,4 +53,20 @@ public class RoomController {
     public void delete(@PathVariable Long id){
         roomService.delete(id);
     }
+
+    @PreAuthorize("hasAuthority('UPDATE_ROOM')")
+    @PatchMapping("/{roomId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void assignTypeToRoom(@PathVariable Long roomId, @RequestBody Long typeId){
+        roomService.assignTypeToRoom(roomId, typeId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_ROOM')")
+    @GetMapping("/{roomId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void revertAssigningTypeFromRoom(@PathVariable Long roomId){
+        roomService.revertAssigningTypeFromRoom(roomId);
+    }
+
+
 }
