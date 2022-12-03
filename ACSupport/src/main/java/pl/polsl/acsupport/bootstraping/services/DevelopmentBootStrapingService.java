@@ -12,14 +12,8 @@ import pl.polsl.acsupport.dtos.RoomDto;
 import pl.polsl.acsupport.entities.*;
 import pl.polsl.acsupport.enums.PermissionName;
 import pl.polsl.acsupport.enums.RoleName;
-import pl.polsl.acsupport.repositories.BuildingRepository;
-import pl.polsl.acsupport.repositories.PermissionRepository;
-import pl.polsl.acsupport.repositories.RoleRepository;
-import pl.polsl.acsupport.repositories.UserRepository;
-import pl.polsl.acsupport.services.BuildingService;
-import pl.polsl.acsupport.services.BuildingTypeService;
-import pl.polsl.acsupport.services.RoomService;
-import pl.polsl.acsupport.services.UserService;
+import pl.polsl.acsupport.repositories.*;
+import pl.polsl.acsupport.services.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
@@ -42,7 +36,13 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
     UserRepository userRepository;
 
     @Autowired
+    BuildingTypeRepository buildingTypeRepository;
+
+    @Autowired
     BuildingTypeService buildingTypeService;
+
+    @Autowired
+    RoomRepository roomRepository;
 
     @Autowired
     RoomService roomService;
@@ -56,6 +56,12 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
     @Autowired
     BuildingRepository buildingRepository;
 
+    @Autowired
+    RoomTypeRepository roomTypeRepository;
+
+    @Autowired
+    RoomTypeService roomTypeService;
+
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
@@ -65,9 +71,13 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_USERS, this::createDefaultUsers);
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_ROLES, this::createDefaultRoles);
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_BUILDING_TYPES, this::createDefaultBuildingTypes);
+        bootStrapingEntryService.createIfNotExists(BootStrapingLabel.ASSIGN_DEFAULT_BUILDING_TYPES_TO_BUILDINGS, this::assignDefaultBuildingTypesToDefaultBuildings);
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_ROOMS, this::createDefaultRooms);
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.ASSIGN_USER_TO_ROLES, this::assignDefaultUsersToDefaultRoles);
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.ASSIGN_DEFAULT_USERS_TO_DEFAULT_BUILDINGS,this::assignDefaultUsersToDefaultBuildings);
+        bootStrapingEntryService.createIfNotExists(BootStrapingLabel.ASSING_DEFAULT_ROOM_TO_BUILDINGS,this::assignDefaultRoomsToDefaultBuildings);
+        bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_ROOM_TYPES, this::createDefaultRoomTypes);
+        bootStrapingEntryService.createIfNotExists(BootStrapingLabel.ASSING_DEFAULT_ROOM_TYPES_TO_ROOMS,this::assignDefaultRoomTypesToRooms);
     }
 
     private void createDefaultBuildings(){
@@ -138,6 +148,16 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         client1.setTelephone("333444555");
         client1.setEnabled(true);
         userRepository.save(client1);
+
+        User client2 = new User();
+        client2.setLogin("client2");
+        client2.setPassword(passwordEncoder.encode("inzynier"));
+        client2.setFirstName("Adam");
+        client2.setLastName("Baran");
+        client2.setEmail("adam_baran@gmail.com");
+        client2.setTelephone("000000888");
+        client2.setEnabled(true);
+        userRepository.save(client2);
     }
 
     private Permission addPermissions(PermissionName name) {
@@ -202,10 +222,12 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         User admin = userRepository.findUserByLogin("admin").orElseThrow(EntityNotFoundException::new);
         User operator1 = userRepository.findUserByLogin("operator1").orElseThrow(EntityNotFoundException::new);
         User client1 = userRepository.findUserByLogin("client1").orElseThrow(EntityNotFoundException::new);
+        User client2 = userRepository.findUserByLogin("client2").orElseThrow(EntityNotFoundException::new);
 
         admin.setRoles(adminRoles);
         operator1.setRoles(operatorRoles);
         client1.setRoles(clientRoles);
+        client2.setRoles(clientRoles);
     }
 
     private void createDefaultBuildingTypes(){
@@ -218,8 +240,51 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         buildingTypeService.create(new BuildingTypeDto(buildingType2));
 
         BuildingType buildingType3 = new BuildingType();
-        buildingType3.setName("Budynek pełniący firmę handlowo-usługową");
+        buildingType3.setName("Budynek pełniący funkcje handlowo-usługową");
         buildingTypeService.create(new BuildingTypeDto(buildingType3));
+
+        BuildingType buildingType4 = new BuildingType();
+        buildingType4.setName("Budynek użyteczności publicznej");
+        buildingTypeService.create(new BuildingTypeDto(buildingType4));
+    }
+
+    private void assignDefaultBuildingTypesToDefaultBuildings(){
+        BuildingType buildingType1 = buildingTypeService.findById(1L);//Budynek mieszkalny
+        Set<Building> buildingType1Set = buildingType1.getBuilding();
+
+        BuildingType buildingType2 = buildingTypeService.findById(2L);//Magazyny, budynki przemysłowe
+        Set<Building> buildingType2Set = buildingType2.getBuilding();
+
+        BuildingType buildingType3 = buildingTypeService.findById(3L);//Budynek pełniący funkcje handlowo-usługową
+        Set<Building> buildingType3Set = buildingType3.getBuilding();
+
+        BuildingType buildingType4 = buildingTypeService.findById(4L);//Budynek uzytecznosci publicznej
+        Set<Building> buildingType4Set = buildingType4.getBuilding();
+
+        Building building1 = buildingService.findById(1L);//Przedsiębiorstwo piekarnicze składające się z częsci usługowej oraz produkcyjnej.
+        building1.setType(buildingType3);
+        buildingType3Set.add(building1);
+
+        Building building2 = buildingService.findById(2L);//Pub w budynku jednopiętrowym z niewielkimi oknami.
+        building2.setType(buildingType1);
+        buildingType1Set.add(building2);
+
+        Building building3 = buildingService.findById(3L);//Budynek dworca kolejowego Chorzów Batory.
+        building3.setType(buildingType4);
+        buildingType4Set.add(building3);
+
+        Building building4 = buildingService.findById(4L);//Dom prywatny jednopiętrowy.
+        building4.setType(buildingType1);
+        buildingType1Set.add(building4);
+
+        buildingType1.setBuilding(buildingType1Set);
+        buildingType2.setBuilding(buildingType2Set);
+        buildingType3.setBuilding(buildingType3Set);
+        buildingType4.setBuilding(buildingType4Set);
+        buildingTypeRepository.save(buildingType1);
+        buildingTypeRepository.save(buildingType2);
+        buildingTypeRepository.save(buildingType3);
+        buildingTypeRepository.save(buildingType4);
     }
 
     private void createDefaultRooms(){
@@ -228,6 +293,8 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         room1.setAreaWidth(BigDecimal.valueOf(20));
         room1.setAreaHeight(BigDecimal.valueOf(30));
         room1.setHeight(BigDecimal.valueOf(3));
+        room1.setEnergyGivenOut(BigDecimal.valueOf(0));
+        room1.setPeopleNumber(BigDecimal.valueOf(2));
         room1.setDescription("Pomieszczenie usługowe");
         roomService.create(new RoomDto(room1));
 
@@ -236,6 +303,8 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         room2.setAreaWidth(BigDecimal.valueOf(15));
         room2.setAreaHeight(BigDecimal.valueOf(20));
         room2.setHeight(BigDecimal.valueOf(3));
+        room2.setEnergyGivenOut(BigDecimal.valueOf(5));
+        room2.setPeopleNumber(BigDecimal.valueOf(5));
         room2.setDescription("Pomieszczenie usługowe");
         roomService.create(new RoomDto(room2));
 
@@ -244,6 +313,8 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         room3.setAreaWidth(BigDecimal.valueOf(40));
         room3.setAreaHeight(BigDecimal.valueOf(30));
         room3.setHeight(BigDecimal.valueOf(2.8));
+        room3.setEnergyGivenOut(BigDecimal.valueOf(0));
+        room3.setPeopleNumber(BigDecimal.valueOf(50));
         room3.setDescription("Miejsce w którym przebywa wiele osób");
         roomService.create(new RoomDto(room3));
 
@@ -252,6 +323,8 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         room4.setAreaWidth(BigDecimal.valueOf(5));
         room4.setAreaHeight(BigDecimal.valueOf(2));
         room4.setHeight(BigDecimal.valueOf(2.8));
+        room4.setEnergyGivenOut(BigDecimal.valueOf(1));
+        room4.setPeopleNumber(BigDecimal.valueOf(10));
         room4.setDescription("Magazyn na zapleczu");
         roomService.create(new RoomDto(room4));
 
@@ -260,6 +333,8 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         room5.setAreaWidth(BigDecimal.valueOf(100));
         room5.setAreaHeight(BigDecimal.valueOf(200));
         room5.setHeight(BigDecimal.valueOf(10));
+        room5.setEnergyGivenOut(BigDecimal.valueOf(20));
+        room5.setPeopleNumber(BigDecimal.valueOf(70));
         room5.setDescription("Główne pomieszczenie dworcowe");
         roomService.create(new RoomDto(room5));
 
@@ -268,6 +343,8 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         room6.setAreaWidth(BigDecimal.valueOf(30));
         room6.setAreaHeight(BigDecimal.valueOf(5));
         room6.setHeight(BigDecimal.valueOf(2.5));
+        room6.setEnergyGivenOut(BigDecimal.valueOf(0.5));
+        room6.setPeopleNumber(BigDecimal.valueOf(4));
         room6.setDescription("Pokój gościnny z patio");
         roomService.create(new RoomDto(room6));
 
@@ -276,13 +353,15 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         room7.setAreaWidth(BigDecimal.valueOf(10));
         room7.setAreaHeight(BigDecimal.valueOf(8));
         room7.setHeight(BigDecimal.valueOf(2.5));
+        room7.setEnergyGivenOut(BigDecimal.valueOf(53.4));
+        room7.setPeopleNumber(BigDecimal.valueOf(1));
         room7.setDescription("Serwerownia w składziku");
         roomService.create(new RoomDto(room7));
-
     }
 
     public void assignDefaultUsersToDefaultBuildings(){
         User client1 = userRepository.findUserByLogin("client1").orElseThrow(EntityNotFoundException::new);
+        Set<Building> client1Buildings = client1.getBuildings();
         Building building1 = buildingService.findById(1L);
         building1.setUser(client1);
         buildingRepository.save(building1);
@@ -292,5 +371,192 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         Building building3 = buildingService.findById(3L);
         building3.setUser(client1);
         buildingRepository.save(building3);
+        client1Buildings.add(building1);
+        client1Buildings.add(building2);
+        client1Buildings.add(building3);
+        userRepository.save(client1);
+
+        User client2 = userRepository.findUserByLogin("client1").orElseThrow(EntityNotFoundException::new);
+        Set<Building> client2Buildings = client2.getBuildings();
+        Building building4 = buildingService.findById(4L);
+        building4.setUser(client2);
+        buildingRepository.save(building4);
+        client2Buildings.add(building4);
+        userRepository.save(client2);
     }
+
+    public void assignDefaultRoomsToDefaultBuildings() {
+        Building building1 = buildingService.findById(1L);//Przedsiębiorstwo piekarnicze składające się z częsci usługowej oraz produkcyjnej.
+        Set<Room> building1Rooms = building1.getRooms();
+
+        Building building2 = buildingService.findById(2L);//Pub w budynku jednopiętrowym z niewielkimi oknami.
+        Set<Room> building2Rooms = building2.getRooms();
+
+        Building building3 = buildingService.findById(3L);//Budynek dworca kolejowego Chorzów Batory.
+        Set<Room> building3Rooms = building3.getRooms();
+
+        Building building4 = buildingService.findById(4L);//Dom prywatny jednopiętrowy.
+        Set<Room> building4Rooms = building4.getRooms();
+
+        Room room1 = roomService.findById(1L);//Pomieszczenie uslugowe piekarni
+        room1.setBuilding(building1);
+        building1Rooms.add(room1);
+        roomRepository.save(room1);
+
+        Room room2 = roomService.findById(2L);//Pomieszczenie produkcyjne piekarni
+        room2.setBuilding(building1);
+        building1Rooms.add(room2);
+        roomRepository.save(room2);
+
+        Room room3 = roomService.findById(3L);//Pomieszczenie glowne
+        room3.setBuilding(building2);
+        building2Rooms.add(room3);
+        roomRepository.save(room3);
+
+        Room room4 = roomService.findById(4L);//Pomieszczenie magazynowe
+        room4.setBuilding(building2);
+        building2Rooms.add(room4);
+        roomRepository.save(room4);
+
+        Room room5 = roomService.findById(5L);//Glowne hall dworcowa
+        room5.setBuilding(building3);
+        building3Rooms.add(room5);
+        roomRepository.save(room5);
+
+        Room room6 = roomService.findById(6L);//Pokoj goscinny
+        room6.setBuilding(building4);
+        building4Rooms.add(room6);
+        roomRepository.save(room6);
+
+        Room room7 = roomService.findById(7L);//Serwerownia
+        room7.setBuilding(building4);
+        building4Rooms.add(room7);
+        roomRepository.save(room7);
+
+        building1.setRooms(building1Rooms);
+        building2.setRooms(building2Rooms);
+        building3.setRooms(building3Rooms);
+        building4.setRooms(building4Rooms);
+        buildingRepository.save(building1);
+        buildingRepository.save(building2);
+        buildingRepository.save(building3);
+        buildingRepository.save(building4);
+    }
+
+    public void createDefaultRoomTypes(){
+        RoomType roomType1 = new RoomType();
+        roomType1.setName("Pomieszczenie Mieszkalne");
+        roomTypeRepository.save(roomType1);
+
+        RoomType roomType2 = new RoomType();
+        roomType2.setName("Pomieszczenie usługowo-handlowe");
+        roomTypeRepository.save(roomType2);
+
+        RoomType roomType3 = new RoomType();
+        roomType3.setName("Pomieszczenie produkcyjne");
+        roomTypeRepository.save(roomType3);
+
+        RoomType roomType4 = new RoomType();
+        roomType4.setName("Biuro");
+        roomTypeRepository.save(roomType4);
+
+        RoomType roomType5 = new RoomType();
+        roomType5.setName("Handel wielkopowierzchniowy");
+        roomTypeRepository.save(roomType5);
+
+        RoomType roomType6 = new RoomType();
+        roomType6.setName("Serwerownia");
+        roomTypeRepository.save(roomType6);
+
+        RoomType roomType7 = new RoomType();
+        roomType7.setName("Magazyn");
+        roomTypeRepository.save(roomType7);
+
+        RoomType roomType8 = new RoomType();
+        roomType8.setName("Hala produkcyjna");
+        roomTypeRepository.save(roomType8);
+
+        RoomType roomType9 = new RoomType();
+        roomType9.setName("Miejsce publiczne");
+        roomTypeRepository.save(roomType9);
+    }
+
+    public void assignDefaultRoomTypesToRooms(){
+        RoomType roomType1 = roomTypeService.findById(1L);
+        Set<Room> roomType1Rooms = roomType1.getRooms();
+
+        RoomType roomType2 = roomTypeService.findById(2L);
+        Set<Room> roomType2Rooms = roomType2.getRooms();
+
+        RoomType roomType3 = roomTypeService.findById(3L);
+        Set<Room> roomType3Rooms = roomType3.getRooms();
+
+        /*RoomType roomType4 = roomTypeService.findById(4L);
+        Set<Room> roomType4Rooms = roomType4.getRooms();*/
+
+        /*RoomType roomType5 = roomTypeService.findById(5L);
+        Set<Room> roomType5Rooms = roomType5.getRooms();*/
+
+        RoomType roomType6 = roomTypeService.findById(6L);
+        Set<Room> roomType6Rooms = roomType6.getRooms();
+
+        RoomType roomType7 = roomTypeService.findById(7L);
+        Set<Room> roomType7Rooms = roomType7.getRooms();
+
+        /*RoomType roomType8 = roomTypeService.findById(8L);
+        Set<Room> roomType8Rooms = roomType8.getRooms();*/
+
+        RoomType roomType9 = roomTypeService.findById(9L);
+        Set<Room> roomType9Rooms = roomType9.getRooms();
+
+        Room room1 = roomService.findById(1L);//Pomieszczenie usługowe pierkania
+        room1.setType(roomType2);
+        roomType2Rooms.add(room1);
+        roomRepository.save(room1);
+
+        Room room2 = roomService.findById(2L);//Pomieszczenie produkcyjne pierkania
+        room2.setType(roomType3);
+        roomType3Rooms.add(room2);
+        roomRepository.save(room2);
+
+        Room room3 = roomService.findById(3L);//Pomieszczenie główne
+        room3.setType(roomType9);
+        roomType9Rooms.add(room3);
+        roomRepository.save(room3);
+
+        Room room4 = roomService.findById(4L);//Pomieszczenie magazynowe
+        room4.setType(roomType7);
+        roomType7Rooms.add(room4);
+        roomRepository.save(room4);
+
+        Room room5 = roomService.findById(5L);//Główny hall dworca
+        room5.setType(roomType9);
+        roomType9Rooms.add(room5);
+        roomRepository.save(room5);
+
+        Room room6 = roomService.findById(6L);//Pokój gościnny
+        room6.setType(roomType1);
+        roomType1Rooms.add(room6);
+        roomRepository.save(room6);
+
+        Room room7 = roomService.findById(7L);//Serwerownia
+        room7.setType(roomType6);
+        roomType6Rooms.add(room7);
+        roomRepository.save(room7);
+
+        roomType1.setRooms(roomType1Rooms);
+        roomType2.setRooms(roomType2Rooms);
+        roomType3.setRooms(roomType3Rooms);
+        roomType6.setRooms(roomType6Rooms);
+        roomType7.setRooms(roomType7Rooms);
+        roomType9.setRooms(roomType9Rooms);
+        roomTypeRepository.save(roomType1);
+        roomTypeRepository.save(roomType2);
+        roomTypeRepository.save(roomType3);
+        roomTypeRepository.save(roomType6);
+        roomTypeRepository.save(roomType7);
+        roomTypeRepository.save(roomType9);
+    }
+
+
 }
