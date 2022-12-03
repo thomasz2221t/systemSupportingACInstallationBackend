@@ -9,7 +9,6 @@ import pl.polsl.acsupport.bootstraping.enums.BootStrapingLabel;
 import pl.polsl.acsupport.dtos.BuildingDto;
 import pl.polsl.acsupport.dtos.BuildingTypeDto;
 import pl.polsl.acsupport.dtos.RoomDto;
-import pl.polsl.acsupport.dtos.UserDto;
 import pl.polsl.acsupport.entities.*;
 import pl.polsl.acsupport.enums.PermissionName;
 import pl.polsl.acsupport.enums.RoleName;
