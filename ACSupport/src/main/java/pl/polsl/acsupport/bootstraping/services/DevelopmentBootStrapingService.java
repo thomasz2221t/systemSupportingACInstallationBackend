@@ -376,7 +376,7 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         client1Buildings.add(building3);
         userRepository.save(client1);
 
-        User client2 = userRepository.findUserByLogin("client1").orElseThrow(EntityNotFoundException::new);
+        User client2 = userRepository.findUserByLogin("client2").orElseThrow(EntityNotFoundException::new);
         Set<Building> client2Buildings = client2.getBuildings();
         Building building4 = buildingService.findById(4L);
         building4.setUser(client2);
