@@ -24,6 +24,10 @@ public class RoomDto {
 
     private BigDecimal height;
 
+    private BigDecimal energyGivenOut;
+
+    private BigDecimal peopleNumber;
+
     private String description;
 
     public RoomDto(Room room){
@@ -32,6 +36,8 @@ public class RoomDto {
         this.areaWidth = room.getAreaWidth();
         this.areaHeight = room.getAreaHeight();
         this.height = room.getHeight();
+        this.energyGivenOut = room.getEnergyGivenOut();
+        this.peopleNumber = room.getPeopleNumber();
         this.description = room.getDescription();
     }
 }

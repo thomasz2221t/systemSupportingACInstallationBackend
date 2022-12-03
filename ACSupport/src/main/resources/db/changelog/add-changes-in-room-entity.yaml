@@ -1,0 +1,22 @@
+databaseChangeLog:
+- changeSet:
+    id: 1670085329122-1
+    author: 0_0 (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: energy_given_out
+            type: numeric(19, 2)
+        tableName: rooms
+- changeSet:
+    id: 1670085329122-2
+    author: 0_0 (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: people_number
+            type: numeric(19, 2)
+        tableName: rooms
+

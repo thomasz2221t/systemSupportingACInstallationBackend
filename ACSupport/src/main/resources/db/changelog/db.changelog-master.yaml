@@ -13,3 +13,5 @@ databaseChangeLog:
       file: db/changelog/add-bootstraping-entry-entity.yaml
   - include:
       file: db/changelog/add-enabled-field-in-user-entity.yaml
+  - include:
+      file: db/changelog/add-changes-in-room-entity.yaml

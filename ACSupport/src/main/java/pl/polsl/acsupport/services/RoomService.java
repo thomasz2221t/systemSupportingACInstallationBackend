@@ -40,6 +40,8 @@ public class RoomService {
         room.setAreaWidth(roomDto.getAreaWidth());
         room.setAreaHeight(roomDto.getAreaHeight());
         room.setHeight(roomDto.getHeight());
+        room.setEnergyGivenOut(roomDto.getEnergyGivenOut());
+        room.setPeopleNumber(roomDto.getEnergyGivenOut());
         room.setDescription(roomDto.getDescription());
         return roomRepository.save(room);
     }
@@ -51,6 +53,8 @@ public class RoomService {
         room.setAreaWidth(roomDto.getAreaWidth());
         room.setAreaHeight(roomDto.getAreaHeight());
         room.setHeight(roomDto.getHeight());
+        room.setEnergyGivenOut(roomDto.getEnergyGivenOut());
+        room.setPeopleNumber(roomDto.getPeopleNumber());
         room.setDescription(roomDto.getDescription());
         return roomRepository.save(room);
     }

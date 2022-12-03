@@ -23,6 +23,12 @@ public class Room extends BaseEntity{
 
     private BigDecimal height;
 
+    @Column(name = "energy_given_out")
+    private BigDecimal energyGivenOut;
+
+    @Column(name = "people_number")
+    private BigDecimal peopleNumber;
+
     private String description;
 
     @ManyToOne
