@@ -15,9 +15,16 @@ const getBuilding = (buildingId: number) => {
   });
 };
 
+const getFindBuildingType = (buildingId: number) => {
+  return axios.get(`${API_URL}/building/type/${buildingId}`,{
+    headers: authHeader(),
+  });
+};
+
 const BuildingService = {
   getUserBuildings,
   getBuilding,
+  getFindBuildingType,
 };
 
 export default BuildingService;

@@ -1,13 +1,17 @@
-import React from "react";
-import { Select, TextField } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import React, { useEffect, useState } from 'react';
+import { MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-import "./BuildingDetailsForm.scss";
+import BuildingTypeType from 'types/BuildingTypeType';
+import BuildingTypeService from 'services/BuildingTypeService';
+
+import './BuildingDetailsForm.scss';
 
 export type buildingDetailsFormProp = {
   id: number;
   name: string;
-  type: string;
+  typeId: number;
+  typeName: string;
   street: string;
   postCode: string;
   city: string;
@@ -16,25 +20,46 @@ export type buildingDetailsFormProp = {
 };
 
 const styles = makeStyles({
-  notchedOutline: { borderColor: "#f0f !important" },
+  notchedOutline: { borderColor: '#f0f !important' },
 });
 
 export function BuildingDetailsForm({
   id,
   name,
-  type,
+  typeId,
+  typeName,
   street,
   postCode,
   city,
   region,
   additionalInfo,
 }: buildingDetailsFormProp) {
-  const exampleBuilding = require("../../../images/exampleBuilding.jpg");
+  const [buildingTypePage, setBuildingTypePage] = useState<BuildingTypeType[]>(
+    []
+  );
+  const [typeIdNumber, setTypeIdNumber] = useState<number>(0);
+  const exampleBuilding = require('../../../images/exampleBuilding.jpg');
   const style = styles();
 
-  console.log(name)
-  console.log(street)
-  console.log(postCode)
+  const handleGettingAllBuildingTypes = async () => {
+    await BuildingTypeService.getFindAllBuildingType().then((response) => {
+      setBuildingTypePage(response.data.content);
+      return buildingTypePage;
+    });
+  };
+
+  useEffect(() => {
+    handleGettingAllBuildingTypes();
+  }, []);
+
+  const onChange = (event: SelectChangeEvent<number>) => {
+    setTypeIdNumber(Number(event.target.value));
+  };
+
+  console.log(name);
+  console.log(street);
+  console.log(postCode);
+  console.log(typeId);
   return (
     <>
       <div className="building-details-form">
@@ -52,7 +77,22 @@ export function BuildingDetailsForm({
         </div>
         <div className="building-type">
           <text className="building-form-header">Typ budynku</text>
-          <Select id="building-type-text" size="small" />
+          <Select
+            id="building-type-text"
+            label="Typ budynku"
+            size="small"
+            displayEmpty
+            value={typeIdNumber}
+            inputProps={{ readOnly: true }}
+            onChange={onChange}
+          >
+            <MenuItem value={0}>{typeName}</MenuItem>
+            {buildingTypePage.map((data, id) => (
+              <MenuItem key={data.id} value={data.id}>
+                {data.name}
+              </MenuItem>
+            ))}
+          </Select>
         </div>
         <div className="building-street">
           <text className="building-form-header">Ulica</text>
@@ -128,7 +168,7 @@ export function BuildingDetailsForm({
             inputProps={{
               readOnly: true,
               style: {
-                height: "122px",
+                height: '122px',
               },
             }}
           />
