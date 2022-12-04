@@ -1,6 +1,6 @@
-import axios from "axios";
-import API_URL from "utils/ApiUrl";
-import authHeader from "./auth/AuthHeaders";
+import axios from 'axios';
+import API_URL from 'utils/ApiUrl';
+import authHeader from './auth/AuthHeaders';
 
 const getUserBuildings = (userId: number) => {
   console.log(authHeader());
@@ -16,7 +16,13 @@ const getBuilding = (buildingId: number) => {
 };
 
 const getFindBuildingType = (buildingId: number) => {
-  return axios.get(`${API_URL}/building/type/${buildingId}`,{
+  return axios.get(`${API_URL}/building/type/${buildingId}`, {
+    headers: authHeader(),
+  });
+};
+
+const getFindAllBuildingsRooms = (buildingId: number) => {
+  return axios.get(`${API_URL}/building/room/${buildingId}`, {
     headers: authHeader(),
   });
 };
@@ -25,6 +31,7 @@ const BuildingService = {
   getUserBuildings,
   getBuilding,
   getFindBuildingType,
+  getFindAllBuildingsRooms,
 };
 
 export default BuildingService;

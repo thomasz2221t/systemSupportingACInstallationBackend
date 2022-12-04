@@ -1,7 +1,10 @@
-import React from "react";
-import { TextField } from "@mui/material";
+import React, { useEffect, useState } from 'react';
+import { MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
 
-import "./RoomDetailsForm.scss";
+import RoomTypeType from 'types/RoomTypeType';
+import RoomTypeService from 'services/RoomTypeService';
+
+import './RoomDetailsForm.scss';
 
 export type roomDetailsFormProp = {
   id: number;
@@ -10,12 +13,39 @@ export type roomDetailsFormProp = {
   areaX: number;
   areaY: number;
   height: number;
-  powerGiveOut: number;
+  energyGiveOut: number;
   numberOfPeople: number;
   additionalInfo: string;
 };
 
-export function RoomDetailsForm({ id, name, purpose, areaX, areaY, height, powerGiveOut, numberOfPeople, additionalInfo }: roomDetailsFormProp) {
+export function RoomDetailsForm({
+  id,
+  name,
+  purpose,
+  areaX,
+  areaY,
+  height,
+  energyGiveOut,
+  numberOfPeople,
+  additionalInfo,
+}: roomDetailsFormProp) {
+  const [roomTypeId, setRoomTypeId] = useState<number>(0);
+  const [roomTypePage, setRoomTypePage] = useState<RoomTypeType[]>([]);
+
+  const handleGettingAllRoomTypes = async () => {
+    await RoomTypeService.getFindAllRooms().then((response) => {
+      setRoomTypePage(response.data.content);
+    });
+  };
+
+  useEffect(() => {
+    handleGettingAllRoomTypes();
+  }, []);
+
+  const onChange = (event: SelectChangeEvent<number>) => {
+    setRoomTypeId(Number(event.target.value));
+  };
+
   return (
     <>
       <div className="room-details-form">
@@ -34,7 +64,22 @@ export function RoomDetailsForm({ id, name, purpose, areaX, areaY, height, power
         </div>
         <div className="room-purpose">
           <text>Przeznaczenie pomieszczenia</text>
-          <TextField
+          <Select
+            label="Przeznaczenie pomieszczenia"
+            size="small"
+            displayEmpty
+            value={roomTypeId}
+            inputProps={{ readOnly: true }}
+            onChange={onChange}
+          >
+            <MenuItem value={0}>{purpose}</MenuItem>
+            {roomTypePage.map((data, id) => (
+              <MenuItem key={data.id} value={data.id}>
+                {data.name}
+              </MenuItem>
+            ))}
+          </Select>
+          {/*<TextField
             label="Przeznaczenie pomieszczenia"
             variant="filled"
             size="small"
@@ -43,7 +88,7 @@ export function RoomDetailsForm({ id, name, purpose, areaX, areaY, height, power
             InputProps={{
               readOnly: true,
             }}
-          />
+          />*/}
         </div>
         <div className="room-area-x">
           <text>Długość pomieszczenia</text>
@@ -91,7 +136,7 @@ export function RoomDetailsForm({ id, name, purpose, areaX, areaY, height, power
             variant="filled"
             size="small"
             fullWidth
-            value={powerGiveOut}
+            value={energyGiveOut}
             InputProps={{
               readOnly: true,
             }}
