@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.polsl.acsupport.dtos.BuildingDto;
 import pl.polsl.acsupport.dtos.BuildingTypeDto;
+import pl.polsl.acsupport.dtos.RoomDto;
 import pl.polsl.acsupport.services.BuildingService;
 
 @RequiredArgsConstructor
@@ -60,6 +61,12 @@ public class BuildingController {
     @ResponseStatus(HttpStatus.OK)
     public Page<BuildingDto> findUserBuildings(@PathVariable Long userId){
         return buildingService.findUserBuildings(userId);
+    }
+
+    @PreAuthorize("hasAuthority('FIND_ROOM')")
+    @GetMapping("/room/{buildingId}")
+    public Page<RoomDto> findAllBuildingsRooms(@PathVariable Long buildingId){
+        return buildingService.findAllBuildingsRooms(buildingId);
     }
 
     @PreAuthorize("hasAuthority('UPDATE_BUILDING')")

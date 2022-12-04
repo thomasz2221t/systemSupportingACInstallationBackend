@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.polsl.acsupport.dtos.BuildingDto;
 import pl.polsl.acsupport.dtos.BuildingTypeDto;
+import pl.polsl.acsupport.dtos.RoomDto;
 import pl.polsl.acsupport.entities.Building;
 import pl.polsl.acsupport.entities.BuildingType;
 import pl.polsl.acsupport.entities.Room;
@@ -85,6 +86,13 @@ public class BuildingService {
         Set<Building> buildings = user.getBuildings();
         List<BuildingDto> buildingDtos = buildings.stream().map(BuildingDto::new).collect(Collectors.toList());
         return new PageImpl<>(buildingDtos);
+    }
+
+    public Page<RoomDto>findAllBuildingsRooms(Long buildingId){
+        Building building = findById(buildingId);
+        Set<Room> rooms = building.getRooms();
+        List<RoomDto> roomDtos = rooms.stream().map(RoomDto::new).collect(Collectors.toList());
+        return new PageImpl<>(roomDtos);
     }
 
     @Transactional
