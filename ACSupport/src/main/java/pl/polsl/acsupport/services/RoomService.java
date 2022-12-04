@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.polsl.acsupport.dtos.RoomDto;
+import pl.polsl.acsupport.dtos.RoomTypeDto;
 import pl.polsl.acsupport.entities.Room;
 import pl.polsl.acsupport.entities.RoomType;
 import pl.polsl.acsupport.repositories.RoomRepository;
@@ -66,6 +67,11 @@ public class RoomService {
     @Transactional
     public void delete(Long id){
         roomRepository.delete(findById(id));
+    }
+
+    public RoomTypeDto findRoomType(Long roomId){
+        Room room = findById(roomId);
+        return new RoomTypeDto(room.getType());
     }
 
     @Transactional

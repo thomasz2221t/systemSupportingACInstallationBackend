@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.polsl.acsupport.dtos.RoomDto;
+import pl.polsl.acsupport.dtos.RoomTypeDto;
 import pl.polsl.acsupport.services.RoomService;
 
 @RequiredArgsConstructor
@@ -52,6 +53,13 @@ public class RoomController {
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable Long id){
         roomService.delete(id);
+    }
+
+    @PreAuthorize("hasAuthority('FIND_ROOM')")
+    @GetMapping("/type/{roomId}")
+    @ResponseStatus(HttpStatus.OK)
+    public RoomTypeDto findRoomType(@PathVariable Long roomId){
+        return roomService.findRoomType(roomId);
     }
 
     @PreAuthorize("hasAuthority('UPDATE_ROOM')")
