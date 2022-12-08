@@ -105,6 +105,10 @@ export function BuildingsPage() {
             city={''}
             region={''}
             additionalInfo={''}
+            isEditable={() => {
+              return true;
+            }}
+            //isEditable={true}
           />
         </DialogContent>
         {/*<DialogActions>

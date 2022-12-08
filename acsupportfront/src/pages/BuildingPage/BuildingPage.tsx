@@ -35,6 +35,7 @@ export function BuildingPage() {
   );
   const [buildingTypeBody, setBuildingTypeBody] =
     useState<BuildingTypeType>(DEFAULT_TYPE_OBJECT);
+  const [buildingFormEditState, setBuildingFormEditState] = useState(true);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -68,11 +69,29 @@ export function BuildingPage() {
     navigate(`pomieszczenia`);
   };
 
+  const handleEditFormState = () => {
+    setBuildingFormEditState(!buildingFormEditState);
+    console.log(buildingFormEditState);
+    //return buildingFormEditState;
+  };
+
+  const getFormState = () => {
+    return buildingFormEditState;
+  };
+
   return (
     <>
       <Navbar />
       <UserAccount />
       <div className="building-details">
+        <Button
+          variant="contained"
+          onClick={() => {
+            handleEditFormState();
+          }}
+        >
+          Edytuj obiekt
+        </Button>
         <BuildingDetailsForm
           id={buildingBody.id}
           name={buildingBody.name}
@@ -83,6 +102,9 @@ export function BuildingPage() {
           city={buildingBody.city}
           region={buildingBody.region}
           additionalInfo={buildingBody.descirpiton}
+          //isEditable={handleEditFormState}
+          isEditable={getFormState}
+          //isEditable={buildingFormEditState}
         />
         <Button
           style={{
