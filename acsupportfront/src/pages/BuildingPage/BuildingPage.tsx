@@ -104,6 +104,7 @@ export function BuildingPage() {
           additionalInfo={buildingBody.descirpiton}
           //isEditable={handleEditFormState}
           isEditable={getFormState}
+          refreshParentData={handleGettingBuildingsData}
           //isEditable={buildingFormEditState}
         />
         <Button

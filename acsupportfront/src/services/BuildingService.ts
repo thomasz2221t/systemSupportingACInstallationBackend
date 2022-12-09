@@ -1,6 +1,10 @@
 import axios from 'axios';
+import BuildingType from 'types/BuildingType';
 import API_URL from 'utils/ApiUrl';
-import authHeader from './auth/AuthHeaders';
+import {
+  authHeader,
+  authHeaderForPrimitiveTypePatch,
+} from './auth/AuthHeaders';
 
 const getUserBuildings = (userId: number) => {
   console.log(authHeader());
@@ -27,11 +31,35 @@ const getFindAllBuildingsRooms = (buildingId: number) => {
   });
 };
 
+const postCreateBuilding = (buildingBody: BuildingType) => {
+  return axios.post(`${API_URL}/building`, buildingBody, {
+    headers: authHeader(),
+  });
+};
+
+const patchUpdateBuilding = (
+  buildingId: number,
+  buildingBody: BuildingType
+) => {
+  return axios.patch(`${API_URL}/building/${buildingId}`, buildingBody, {
+    headers: authHeader(),
+  });
+};
+
+const patchAssignTypeToBuilding = (buildingId: number, typeId: number) => {
+  return axios.patch(`${API_URL}/building/assigntype/${buildingId}`, typeId, {
+    headers: authHeaderForPrimitiveTypePatch(),
+  });
+};
+
 const BuildingService = {
   getUserBuildings,
   getBuilding,
   getFindBuildingType,
   getFindAllBuildingsRooms,
+  postCreateBuilding,
+  patchUpdateBuilding,
+  patchAssignTypeToBuilding,
 };
 
 export default BuildingService;
