@@ -20,7 +20,7 @@ const DEFAULT_BUILDING_OBJECT = {
   postCode: '',
   city: '',
   region: '',
-  descirpiton: '',
+  description: '',
 };
 
 const DEFAULT_TYPE_OBJECT = {
@@ -95,14 +95,15 @@ export function BuildingPage() {
         <BuildingDetailsForm
           id={buildingBody.id}
           name={buildingBody.name}
-          typeId={buildingTypeBody.id}
           typeName={buildingTypeBody.name}
           street={buildingBody.street}
           postCode={buildingBody.postCode}
           city={buildingBody.city}
           region={buildingBody.region}
-          additionalInfo={buildingBody.descirpiton}
+          description={buildingBody.description}
           //isEditable={handleEditFormState}
+          mustCreate={false}
+          userId={0}
           isEditable={getFormState}
           refreshParentData={handleGettingBuildingsData}
           //isEditable={buildingFormEditState}

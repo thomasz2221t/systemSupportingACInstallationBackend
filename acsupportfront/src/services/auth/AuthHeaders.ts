@@ -10,11 +10,22 @@ export function authHeader() {
 export function authHeaderForPrimitiveTypePatch() {
   console.log(user);
   return {
-    Authorization: 'Bearer ' + user,
-    'Content-type': 'application/json',
+    headers: {
+      Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+      'Content-Type': 'application/json',
+    },
   };
 }
 
+/*export function authHeaderPatchRequestWithPrimitiveType() {
+  return {
+    headers: {
+      Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+      'Content-type': 'application/json',
+    },
+  };
+}*/
+
 export function getTokenFromLocalStorage() {
-  return user.accessToken;
+  return user;
 }

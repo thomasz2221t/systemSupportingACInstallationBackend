@@ -6,7 +6,7 @@ type BuildingType = {
   postCode: string;
   city: string;
   region: string;
-  descirpiton: string;
+  description: string;
 };
 
 export default BuildingType;

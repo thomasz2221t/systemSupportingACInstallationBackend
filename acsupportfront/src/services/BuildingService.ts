@@ -47,9 +47,19 @@ const patchUpdateBuilding = (
 };
 
 const patchAssignTypeToBuilding = (buildingId: number, typeId: number) => {
-  return axios.patch(`${API_URL}/building/assigntype/${buildingId}`, typeId, {
-    headers: authHeaderForPrimitiveTypePatch(),
-  });
+  return axios.patch(
+    `${API_URL}/building/assigntype/${buildingId}`,
+    typeId,
+    authHeaderForPrimitiveTypePatch()
+  );
+};
+
+const patchAssignUserToBuilding = (buildingId: number, userId: number) => {
+  return axios.patch(
+    `${API_URL}/building/assignuser/${buildingId}`,
+    userId,
+    authHeaderForPrimitiveTypePatch()
+  );
 };
 
 const BuildingService = {
@@ -60,6 +70,7 @@ const BuildingService = {
   postCreateBuilding,
   patchUpdateBuilding,
   patchAssignTypeToBuilding,
+  patchAssignUserToBuilding,
 };
 
 export default BuildingService;

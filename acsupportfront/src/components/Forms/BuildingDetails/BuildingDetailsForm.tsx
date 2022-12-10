@@ -19,13 +19,13 @@ import './BuildingDetailsForm.scss';
 export type buildingDetailsFormProp = {
   id: number;
   name: string;
-  typeId: number;
   typeName: string;
   street: string;
   postCode: string;
   city: string;
   region: string;
-  additionalInfo: string;
+  description: string;
+  userId: number;
   mustCreate: boolean;
   isEditable: () => boolean;
   refreshParentData?: (buildingId: number) => void;
@@ -40,13 +40,14 @@ const styles = makeStyles({
 export function BuildingDetailsForm({
   id,
   name,
-  typeId,
   typeName,
   street,
   postCode,
   city,
   region,
-  additionalInfo,
+  description,
+  userId,
+  mustCreate,
   isEditable,
   refreshParentData,
 }: buildingDetailsFormProp) {
@@ -68,7 +69,7 @@ export function BuildingDetailsForm({
     postCode: postCode,
     city: city,
     region: region,
-    descirpiton: additionalInfo,
+    description: description,
   });
   const [buildingTypePage, setBuildingTypePage] = useState<BuildingTypeType[]>(
     []
@@ -87,29 +88,74 @@ export function BuildingDetailsForm({
     });
   };
 
-  /*To Do*/
   const handleUpdatingBuildingType = async (
     buildingId: number,
     buildingTypeId: number
-  ) => {};
+  ) => {
+    await BuildingService.patchAssignTypeToBuilding(buildingId, buildingTypeId);
+  };
 
   const handleUpdatingBuildingBody = async (
-    buildingId: number,
     buildingBody: BuildingType,
     buildingTypeId: number
   ) => {
-    await BuildingService.patchUpdateBuilding(buildingId, buildingBody).then(
-      (response) => {
-        const buildingId = response.data;
-        console.log(response.data);
-        handleUpdatingBuildingType(buildingId, buildingTypeId);
-        return response.data;
-      }
-    );
+    await BuildingService.patchUpdateBuilding(
+      buildingBody.id,
+      buildingBody
+    ).then(() => {
+      handleUpdatingBuildingType(buildingBody.id, buildingTypeId);
+    });
   };
 
-  const handleBuildingFormSubmit = () => {
+  const handleAssigningUserIdToBuilding = async (
+    buildingId: number,
+    userId: number
+  ) => {
+    await BuildingService.patchAssignUserToBuilding(buildingId, userId);
+  };
+
+  const handleCreatingBuildingBody = async (
+    buildingBody: BuildingType,
+    buildingTypeId: number,
+    userId: number
+  ) => {
+    let buildingId = 0;
+    await BuildingService.postCreateBuilding(buildingBody).then((response) => {
+      //const buildingId = response.data;
+      buildingId = response.data;
+      console.log(response.data);
+      //handleUpdatingBuildingType(Number(buildingId), buildingTypeId);
+      //handleAssigningUserIdToBuilding(Number(buildingId), userId);
+      return response.data;
+    });
+
+    handleUpdatingBuildingType(buildingId, buildingTypeId);
+    handleAssigningUserIdToBuilding(buildingId, userId);
+  };
+
+  /*const createBuilding = (
+    buildingBody: BuildingType,
+    buildingTypeId: number,
+    userId: number
+  ) => {
+    handleCreatingBuildingBody(buildingBody, buildingTypeId);
+    if (newBuildingId > 0) {
+      console.log('jest');
+      console.log(newBuildingId);
+    }
+    handleUpdatingBuildingType(newBuildingId, buildingTypeId);
+    handleAssigningUserIdToBuilding(newBuildingId, userId);
+  };*/
+
+  const handleBuildingFormSubmit = (
+    buildingBody: BuildingType,
+    buildingTypeId: number,
+    userId: number
+  ) => {
     console.log('update');
+    mustCreate === true
+      ? handleCreatingBuildingBody(buildingBody, buildingTypeId, userId)
+      : handleUpdatingBuildingBody(buildingBody, buildingTypeId);
   };
 
   useEffect(() => {
@@ -129,7 +175,7 @@ export function BuildingDetailsForm({
         postCode: postCode,
         city: city,
         region: region,
-        descirpiton: additionalInfo,
+        description: description,
       });
     }
   }, [editableState]);
@@ -138,17 +184,9 @@ export function BuildingDetailsForm({
     setTypeIdNumber(Number(event.target.value));
   };
 
-  console.log(name);
-  console.log(street);
-  console.log(postCode);
-  console.log(typeId);
-  //console.log(editableState);
-  console.log(isEditable());
-  console.log(editableState);
-  console.log(data.name);
   return editableState === false ? (
     <>
-      <div className="building-form-close">
+      {/*<div className="building-form-close">
         <Icon />
         <Button
           // style={{
@@ -172,9 +210,9 @@ export function BuildingDetailsForm({
             isEditable();
           }}
         >
-          Zatwierdź
+          Edytuj budynek
         </Button>
-      </div>
+      </div>*/}
       <div className="building-details-form">
         <div className="building-name-form">
           <text className="building-form-header">Nazwa budynku</text>
@@ -312,7 +350,7 @@ export function BuildingDetailsForm({
             variant="filled"
             fullWidth
             multiline
-            value={data.descirpiton}
+            value={data.description}
             inputProps={{
               readOnly: false,
               style: {
@@ -322,16 +360,32 @@ export function BuildingDetailsForm({
             onChange={(e) =>
               setData({
                 ...data,
-                descirpiton: e.target.value,
+                description: e.target.value,
               })
             }
           />
         </div>
         <div className="building-form-submit">
           <Button
+            style={{
+              position: 'relative',
+              marginTop: 50,
+              left: -82,
+              width: 1064,
+              height: 53,
+              backgroundColor: '#D6E900',
+              color: '#ffffff',
+              borderRadius: 18,
+              padding: '18px 36px',
+              fontSize: '18px',
+              fontFamily: 'Segoe UI',
+              fontStyle: 'normal',
+              fontWeight: 500,
+              lineHeight: 24,
+            }}
             variant="contained"
             onClick={() => {
-              handleBuildingFormSubmit();
+              handleBuildingFormSubmit(data, typeIdNumber, userId);
             }}
           >
             Zatwierdź
@@ -443,7 +497,7 @@ export function BuildingDetailsForm({
             variant="filled"
             fullWidth
             multiline
-            value={additionalInfo}
+            value={description}
             inputProps={{
               readOnly: true,
               style: {

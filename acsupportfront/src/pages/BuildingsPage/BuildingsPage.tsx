@@ -14,7 +14,7 @@ import './BuildingsPage.scss';
 
 export function BuildingsPage() {
   const [userBuildings, setUserBuildings] = useState<BuildingType[]>([]);
-  const [userId, setUserId] = useState<number>();
+  const [userId, setUserId] = useState<number>(0);
   const [openBuildingForm, setOpenBuildingForm] = useState<boolean>(false);
 
   const handleGetingUserBuildings = async (userId: number) => {
@@ -98,15 +98,16 @@ export function BuildingsPage() {
           <BuildingDetailsForm
             id={0}
             name={''}
-            typeId={0}
             typeName={''}
             street={''}
             postCode={''}
             city={''}
             region={''}
-            additionalInfo={''}
+            description={''}
+            userId={userId}
+            mustCreate={true}
             isEditable={() => {
-              return true;
+              return false;
             }}
             //isEditable={true}
           />
