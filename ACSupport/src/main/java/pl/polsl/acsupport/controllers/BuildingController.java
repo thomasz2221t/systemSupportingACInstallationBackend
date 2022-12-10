@@ -82,7 +82,7 @@ public class BuildingController {
     }
 
     @PreAuthorize("hasAuthority('FIND_BUILDING')")
-    @GetMapping("/type/{buildingId}")
+    @PatchMapping("/type/{buildingId}")
     public BuildingTypeDto findBuildingType(@PathVariable Long buildingId){
         return buildingService.findBuildingType(buildingId);
     }
@@ -91,5 +91,23 @@ public class BuildingController {
     @PatchMapping("/assigntype/{buildingId}")
     public void assignTypeToBuilding(@PathVariable Long buildingId, @RequestBody Long typeId){
         buildingService.assignTypeToBuilding(buildingId, typeId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_BUILDING')")
+    @PatchMapping("/reverttype/{buildingId}")
+    public void revertAssigningTypeToBuilding(@PathVariable Long buildingId){
+        buildingService.revertAssigningTypeFromBuilding(buildingId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_BUILDING')")
+    @PatchMapping("/assignuser/{buildingId}")
+    public void assignUserToBuilding(@PathVariable Long buildingId, @RequestBody Long userId){
+        buildingService.assignUserToBuilding(buildingId, userId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_BUILDING')")
+    @PatchMapping("/revertuser/{buildingId}")
+    public void revertAssigningUserFromBuilding(@PathVariable Long buildingId){
+        buildingService.revertAssigningUserFromBuilding(buildingId);
     }
 }

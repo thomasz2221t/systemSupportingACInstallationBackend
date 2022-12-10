@@ -16,6 +16,7 @@ import pl.polsl.acsupport.entities.User;
 import pl.polsl.acsupport.repositories.BuildingRepository;
 import pl.polsl.acsupport.repositories.BuildingTypeRepository;
 import pl.polsl.acsupport.repositories.RoomRepository;
+import pl.polsl.acsupport.repositories.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -30,6 +31,8 @@ public class BuildingService {
     final private BuildingRepository buildingRepository;
 
     final private UserService userService;
+
+    final private UserRepository userRepository;
 
     final private RoomService roomService;
 
@@ -158,5 +161,35 @@ public class BuildingService {
 
         buildingRepository.save(building);
         buildingTypeRepository.save(type);
+    }
+
+    @Transactional
+    public void assignUserToBuilding(Long buildingId, Long userId){
+        Building building = findById(buildingId);
+        User user = userService.findById(userId);
+
+        Set<Building> buildingSet = user.getBuildings();
+        buildingSet.add(building);
+        user.setBuildings(buildingSet);
+
+        building.setUser(user);
+
+        buildingRepository.save(building);
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void revertAssigningUserFromBuilding(Long buildingId){
+        Building building = findById(buildingId);
+        User user = building.getUser();
+
+        Set<Building> buildingSet = user.getBuildings();
+        buildingSet.remove(building);
+        user.setBuildings(buildingSet);
+
+        building.setUser(null);
+
+        buildingRepository.save(building);
+        userRepository.save(user);
     }
 }
