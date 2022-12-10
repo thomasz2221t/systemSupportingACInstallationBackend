@@ -82,7 +82,7 @@ public class BuildingController {
     }
 
     @PreAuthorize("hasAuthority('FIND_BUILDING')")
-    @PatchMapping("/type/{buildingId}")
+    @GetMapping("/type/{buildingId}")
     public BuildingTypeDto findBuildingType(@PathVariable Long buildingId){
         return buildingService.findBuildingType(buildingId);
     }
