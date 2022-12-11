@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {
   Button,
-  Icon,
   MenuItem,
   Select,
   SelectChangeEvent,
   TextField,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { Icon } from '@iconify/react';
 
 import BuildingTypeType from 'types/BuildingTypeType';
 import BuildingTypeService from 'services/BuildingTypeService';
@@ -129,8 +129,8 @@ export function BuildingDetailsForm({
       return response.data;
     });
 
-    handleUpdatingBuildingType(buildingId, buildingTypeId);
     handleAssigningUserIdToBuilding(buildingId, userId);
+    handleUpdatingBuildingType(buildingId, buildingTypeId);
   };
 
   /*const createBuilding = (
@@ -369,10 +369,10 @@ export function BuildingDetailsForm({
           <Button
             style={{
               position: 'relative',
-              marginTop: 50,
-              left: -82,
-              width: 1064,
-              height: 53,
+              top: 20,
+              //left: 500,
+              width: 300,
+              height: 50,
               backgroundColor: '#D6E900',
               color: '#ffffff',
               borderRadius: 18,
@@ -380,14 +380,19 @@ export function BuildingDetailsForm({
               fontSize: '18px',
               fontFamily: 'Segoe UI',
               fontStyle: 'normal',
-              fontWeight: 500,
-              lineHeight: 24,
+              alignItems: 'right',
             }}
             variant="contained"
             onClick={() => {
               handleBuildingFormSubmit(data, typeIdNumber, userId);
             }}
           >
+            <Icon
+              className="building-form-submit-icon"
+              icon="ic:outline-save-as"
+              color="#4e4e4e"
+              height="36"
+            />
             Zatwierdź
           </Button>
         </div>

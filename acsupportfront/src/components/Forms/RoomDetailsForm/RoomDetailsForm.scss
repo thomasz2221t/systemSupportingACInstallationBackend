@@ -7,9 +7,26 @@
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 18px;
   grid-template-columns: 20px 1fr 1fr 20px;
-  grid-template-rows: 30px 1fr 1fr 1fr 1fr 50px 20px;
+  grid-template-rows: 40px 1fr 1fr 1fr 1fr 50px 20px;
   column-gap: 29px;
   row-gap: 10px;
+
+  .edit-room-button {
+    display: relative;
+    grid-column: 3;
+    grid-row: 1;
+    align-items: center;
+    height: 32px;
+    margin-top: 10px;
+    background-color: #3298d1;
+    color: #ffffff;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 18px;
+    align-items: center;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'Segoe UI';
+  }
 
   .room-name {
     display: inline-grid;
@@ -74,10 +91,30 @@
     grid-column: 3;
     grid-row: 5;
   }
+
+  .submit-room-button {
+    display: relative;
+    grid-column: 2/4;
+    grid-row: 6;
+    align-items: center;
+    height: 32px;
+    margin-top: 15px;
+    background-color: #3298d1;
+    color: #ffffff;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 18px;
+    align-items: center;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'Segoe UI';
+    //top: 30px;
+    //width: 400px;
+    //height: 65px;
+  }
 }
 
 .room-details-form text {
-  font-family: "Segoe UI";
+  font-family: 'Segoe UI';
   font-style: normal;
   font-weight: 500;
   font-size: 16px;

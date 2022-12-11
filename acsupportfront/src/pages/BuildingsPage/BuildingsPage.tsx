@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Dialog, DialogContent, DialogActions } from '@mui/material';
+import { Button, Dialog, DialogContent } from '@mui/material';
+import { Icon } from '@iconify/react';
 
 import { BuildingDetailsForm } from 'components/Forms/BuildingDetails/BuildingDetailsForm';
 import Navbar from 'components/Navbar/Navbar';
@@ -64,6 +65,12 @@ export function BuildingsPage() {
       <Navbar />
       <UserAccount />
       <div className="add-building-button">
+        <Icon
+          className="return-icon"
+          icon="material-symbols:add-home"
+          color="#4e4e4e"
+          height="21"
+        />
         <Button
           sx={{
             color: '#ffffff',

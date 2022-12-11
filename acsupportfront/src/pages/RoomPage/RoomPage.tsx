@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, Dialog, DialogContent } from '@mui/material';
 import { Icon } from '@iconify/react';
 
 import { RoomDetailsForm } from 'components/Forms/RoomDetailsForm/RoomDetailsForm';
@@ -20,14 +20,21 @@ const ROOM_TYPE_DEFAULT = {
 };
 
 export function RoomPage() {
+  const [roomBuildingId, setRoomBuildingId] = useState<number>(0);
   const [roomPage, setRoomPage] = useState<RoomType[]>([]);
   const [roomType, setRoomType] = useState<RoomTypeType>(ROOM_TYPE_DEFAULT);
+  const [roomFormOpen, setRoomFormOpen] = useState<boolean>(false);
+  //const [isRoomFormEditable, setIsRoomFormEditable] = useState<boolean>(true);
   const { id } = useParams();
   const navigate = useNavigate();
 
   const handleReturnButtonClick = () => {
     navigate(`/obiekty/obiekt/${Number(id)}`);
   };
+
+  useEffect(() => {
+    setRoomBuildingId(Number(id));
+  }, []);
 
   const handleGettingAllBuildingsRoomsData = async (buildingId: number) => {
     await BuildingService.getFindAllBuildingsRooms(buildingId).then(
@@ -56,6 +63,14 @@ export function RoomPage() {
     });
   };
 
+  const handleClickOpen = () => {
+    setRoomFormOpen(true);
+  };
+
+  const handleClose = () => {
+    setRoomFormOpen(false);
+  };
+
   useEffect(() => {
     handleGettingAllBuildingsRoomsData(Number(id));
   }, [id]);
@@ -80,8 +95,24 @@ export function RoomPage() {
           Powrót
         </Button>
       </div>
+      <div className="add-room-button">
+        <Icon
+          className="return-icon"
+          icon="material-symbols:meeting-room-outline"
+          color="#4e4e4e"
+          height="21"
+        />
+        <Button
+          sx={{
+            color: '#ffffff',
+          }}
+          onClick={handleClickOpen}
+        >
+          Dodaj pomieszczenie
+        </Button>
+      </div>
       {roomPage.map((data) => (
-        <div className="room-details">
+        <div id={`${data.id}`} className="room-details">
           <RoomDetailsForm
             id={data.id}
             name={data.name}
@@ -91,11 +122,56 @@ export function RoomPage() {
             height={data.height}
             energyGiveOut={data.energyGivenOut}
             numberOfPeople={data.peopleNumber}
-            additionalInfo={data.description}
+            description={data.description}
+            buildingId={0}
+            mustCreate={false}
+            //isEditable={() => {
+            //return isRoomFormEditable;
+            //  return false;
+            //}}
+            //refreshParentData={()}
           />
         </div>
       ))}
       <Footer />
+      <Dialog
+        sx={{
+          width: '1200px',
+          height: '612px',
+          alignItems: 'center',
+          marginLeft: '193px',
+          marginTop: '20px',
+        }}
+        open={roomFormOpen}
+        onClose={handleClose}
+        fullWidth
+        maxWidth="lg"
+      >
+        <DialogContent
+          sx={{
+            padding: '0',
+            backgroundColor: '#d6e900',
+            alignItems: 'center',
+          }}
+        >
+          <RoomDetailsForm
+            id={0}
+            name={''}
+            purpose={''}
+            areaX={0}
+            areaY={0}
+            height={0}
+            energyGiveOut={0}
+            numberOfPeople={0}
+            description={''}
+            buildingId={roomBuildingId}
+            mustCreate={true}
+            //isEditable={() => {
+            //  return true;
+            //}}
+          />
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

@@ -79,8 +79,17 @@
   }
 
   .building-form-submit {
-    grid-column: 2/4;
-    grid-row: 5;
+    top: 30px;
+    width: 400px;
+    height: 65px;
+    align-items: center;
+    grid-column: 4/6;
+    grid-row: 6;
+  }
+
+  .building-form-submit-icon {
+    margin-right: 10px;
+    left: 10px;
   }
 }
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Icon } from '@iconify/react';
 
 import { BuildingDetailsForm } from 'components/Forms/BuildingDetails/BuildingDetailsForm';
 import Navbar from 'components/Navbar/Navbar';
@@ -61,8 +62,10 @@ export function BuildingPage() {
   }, []); //[id]
 
   useEffect(() => {
-    handleGettingBuildingsData(buildingId);
-    handleGettingBuildingTypeData(buildingId);
+    if (buildingId > 0) {
+      handleGettingBuildingsData(buildingId);
+      handleGettingBuildingTypeData(buildingId);
+    }
   }, [buildingId]);
 
   const handleRoomButtonClick = () => {
@@ -84,14 +87,40 @@ export function BuildingPage() {
       <Navbar />
       <UserAccount />
       <div className="building-details">
-        <Button
-          variant="contained"
-          onClick={() => {
-            handleEditFormState();
-          }}
-        >
-          Edytuj obiekt
-        </Button>
+        <div className="edit-building-button">
+          <Icon
+            className="return-icon"
+            icon="tabler:home-edit"
+            color="#4e4e4e"
+            height="21"
+          />
+          <Button
+            style={{
+              color: '#ffffff',
+              /*position: 'relative',
+              marginTop: 5,
+              marginBottom: 5,
+              left: 330,
+              width: 200,
+              height: 30,
+              backgroundColor: '#3298d1',
+              color: '#ffffff',
+              borderRadius: 18,
+              padding: '18px 36px',
+              fontSize: '16px',
+              fontFamily: 'Segoe UI',
+              fontStyle: 'normal',
+              borderStyle: 'solid',
+              borderWidth: 1,
+              borderColor: '#000000',*/
+            }}
+            onClick={() => {
+              handleEditFormState();
+            }}
+          >
+            Edytuj obiekt
+          </Button>
+        </div>
         <BuildingDetailsForm
           id={buildingBody.id}
           name={buildingBody.name}
