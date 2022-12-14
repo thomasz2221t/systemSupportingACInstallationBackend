@@ -92,7 +92,10 @@ export function BuildingDetailsForm({
     buildingId: number,
     buildingTypeId: number
   ) => {
-    await BuildingService.patchAssignTypeToBuilding(buildingId, buildingTypeId);
+    return await BuildingService.patchAssignTypeToBuilding(
+      buildingId,
+      buildingTypeId
+    );
   };
 
   const handleUpdatingBuildingBody = async (
@@ -111,7 +114,7 @@ export function BuildingDetailsForm({
     buildingId: number,
     userId: number
   ) => {
-    await BuildingService.patchAssignUserToBuilding(buildingId, userId);
+    return await BuildingService.patchAssignUserToBuilding(buildingId, userId);
   };
 
   const handleCreatingBuildingBody = async (
@@ -119,18 +122,26 @@ export function BuildingDetailsForm({
     buildingTypeId: number,
     userId: number
   ) => {
-    let buildingId = 0;
-    await BuildingService.postCreateBuilding(buildingBody).then((response) => {
-      //const buildingId = response.data;
-      buildingId = response.data;
-      console.log(response.data);
-      //handleUpdatingBuildingType(Number(buildingId), buildingTypeId);
-      //handleAssigningUserIdToBuilding(Number(buildingId), userId);
-      return response.data;
-    });
+    await BuildingService.postCreateBuilding(buildingBody)
+      .then((response) => {
+        //const buildingId = response.data;
+        //buildingId = response.data;
+        console.log(response.data);
+        handleUpdatingBuildingType(response.data, buildingTypeId)
+          .then(() => {
+            handleAssigningUserIdToBuilding(response.data, userId);
+          })
+          .catch((error) => console.log(error));
 
-    handleAssigningUserIdToBuilding(buildingId, userId);
-    handleUpdatingBuildingType(buildingId, buildingTypeId);
+        //handleAssigningUserIdToBuilding(Number(buildingId), userId);
+        return response.data;
+      })
+      .catch((error) => console.log(error));
+
+    //handleUpdatingBuildingType(buildingId, buildingTypeId);
+    //handleAssigningUserIdToBuilding(buildingId, userId);
+    //await BuildingService.patchAssignTypeToBuilding(buildingId, buildingTypeId);
+    //await BuildingService.patchAssignUserToBuilding(buildingId, userId);
   };
 
   /*const createBuilding = (

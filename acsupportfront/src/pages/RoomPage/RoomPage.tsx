@@ -19,9 +19,21 @@ const ROOM_TYPE_DEFAULT = {
   name: '',
 };
 
+export type RoomTypeWithName = {
+  id: number;
+  name: string;
+  areaWidth: number;
+  areaHeight: number;
+  height: number;
+  energyGivenOut: number;
+  peopleNumber: number;
+  description: string;
+  roomTypeName: string;
+};
+
 export function RoomPage() {
   const [roomBuildingId, setRoomBuildingId] = useState<number>(0);
-  const [roomPage, setRoomPage] = useState<RoomType[]>([]);
+  const [roomPage, setRoomPage] = useState<RoomTypeWithName[]>([]);
   const [roomType, setRoomType] = useState<RoomTypeType>(ROOM_TYPE_DEFAULT);
   const [roomFormOpen, setRoomFormOpen] = useState<boolean>(false);
   //const [isRoomFormEditable, setIsRoomFormEditable] = useState<boolean>(true);
@@ -54,7 +66,10 @@ export function RoomPage() {
     );
   };
 
-  const handleGettingRoomTypeData = async (roomId: number, room: RoomType) => {
+  const handleGettingRoomTypeData = async (
+    roomId: number,
+    room: RoomTypeWithName
+  ) => {
     await RoomService.getFindRoomType(roomId).then((response) => {
       console.log(response.data);
       setRoomType(response.data);

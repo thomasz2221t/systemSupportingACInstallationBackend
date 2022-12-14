@@ -7,7 +7,6 @@ type RoomType = {
   energyGivenOut: number;
   peopleNumber: number;
   description: string;
-  roomTypeName: string;
 };
 
 export default RoomType;

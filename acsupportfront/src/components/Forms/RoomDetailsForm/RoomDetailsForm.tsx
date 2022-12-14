@@ -10,8 +10,11 @@ import { Icon } from '@iconify/react';
 
 import RoomTypeType from 'types/RoomTypeType';
 import RoomTypeService from 'services/RoomTypeService';
+import RoomType from 'types/RoomType';
+import RoomService from 'services/RoomService';
 
 import './RoomDetailsForm.scss';
+import BuildingService from 'services/BuildingService';
 
 export type roomDetailsFormProp = {
   id: number;
@@ -40,17 +43,85 @@ export function RoomDetailsForm({
   numberOfPeople,
   description,
   buildingId,
+  mustCreate,
 }: //isEditable,
 //refreshParentData,
 roomDetailsFormProp) {
+  const [data, setData] = useState<RoomType>({
+    id: id,
+    name: name,
+    areaWidth: areaX,
+    areaHeight: areaY,
+    height: height,
+    energyGivenOut: energyGiveOut,
+    peopleNumber: numberOfPeople,
+    description: description,
+  });
   const [roomTypeId, setRoomTypeId] = useState<number>(0);
   const [roomTypePage, setRoomTypePage] = useState<RoomTypeType[]>([]);
-  const [isRoomFormEditable, setIsRoomFormEditable] = useState<boolean>(true);
+  const [isRoomFormEditable, setIsRoomFormEditable] = useState<boolean>(
+    !mustCreate
+  );
 
   const handleGettingAllRoomTypes = async () => {
     await RoomTypeService.getFindAllRooms().then((response) => {
       setRoomTypePage(response.data.content);
     });
+  };
+
+  const handleAssigningRoomTypeToBody = async (
+    roomId: number,
+    roomTypeId: number
+  ) => {
+    return await RoomService.patchAssignTypeToRoom(roomId, roomTypeId);
+  };
+
+  const handleAssigningBuildingToRoom = async (
+    buildingId: number,
+    roomId: number
+  ) => {
+    return await BuildingService.patchAssignRoomToBuilding(buildingId, roomId);
+  };
+
+  const handleCreatingRoomBody = async (
+    roomBody: RoomType,
+    roomTypeId: number,
+    buildingId: number
+  ) => {
+    await RoomService.postCreateRoom(roomBody)
+      .then((response) => {
+        handleAssigningRoomTypeToBody(response.data, roomTypeId)
+          .then(() => {
+            console.log(response.data);
+            handleAssigningBuildingToRoom(buildingId, response.data);
+          })
+          .catch((error) => console.log(error));
+        return response.data;
+      })
+      .catch((error) => console.log(error));
+    //handleAssigningRoomTypeToBody(roomId, roomTypeId);
+    //handleAssigningBuildingToRoom(buildingId, roomId);
+    //await BuildingService.patchAssignRoomToBuilding(buildingId, roomId);
+    //return roomId;
+  };
+
+  const handleUpdatingRoomBody = async (
+    roomBody: RoomType,
+    roomTypeId: number
+  ) => {
+    await RoomService.patchUpdateRoom(roomBody.id, roomBody).then(() => {
+      handleAssigningRoomTypeToBody(roomBody.id, roomTypeId);
+    });
+  };
+
+  const handleRoomFormSubmiting = (
+    roomBody: RoomType,
+    roomTypeId: number,
+    buildingId: number
+  ) => {
+    mustCreate === true
+      ? handleCreatingRoomBody(roomBody, roomTypeId, buildingId)
+      : handleUpdatingRoomBody(roomBody, roomTypeId);
   };
 
   useEffect(() => {
@@ -64,24 +135,26 @@ roomDetailsFormProp) {
   return isRoomFormEditable === false ? (
     <>
       <div className="room-details-form">
-        <div className="edit-room-button">
-          <Icon
-            className="return-icon"
-            icon="material-symbols:room-preferences-outline"
-            color="#4e4e4e"
-            height="21"
-          />
-          <Button
-            sx={{
-              color: '#ffffff',
-            }}
-            onClick={() => {
-              setIsRoomFormEditable(!isRoomFormEditable);
-            }}
-          >
-            Edytuj pomieszczenie
-          </Button>
-        </div>
+        {mustCreate === false ? (
+          <div className="edit-room-button">
+            <Icon
+              className="return-icon"
+              icon="material-symbols:room-preferences-outline"
+              color="#4e4e4e"
+              height="21"
+            />
+            <Button
+              sx={{
+                color: '#ffffff',
+              }}
+              onClick={() => {
+                setIsRoomFormEditable(!isRoomFormEditable);
+              }}
+            >
+              Edytuj pomieszczenie
+            </Button>
+          </div>
+        ) : null}
         <div className="room-name">
           <text>Nazwa pomieszczenia</text>
           <TextField
@@ -89,10 +162,16 @@ roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
-            value={name}
+            value={data.name}
             InputProps={{
-              readOnly: true,
+              readOnly: false,
             }}
+            onChange={(e) =>
+              setData({
+                ...data,
+                name: e.target.value,
+              })
+            }
           />
         </div>
         <div className="room-purpose">
@@ -102,7 +181,7 @@ roomDetailsFormProp) {
             size="small"
             displayEmpty
             value={roomTypeId}
-            inputProps={{ readOnly: true }}
+            inputProps={{ readOnly: false }}
             onChange={onChange}
           >
             <MenuItem value={0}>{purpose}</MenuItem>
@@ -112,16 +191,6 @@ roomDetailsFormProp) {
               </MenuItem>
             ))}
           </Select>
-          {/*<TextField
-          label="Przeznaczenie pomieszczenia"
-          variant="filled"
-          size="small"
-          fullWidth
-          value={purpose}
-          InputProps={{
-            readOnly: true,
-          }}
-        />*/}
         </div>
         <div className="room-area-x">
           <text>Długość pomieszczenia</text>
@@ -130,10 +199,16 @@ roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
-            value={areaX}
+            value={data.areaWidth}
             InputProps={{
-              readOnly: true,
+              readOnly: false,
             }}
+            onChange={(e) =>
+              setData({
+                ...data,
+                areaWidth: Number(e.target.value),
+              })
+            }
           />
         </div>
         <div className="room-area-y">
@@ -143,10 +218,16 @@ roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
-            value={areaY}
+            value={data.areaHeight}
             InputProps={{
-              readOnly: true,
+              readOnly: false,
             }}
+            onChange={(e) =>
+              setData({
+                ...data,
+                areaHeight: Number(e.target.value),
+              })
+            }
           />
         </div>
         <div className="room-height">
@@ -156,10 +237,16 @@ roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
-            value={height}
+            value={data.height}
             InputProps={{
-              readOnly: true,
+              readOnly: false,
             }}
+            onChange={(e) =>
+              setData({
+                ...data,
+                height: Number(e.target.value),
+              })
+            }
           />
         </div>
         <div className="room-power-giveout">
@@ -169,10 +256,16 @@ roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
-            value={energyGiveOut}
+            value={data.energyGivenOut}
             InputProps={{
-              readOnly: true,
+              readOnly: false,
             }}
+            onChange={(e) =>
+              setData({
+                ...data,
+                energyGivenOut: Number(e.target.value),
+              })
+            }
           />
         </div>
         <div className="room-people-number">
@@ -182,10 +275,16 @@ roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
-            value={numberOfPeople}
+            value={data.peopleNumber}
             InputProps={{
-              readOnly: true,
+              readOnly: false,
             }}
+            onChange={(e) =>
+              setData({
+                ...data,
+                peopleNumber: Number(e.target.value),
+              })
+            }
           />
         </div>
         <div className="room-additional-info">
@@ -195,10 +294,16 @@ roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
-            value={description}
+            value={data.description}
             InputProps={{
-              readOnly: true,
+              readOnly: false,
             }}
+            onChange={(e) =>
+              setData({
+                ...data,
+                description: e.target.value,
+              })
+            }
           />
         </div>
         <div className="submit-room-button">
@@ -213,7 +318,7 @@ roomDetailsFormProp) {
               color: '#ffffff',
             }}
             onClick={() => {
-              //zapis
+              handleRoomFormSubmiting(data, roomTypeId, buildingId);
             }}
           >
             Zatwierdź
@@ -249,7 +354,7 @@ roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
-            value={name}
+            value={data.name}
             InputProps={{
               readOnly: true,
             }}
@@ -290,7 +395,7 @@ roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
-            value={areaX}
+            value={data.areaWidth}
             InputProps={{
               readOnly: true,
             }}
@@ -303,7 +408,7 @@ roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
-            value={areaY}
+            value={data.areaHeight}
             InputProps={{
               readOnly: true,
             }}
@@ -316,7 +421,7 @@ roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
-            value={height}
+            value={data.height}
             InputProps={{
               readOnly: true,
             }}
@@ -329,7 +434,7 @@ roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
-            value={energyGiveOut}
+            value={data.energyGivenOut}
             InputProps={{
               readOnly: true,
             }}
@@ -342,7 +447,7 @@ roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
-            value={numberOfPeople}
+            value={data.peopleNumber}
             InputProps={{
               readOnly: true,
             }}
@@ -355,7 +460,7 @@ roomDetailsFormProp) {
             variant="filled"
             size="small"
             fullWidth
-            value={description}
+            value={data.description}
             InputProps={{
               readOnly: true,
             }}

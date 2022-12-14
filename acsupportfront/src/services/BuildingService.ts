@@ -62,6 +62,14 @@ const patchAssignUserToBuilding = (buildingId: number, userId: number) => {
   );
 };
 
+const patchAssignRoomToBuilding = (buildingId: number, roomId: number) => {
+  return axios.patch(
+    `${API_URL}/building/assignroom/${buildingId}`,
+    roomId,
+    authHeaderForPrimitiveTypePatch()
+  );
+};
+
 const BuildingService = {
   getUserBuildings,
   getBuilding,
@@ -71,6 +79,7 @@ const BuildingService = {
   patchUpdateBuilding,
   patchAssignTypeToBuilding,
   patchAssignUserToBuilding,
+  patchAssignRoomToBuilding,
 };
 
 export default BuildingService;
