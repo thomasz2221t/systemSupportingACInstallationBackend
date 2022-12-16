@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Dialog, DialogContent } from '@mui/material';
+import { Button, Dialog, DialogContent, TablePagination } from '@mui/material';
 import { Icon } from '@iconify/react';
 
 import { BuildingDetailsForm } from 'components/Forms/BuildingDetails/BuildingDetailsForm';
@@ -17,6 +17,17 @@ export function BuildingsPage() {
   const [userBuildings, setUserBuildings] = useState<BuildingType[]>([]);
   const [userId, setUserId] = useState<number>(0);
   const [openBuildingForm, setOpenBuildingForm] = useState<boolean>(false);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
+  const [RowsPerPageOption] = useState([1, 2, 5, 10, 15]);
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    console.log(event.target.value);
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPageNumber(0);
+  };
 
   const handleGetingUserBuildings = async (userId: number) => {
     await BuildingService.getUserBuildings(userId).then((response) => {
@@ -48,7 +59,7 @@ export function BuildingsPage() {
 
   const buildingsTable = userBuildings
     .sort((a, b) => a.id - b.id)
-    //.slice(page * elementsPerPage, page * elementsPerPage + elementsPerPage)
+    .slice(pageNumber * rowsPerPage, pageNumber * rowsPerPage + rowsPerPage)
     .map((data) => {
       return (
         <BuildingTile
@@ -80,7 +91,19 @@ export function BuildingsPage() {
           Dodaj Budynek
         </Button>
       </div>
-      <div className="buildings">{buildingsTable}</div>
+      <div className="buildings">
+        {buildingsTable}
+        <TablePagination
+          component="div"
+          count={userBuildings.length}
+          page={pageNumber}
+          rowsPerPageOptions={RowsPerPageOption}
+          onPageChange={(_, newPage) => setPageNumber(newPage)}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPage={rowsPerPage}
+          labelRowsPerPage={'Liczba elementów na stronie:'}
+        />
+      </div>
       <Footer />
       <Dialog
         sx={{
@@ -116,6 +139,7 @@ export function BuildingsPage() {
             isEditable={() => {
               return false;
             }}
+            handleFormClose={handleClose}
             //isEditable={true}
           />
         </DialogContent>

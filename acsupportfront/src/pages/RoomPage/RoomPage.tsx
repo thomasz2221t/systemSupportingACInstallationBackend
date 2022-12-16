@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, Dialog, DialogContent } from '@mui/material';
+import { Button, Dialog, DialogContent, TablePagination } from '@mui/material';
 import { Icon } from '@iconify/react';
 
 import { RoomDetailsForm } from 'components/Forms/RoomDetailsForm/RoomDetailsForm';
@@ -8,7 +8,6 @@ import Footer from 'components/Footer/Footer';
 import Navbar from 'components/Navbar/Navbar';
 import UserAccount from 'components/UserAccount/UserAccount';
 import BuildingService from 'services/BuildingService';
-import RoomType from 'types/RoomType';
 import RoomService from 'services/RoomService';
 import RoomTypeType from 'types/RoomTypeType';
 
@@ -34,14 +33,25 @@ export type RoomTypeWithName = {
 export function RoomPage() {
   const [roomBuildingId, setRoomBuildingId] = useState<number>(0);
   const [roomPage, setRoomPage] = useState<RoomTypeWithName[]>([]);
-  const [roomType, setRoomType] = useState<RoomTypeType>(ROOM_TYPE_DEFAULT);
+  const [, setRoomType] = useState<RoomTypeType>(ROOM_TYPE_DEFAULT);
   const [roomFormOpen, setRoomFormOpen] = useState<boolean>(false);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
+  const [RowsPerPageOption] = useState([1, 2, 5, 10, 15]);
   //const [isRoomFormEditable, setIsRoomFormEditable] = useState<boolean>(true);
   const { id } = useParams();
   const navigate = useNavigate();
 
   const handleReturnButtonClick = () => {
     navigate(`/obiekty/obiekt/${Number(id)}`);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    console.log(event.target.value);
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPageNumber(0);
   };
 
   useEffect(() => {
@@ -51,6 +61,7 @@ export function RoomPage() {
   const handleGettingAllBuildingsRoomsData = async (buildingId: number) => {
     await BuildingService.getFindAllBuildingsRooms(buildingId).then(
       (response) => {
+        console.log('Odswiezam');
         console.log(response.data.content);
         /*for (const parameter of getData.data) {
           const parameterType = await parameterService.parameterTypeGet(parameter);
@@ -126,28 +137,41 @@ export function RoomPage() {
           Dodaj pomieszczenie
         </Button>
       </div>
-      {roomPage.map((data) => (
-        <div id={`${data.id}`} className="room-details">
-          <RoomDetailsForm
-            id={data.id}
-            name={data.name}
-            purpose={data.roomTypeName}
-            areaX={data.areaWidth}
-            areaY={data.areaHeight}
-            height={data.height}
-            energyGiveOut={data.energyGivenOut}
-            numberOfPeople={data.peopleNumber}
-            description={data.description}
-            buildingId={0}
-            mustCreate={false}
-            //isEditable={() => {
-            //return isRoomFormEditable;
-            //  return false;
-            //}}
-            //refreshParentData={()}
-          />
-        </div>
-      ))}
+      {roomPage
+        .sort((a, b) => a.id - b.id)
+        .slice(pageNumber * rowsPerPage, pageNumber * rowsPerPage + rowsPerPage)
+        .map((data) => (
+          <div id={`${data.id}`} className="room-details">
+            <RoomDetailsForm
+              id={data.id}
+              name={data.name}
+              purpose={data.roomTypeName}
+              areaX={data.areaWidth}
+              areaY={data.areaHeight}
+              height={data.height}
+              energyGiveOut={data.energyGivenOut}
+              numberOfPeople={data.peopleNumber}
+              description={data.description}
+              buildingId={0}
+              mustCreate={false}
+              //isEditable={() => {
+              //return isRoomFormEditable;
+              //  return false;
+              //}}
+              //refreshParentData={()}
+            />
+          </div>
+        ))}
+      <TablePagination
+        component="div"
+        count={roomPage.length}
+        page={pageNumber}
+        rowsPerPageOptions={RowsPerPageOption}
+        onPageChange={(_, newPage) => setPageNumber(newPage)}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        rowsPerPage={rowsPerPage}
+        labelRowsPerPage={'Liczba elementów na stronie:'}
+      />
       <Footer />
       <Dialog
         sx={{
@@ -184,6 +208,8 @@ export function RoomPage() {
             //isEditable={() => {
             //  return true;
             //}}
+            refreshParentData={handleGettingAllBuildingsRoomsData}
+            handleFormClose={handleClose}
           />
         </DialogContent>
       </Dialog>

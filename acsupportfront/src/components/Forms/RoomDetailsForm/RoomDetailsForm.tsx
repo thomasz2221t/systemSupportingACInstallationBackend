@@ -29,7 +29,8 @@ export type roomDetailsFormProp = {
   buildingId: number;
   mustCreate: boolean;
   //isEditable: () => boolean;
-  //refreshParentData?: (buildingId: number) => void;
+  refreshParentData?: (buildingId: number) => void;
+  handleFormClose?: () => void;
 };
 
 export function RoomDetailsForm({
@@ -44,6 +45,8 @@ export function RoomDetailsForm({
   description,
   buildingId,
   mustCreate,
+  refreshParentData,
+  handleFormClose,
 }: //isEditable,
 //refreshParentData,
 roomDetailsFormProp) {
@@ -62,6 +65,7 @@ roomDetailsFormProp) {
   const [isRoomFormEditable, setIsRoomFormEditable] = useState<boolean>(
     !mustCreate
   );
+  const [isRequestSent, setIsRequestSent] = useState<boolean>(false);
 
   const handleGettingAllRoomTypes = async () => {
     await RoomTypeService.getFindAllRooms().then((response) => {
@@ -93,7 +97,11 @@ roomDetailsFormProp) {
         handleAssigningRoomTypeToBody(response.data, roomTypeId)
           .then(() => {
             console.log(response.data);
-            handleAssigningBuildingToRoom(buildingId, response.data);
+            handleAssigningBuildingToRoom(buildingId, response.data).then(
+              () => {
+                setIsRequestSent(true);
+              }
+            );
           })
           .catch((error) => console.log(error));
         return response.data;
@@ -127,6 +135,12 @@ roomDetailsFormProp) {
   useEffect(() => {
     handleGettingAllRoomTypes();
   }, []);
+
+  useEffect(() => {
+    if (refreshParentData) {
+      refreshParentData(buildingId);
+    }
+  }, [isRequestSent]);
 
   const onChange = (event: SelectChangeEvent<number>) => {
     setRoomTypeId(Number(event.target.value));
@@ -319,6 +333,9 @@ roomDetailsFormProp) {
             }}
             onClick={() => {
               handleRoomFormSubmiting(data, roomTypeId, buildingId);
+              if (handleFormClose) {
+                handleFormClose();
+              }
             }}
           >
             Zatwierdź

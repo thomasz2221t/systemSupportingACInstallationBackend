@@ -29,13 +29,14 @@ export type buildingDetailsFormProp = {
   mustCreate: boolean;
   isEditable: () => boolean;
   refreshParentData?: (buildingId: number) => void;
+  handleFormClose?: () => void;
 
   //isEditable: boolean;
 };
 
-const styles = makeStyles({
+/*const styles = makeStyles({
   notchedOutline: { borderColor: '#f0f !important' },
-});
+});*/
 
 export function BuildingDetailsForm({
   id,
@@ -50,6 +51,7 @@ export function BuildingDetailsForm({
   mustCreate,
   isEditable,
   refreshParentData,
+  handleFormClose,
 }: buildingDetailsFormProp) {
   /*const defaultvalue = {
     id: id,
@@ -79,7 +81,7 @@ export function BuildingDetailsForm({
   useState<BuildingType>();
   const editableState = isEditable();
   const exampleBuilding = require('../../../images/exampleBuilding.jpg');
-  const style = styles();
+  //const style = styles();
 
   const handleGettingAllBuildingTypes = async () => {
     await BuildingTypeService.getFindAllBuildingType().then((response) => {
@@ -396,6 +398,9 @@ export function BuildingDetailsForm({
             variant="contained"
             onClick={() => {
               handleBuildingFormSubmit(data, typeIdNumber, userId);
+              if (handleFormClose) {
+                handleFormClose();
+              }
             }}
           >
             <Icon
