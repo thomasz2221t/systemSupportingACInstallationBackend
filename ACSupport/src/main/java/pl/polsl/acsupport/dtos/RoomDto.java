@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.polsl.acsupport.entities.Room;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @AllArgsConstructor
@@ -18,10 +19,13 @@ public class RoomDto {
 
     private String name;
 
+    @NotNull
     private BigDecimal areaWidth;
 
+    @NotNull
     private BigDecimal areaHeight;
 
+    @NotNull
     private BigDecimal height;
 
     private BigDecimal energyGivenOut;
