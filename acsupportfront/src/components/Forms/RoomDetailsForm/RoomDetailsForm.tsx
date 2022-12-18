@@ -217,6 +217,7 @@ roomDetailsFormProp) {
             InputProps={{
               readOnly: false,
             }}
+            required
             onChange={(e) =>
               setData({
                 ...data,
@@ -236,6 +237,7 @@ roomDetailsFormProp) {
             InputProps={{
               readOnly: false,
             }}
+            required
             onChange={(e) =>
               setData({
                 ...data,
@@ -255,6 +257,7 @@ roomDetailsFormProp) {
             InputProps={{
               readOnly: false,
             }}
+            required
             onChange={(e) =>
               setData({
                 ...data,

@@ -277,6 +277,7 @@ export function BuildingDetailsForm({
             InputProps={{
               readOnly: false,
             }}
+            required
             onChange={(e) =>
               setData({
                 ...data,
@@ -297,6 +298,7 @@ export function BuildingDetailsForm({
             InputProps={{
               readOnly: false,
             }}
+            required
             onChange={(e) =>
               setData({
                 ...data,
@@ -317,6 +319,7 @@ export function BuildingDetailsForm({
             InputProps={{
               readOnly: false,
             }}
+            required
             onChange={(e) =>
               setData({
                 ...data,
@@ -336,6 +339,7 @@ export function BuildingDetailsForm({
             InputProps={{
               readOnly: false,
             }}
+            required
             onChange={(e) =>
               setData({
                 ...data,
