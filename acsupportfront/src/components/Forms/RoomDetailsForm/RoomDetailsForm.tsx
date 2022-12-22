@@ -66,6 +66,7 @@ roomDetailsFormProp) {
     !mustCreate
   );
   const [isRequestSent, setIsRequestSent] = useState<boolean>(false);
+  let isError = false;
 
   const handleGettingAllRoomTypes = async () => {
     await RoomTypeService.getFindAllRooms().then((response) => {
@@ -130,6 +131,14 @@ roomDetailsFormProp) {
     mustCreate === true
       ? handleCreatingRoomBody(roomBody, roomTypeId, buildingId)
       : handleUpdatingRoomBody(roomBody, roomTypeId);
+  };
+
+  const validate = () => {
+    if (data.areaWidth === 0 || data.areaHeight === 0 || data.height === 0) {
+      isError = true;
+    } else {
+      isError = false;
+    }
   };
 
   useEffect(() => {
@@ -207,7 +216,7 @@ roomDetailsFormProp) {
           </Select>
         </div>
         <div className="room-area-x">
-          <text>Długość pomieszczenia</text>
+          <text>Długość pomieszczenia *</text>
           <TextField
             label="Długość pomieszczenia"
             variant="filled"
@@ -218,6 +227,7 @@ roomDetailsFormProp) {
               readOnly: false,
             }}
             required
+            error={data.areaWidth === 0 ? true : false}
             onChange={(e) =>
               setData({
                 ...data,
@@ -227,7 +237,7 @@ roomDetailsFormProp) {
           />
         </div>
         <div className="room-area-y">
-          <text>Szerokość pomieszczenia</text>
+          <text>Szerokość pomieszczenia *</text>
           <TextField
             label="Szerokość pomieszczenia"
             variant="filled"
@@ -238,6 +248,7 @@ roomDetailsFormProp) {
               readOnly: false,
             }}
             required
+            error={data.areaHeight === 0 ? true : false}
             onChange={(e) =>
               setData({
                 ...data,
@@ -247,7 +258,7 @@ roomDetailsFormProp) {
           />
         </div>
         <div className="room-height">
-          <text>Wysokość pomieszczenia</text>
+          <text>Wysokość pomieszczenia *</text>
           <TextField
             label="Wysokość pomieszczenia"
             variant="filled"
@@ -258,6 +269,7 @@ roomDetailsFormProp) {
               readOnly: false,
             }}
             required
+            error={data.height === 0 ? true : false}
             onChange={(e) =>
               setData({
                 ...data,
@@ -335,9 +347,14 @@ roomDetailsFormProp) {
               color: '#ffffff',
             }}
             onClick={() => {
-              handleRoomFormSubmiting(data, roomTypeId, buildingId);
-              if (handleFormClose) {
-                handleFormClose();
+              validate();
+              if (isError === false) {
+                handleRoomFormSubmiting(data, roomTypeId, buildingId);
+                if (handleFormClose) {
+                  handleFormClose();
+                }
+              } else {
+                console.log('Validation error');
               }
             }}
           >

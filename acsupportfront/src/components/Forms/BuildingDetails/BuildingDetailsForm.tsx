@@ -78,9 +78,10 @@ export function BuildingDetailsForm({
   );
   const [typeIdNumber, setTypeIdNumber] = useState<number>(0);
   //const [buildingRefreshedBody, setBuildingRefreshedBody] =
-  useState<BuildingType>();
+  //useState<BuildingType>();
   const editableState = isEditable();
   const exampleBuilding = require('../../../images/exampleBuilding.jpg');
+  let isError = false;
   //const style = styles();
 
   const handleGettingAllBuildingTypes = async () => {
@@ -169,6 +170,23 @@ export function BuildingDetailsForm({
     mustCreate === true
       ? handleCreatingBuildingBody(buildingBody, buildingTypeId, userId)
       : handleUpdatingBuildingBody(buildingBody, buildingTypeId);
+  };
+
+  const validate = () => {
+    console.log(data.street);
+    console.log(data.city);
+    console.log(data.postCode);
+    console.log(data.region);
+    if (
+      data.street === '' ||
+      data.city === '' ||
+      data.postCode === '' ||
+      data.region === ''
+    ) {
+      isError = true;
+    } else {
+      isError = false;
+    }
   };
 
   useEffect(() => {
@@ -266,7 +284,7 @@ export function BuildingDetailsForm({
           </Select>
         </div>
         <div className="building-street">
-          <text className="building-form-header">Ulica</text>
+          <text className="building-form-header">Ulica *</text>
           <TextField
             id="street-input"
             className="building-form-header"
@@ -278,6 +296,8 @@ export function BuildingDetailsForm({
               readOnly: false,
             }}
             required
+            error={data.street === '' ? true : false}
+            helperText="Brak ulicy."
             onChange={(e) =>
               setData({
                 ...data,
@@ -287,7 +307,7 @@ export function BuildingDetailsForm({
           />
         </div>
         <div className="building-post-code">
-          <text className="building-form-header">Kod pocztowy</text>
+          <text className="building-form-header">Kod pocztowy *</text>
           <TextField
             id="code-input"
             className="building-form-header"
@@ -299,6 +319,8 @@ export function BuildingDetailsForm({
               readOnly: false,
             }}
             required
+            error={data.postCode === '' ? true : false}
+            helperText="Brak kodu pocztowego."
             onChange={(e) =>
               setData({
                 ...data,
@@ -308,7 +330,7 @@ export function BuildingDetailsForm({
           />
         </div>
         <div className="building-city">
-          <text className="building-form-header">Miasto</text>
+          <text className="building-form-header">Miasto *</text>
           <TextField
             id="city-input"
             className="building-form-header"
@@ -320,6 +342,8 @@ export function BuildingDetailsForm({
               readOnly: false,
             }}
             required
+            error={data.city === '' ? true : false}
+            helperText="Brak miasta."
             onChange={(e) =>
               setData({
                 ...data,
@@ -329,7 +353,7 @@ export function BuildingDetailsForm({
           />
         </div>
         <div className="building-region">
-          <text className="building-form-header">Województwo</text>
+          <text className="building-form-header">Województwo *</text>
           <TextField
             id="building-region-text"
             label="Województwo"
@@ -340,6 +364,8 @@ export function BuildingDetailsForm({
               readOnly: false,
             }}
             required
+            error={data.region === '' ? true : false}
+            helperText="Brak województwa."
             onChange={(e) =>
               setData({
                 ...data,
@@ -401,9 +427,14 @@ export function BuildingDetailsForm({
             }}
             variant="contained"
             onClick={() => {
-              handleBuildingFormSubmit(data, typeIdNumber, userId);
-              if (handleFormClose) {
-                handleFormClose();
+              validate();
+              if (isError === false) {
+                handleBuildingFormSubmit(data, typeIdNumber, userId);
+                if (handleFormClose) {
+                  handleFormClose();
+                }
+              } else {
+                console.log('Validation error');
               }
             }}
           >
