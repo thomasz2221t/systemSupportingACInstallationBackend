@@ -185,6 +185,8 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         permissionsClient.add(addPermissions(FIND_ROOM_TYPE));
         permissionsClient.add(addPermissions(CREATE_ROOM_TYPE));
         permissionsClient.add(addPermissions(DELETE_ROOM_TYPE));
+        permissionsClient.add(addPermissions(FIND_MESSAGES));
+        permissionsClient.add(addPermissions(CREATE_MESSAGE));
         roleClient.setPermissions(permissionsClient);
         roleRepository.save(roleClient);
 

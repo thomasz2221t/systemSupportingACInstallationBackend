@@ -48,12 +48,9 @@ public class User extends BaseEntity{
     )
     private Set<Role> roles = new LinkedHashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_messages",
-            joinColumns = { @JoinColumn(name="user_id") },
-            inverseJoinColumns = {@JoinColumn(name="message_id") }
-    )
-    private Set<Message> messages = new LinkedHashSet<>();
+    @OneToOne
+    @JoinColumn(name="message_id")
+    private Message message;
 
     @OneToMany(mappedBy = "user")
     private Set<Offer> offers = new LinkedHashSet<>();

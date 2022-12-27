@@ -15,3 +15,5 @@ databaseChangeLog:
       file: db/changelog/add-enabled-field-in-user-entity.yaml
   - include:
       file: db/changelog/add-changes-in-room-entity.yaml
+  - include:
+      file: db/changelog/changed-user-to-message-relation.yaml

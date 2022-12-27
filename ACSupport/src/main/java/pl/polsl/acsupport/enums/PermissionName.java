@@ -19,5 +19,7 @@ public enum PermissionName {
     FIND_ROOM_TYPE,
     CREATE_ROOM_TYPE,
     DELETE_ROOM_TYPE,
+    FIND_MESSAGES,
+    CREATE_MESSAGE,
 
 }
