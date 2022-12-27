@@ -9,14 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.polsl.acsupport.dtos.BuildingDto;
 import pl.polsl.acsupport.dtos.BuildingTypeDto;
 import pl.polsl.acsupport.dtos.RoomDto;
-import pl.polsl.acsupport.entities.Building;
-import pl.polsl.acsupport.entities.BuildingType;
-import pl.polsl.acsupport.entities.Room;
-import pl.polsl.acsupport.entities.User;
-import pl.polsl.acsupport.repositories.BuildingRepository;
-import pl.polsl.acsupport.repositories.BuildingTypeRepository;
-import pl.polsl.acsupport.repositories.RoomRepository;
-import pl.polsl.acsupport.repositories.UserRepository;
+import pl.polsl.acsupport.entities.*;
+import pl.polsl.acsupport.repositories.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -42,6 +36,8 @@ public class BuildingService {
 
     final private BuildingTypeRepository buildingTypeRepository;
 
+    final private ChatRepository chatRepository;
+
     public Page<BuildingDto> findAll(Pageable pageable){
         final Page<Building> buildings = buildingRepository.findAll(pageable);
         return buildings.map(BuildingDto::new);
@@ -59,6 +55,10 @@ public class BuildingService {
     @Transactional
     public Building create(BuildingDto buildingDto){
         Building building = new Building();
+        Chat chat = new Chat();
+        chat.setBuilding(building);
+        building.setChat(chat);
+        chatRepository.save(chat);
         return setDataFromDto(buildingDto, building);
     }
 
