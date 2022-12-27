@@ -21,7 +21,7 @@ public class ChatController {
     @PreAuthorize("hasAuthority('FIND_MESSAGES')")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Page<Message> findChatMessage(@PathVariable Long id){
+    public Page<MessageDto> findChatMessage(@PathVariable Long id){
         return chatService.getAllMessageByChatId(id);
     }
 

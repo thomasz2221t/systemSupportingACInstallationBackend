@@ -14,13 +14,8 @@ import java.util.Set;
 @Entity(name = "services")
 public class Service extends BaseEntity{
 
-    @Column(name = "dates_begining")
-    @ElementCollection
-    private List<LocalDateTime> datesBegining;
-
-    @Column(name = "dates_end")
-    @ElementCollection
-    private List<LocalDateTime> datesEnd;
+    @Column(name = "date")
+    private LocalDateTime date;
 
     private String description;
 

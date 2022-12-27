@@ -27,11 +27,11 @@ public class ChatService {
 
     private final MessageRepository messageRepository;
 
-    public Page<Message> getAllMessageByChatId(Long chatId){
+    public Page<MessageDto> getAllMessageByChatId(Long chatId){
         final Chat chat = chatRepository.findById(chatId)
                 .orElseThrow(() -> new EntityNotFoundException("Chat with given id not found"));
         Set<Message> messages = chat.getMessages();
-        List<Message> messageList = messages.stream().toList();
+        List<MessageDto> messageList = messages.stream().map(MessageDto::new).toList();
         return new PageImpl<>(messageList);
     };
 

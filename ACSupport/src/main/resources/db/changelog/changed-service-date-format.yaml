@@ -1,0 +1,38 @@
+databaseChangeLog:
+- changeSet:
+    id: 1672157868751-1
+    author: 0_0 (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: date
+            type: timestamp
+        tableName: services
+- changeSet:
+    id: 1672157868751-2
+    author: 0_0 (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: services_datesEnd
+        constraintName: FK3srwjwjkk5jb46erkgfc460bi
+- changeSet:
+    id: 1672157868751-3
+    author: 0_0 (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: services_datesBegining
+        constraintName: FKkp2jwtocjqkerbn4kd9x9gorf
+- changeSet:
+    id: 1672157868751-4
+    author: 0_0 (generated)
+    changes:
+    - dropTable:
+        tableName: services_datesBegining
+- changeSet:
+    id: 1672157868751-5
+    author: 0_0 (generated)
+    changes:
+    - dropTable:
+        tableName: services_datesEnd
+
