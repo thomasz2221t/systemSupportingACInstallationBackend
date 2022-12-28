@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.polsl.acsupport.dtos.ServiceDto;
+import pl.polsl.acsupport.dtos.ServiceTypeDto;
 import pl.polsl.acsupport.services.ServiceService;
 
 @RequiredArgsConstructor
@@ -42,5 +43,23 @@ public class ServiceController {
     @ResponseStatus(HttpStatus.OK)
     public void delete (@PathVariable Long id){
         serviceService.delete(id);
+    }
+
+    @PreAuthorize("hasAuthority('FIND_SERVICE')")
+    @GetMapping("/type/{serviceId}")
+    public ServiceTypeDto findServiceType(@PathVariable Long serviceId){
+        return serviceService.findServiceType(serviceId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_SERVICE')")
+    @PatchMapping("/assigntype/{serviceId}")
+    public void assignTypeToService(@PathVariable Long serviceId, @RequestBody Long typeId){
+        serviceService.assignTypeToService(serviceId, typeId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_SERVICE')")
+    @PatchMapping("/reverttype/{serviceId}")
+    public void revertAssigningTypeToService(@PathVariable Long serviceId){
+        serviceService.revertAssigningTypeFromService(serviceId);
     }
 }
