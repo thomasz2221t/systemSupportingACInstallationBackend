@@ -7,7 +7,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.polsl.acsupport.dtos.MessageDto;
-import pl.polsl.acsupport.entities.Message;
 import pl.polsl.acsupport.services.ChatService;
 
 @RequiredArgsConstructor
