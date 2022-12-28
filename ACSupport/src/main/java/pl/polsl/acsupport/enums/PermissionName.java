@@ -21,5 +21,9 @@ public enum PermissionName {
     DELETE_ROOM_TYPE,
     FIND_MESSAGES,
     CREATE_MESSAGE,
+    FIND_SERVICE,
+    CREATE_SERVICE,
+    UPDATE_SERVICE,
+    DELETE_SERVICE,
 
 }

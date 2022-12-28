@@ -4,11 +4,25 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.polsl.acsupport.entities.Service;
 
-//@Getter
-//@Setter
-//@AllArgsConstructor
-//@NoArgsConstructor
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ServiceDto {
 
+    private Long id;
+
+    private LocalDateTime date;
+
+    private String description;
+
+    public ServiceDto(Service service){
+        this.id = service.getId();
+        this.date = service.getDate();
+        this.description = service.getDescription();
+    }
 }

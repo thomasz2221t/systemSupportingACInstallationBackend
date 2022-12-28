@@ -14,13 +14,20 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class MessageDto {
 
-    String message;
+    private Long id;
+
+    private String message;
+
     @NotNull
-    Long chatId;
+    private Long chatId;
+
     @NotNull
-    Long userId;
+    private Long userId;
 
     public MessageDto(Message message){
-
+        this.id = message.getId();
+        this.message = message.getMessage();
+        this.chatId = message.getChat().getId();
+        this.userId = message.getUser().getId();
     }
 }
