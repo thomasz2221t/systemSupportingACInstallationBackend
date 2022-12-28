@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import pl.polsl.acsupport.filters.JWTAuthenticationEntryPointFilter;
 import pl.polsl.acsupport.filters.JWTAuthenticationFilter;
 import pl.polsl.acsupport.filters.JWTAuthorizationFilter;
 
@@ -29,6 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //required as an interface between Authentication provider and JPA Services
     @Autowired
     protected UserDetailsService userDetailsService;
+
+    @Autowired
+    protected JWTAuthenticationEntryPointFilter jwtAuthenticationEntryPointFilter;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -60,8 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .addFilterBefore(new JWTAuthorizationFilter(authenticationManager()),
-                        UsernamePasswordAuthenticationFilter.class);
-
+                        UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPointFilter);
     }
 
     @Bean
