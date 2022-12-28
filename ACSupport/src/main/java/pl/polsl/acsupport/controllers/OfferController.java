@@ -1,10 +1,12 @@
 package pl.polsl.acsupport.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import pl.polsl.acsupport.dtos.InstallerEquipmentDto;
 import pl.polsl.acsupport.dtos.OfferDto;
 import pl.polsl.acsupport.services.OfferService;
 
@@ -41,5 +43,23 @@ public class OfferController {
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable Long id){
         offerService.delete(id);
+    }
+
+    @PreAuthorize("hasAuthority('FIND_OFFER')")
+    @GetMapping("/equipment/{offerId}")
+    public Page<InstallerEquipmentDto> findAllEquipmentInOffer(@PathVariable Long offerId){
+        return offerService.findAllEquipmentInOffer(offerId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_OFFER')")
+    @PatchMapping("/assignequipment/{offerId}")
+    public void assignEquipmentToOffer(@PathVariable Long offerId, @RequestBody Long equipmentId){
+        offerService.assignEquipmentToOffer(offerId, equipmentId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_OFFER')")
+    @PatchMapping("/revertequipment/{offerId}")
+    public void revertAssigningEquipmentFromOffer(@PathVariable Long offerId, @RequestBody Long equipmentId){
+        offerService.revertAssigningEquipmentFromOffer(offerId, equipmentId);
     }
 }

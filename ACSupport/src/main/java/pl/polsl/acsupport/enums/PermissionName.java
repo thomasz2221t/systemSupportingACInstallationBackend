@@ -32,5 +32,8 @@ public enum PermissionName {
     CREATE_OFFER,
     UPDATE_OFFER,
     DELETE_OFFER,
-
+    FIND_EQUIPMENT,
+    CREATE_EQUIPMENT,
+    UPDATE_EQUIPMENT,
+    DELETE_EQUIPMENT,
 }
