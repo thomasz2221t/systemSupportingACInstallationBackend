@@ -28,5 +28,9 @@ public enum PermissionName {
     FIND_SERVICE_TYPE,
     CREATE_SERVICE_TYPE,
     DELETE_SERVICE_TYPE,
+    FIND_OFFER,
+    CREATE_OFFER,
+    UPDATE_OFFER,
+    DELETE_OFFER,
 
 }

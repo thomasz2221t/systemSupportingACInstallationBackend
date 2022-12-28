@@ -192,6 +192,7 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         permissionsClient.add(addPermissions(UPDATE_SERVICE));
         permissionsClient.add(addPermissions(DELETE_SERVICE));
         permissionsClient.add(addPermissions(FIND_SERVICE_TYPE));
+        permissionsClient.add(addPermissions(FIND_OFFER));
         roleClient.setPermissions(permissionsClient);
         roleRepository.save(roleClient);
 
@@ -203,6 +204,9 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         permissionsOperator.add(addPermissions(DELETE_BUILDING_TYPE));
         permissionsOperator.add(addPermissions(CREATE_SERVICE_TYPE));
         permissionsOperator.add(addPermissions(DELETE_SERVICE_TYPE));
+        permissionsOperator.add(addPermissions(CREATE_OFFER));
+        permissionsOperator.add(addPermissions(UPDATE_OFFER));
+        permissionsOperator.add(addPermissions(DELETE_OFFER));
         roleOperator.setPermissions(permissionsOperator);
         roleRepository.save(roleOperator);
 
