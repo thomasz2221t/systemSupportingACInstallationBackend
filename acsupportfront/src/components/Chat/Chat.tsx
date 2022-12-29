@@ -1,4 +1,4 @@
-import React, { Fragment, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import {
   Box,
   Container,
@@ -15,17 +15,23 @@ import {
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import './Chat.scss';
+import ChatService from 'services/ChatService';
+import MessageType from 'types/MessageType';
 
-export default function Chat() {
+export type ChatPropType = {
+  chatIdentifiaction: number;
+};
+
+export default function Chat({ chatIdentifiaction }: ChatPropType) {
   const scrollBottomRef = useRef(null);
-  const [chatMessages, setChatMessages] = useState([]);
+  const [chatMessages, setChatMessages] = useState<MessageType[]>([]);
   const [user, setUser] = useState('');
   const [message, setMessage] = useState('');
 
   const listChatMessages = chatMessages.map((chatMessageDto, index) => (
     <ListItem key={index}>
       <ListItemText
-      //primary={`${chatMessageDto.user}: ${chatMessageDto.message}`}
+        primary={`${chatMessageDto.userId}: ${chatMessageDto.message}`}
       />
     </ListItem>
   ));
@@ -35,6 +41,20 @@ export default function Chat() {
       console.log('send');
     }
   };
+
+  const handleDownloadingMessages = async (chatId: number) => {
+    await ChatService.findChatMessage(chatId).then((response) => {
+      console.log(response.data.content);
+      setChatMessages(response.data.content);
+    });
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleDownloadingMessages(chatIdentifiaction);
+    }, 5 * 1000);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <>
       <Fragment>
@@ -50,7 +70,7 @@ export default function Chat() {
                   <List id="chat-window-messages">{listChatMessages}</List>
                   <ListItem ref={scrollBottomRef}></ListItem>
                 </Grid>
-                <Grid xs={2} item>
+                {/* <Grid xs={2} item>
                   <FormControl fullWidth>
                     <TextField
                       value={user}
@@ -58,8 +78,8 @@ export default function Chat() {
                       variant="outlined"
                     />
                   </FormControl>
-                </Grid>
-                <Grid xs={9} item>
+                </Grid> */}
+                <Grid xs={11} item>
                   <FormControl fullWidth>
                     <TextField
                       value={message}

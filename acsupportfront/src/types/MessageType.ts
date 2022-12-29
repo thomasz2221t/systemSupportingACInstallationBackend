@@ -1,6 +1,8 @@
 export type MessageType = {
   id: number;
-  name: string;
+  message: string;
+  chatId: number;
+  userId: number;
 };
 
 export default MessageType;
