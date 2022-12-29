@@ -87,7 +87,7 @@ public class RoomService {
     }
 
     @Transactional
-    public void revertAssigningTypeFromRoom(Long roomId){
+    public void revertAssigningTypeFromRoom(Long roomId) {
         Room room = findById(roomId);
         RoomType roomType = room.getType();
 

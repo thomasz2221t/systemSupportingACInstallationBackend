@@ -15,6 +15,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OfferDto {
+
+    private Long id;
+
     private BigDecimal cost;
 
     private LocalDateTime datesBegining;
@@ -26,6 +29,7 @@ public class OfferDto {
     private Long userId;
 
     public OfferDto(Offer offer){
+        this.id = offer.getId();
         this.cost = offer.getCost();
         this.datesBegining = offer.getDatesBegining();
         this.datesEnd = offer.getDatesEnd();

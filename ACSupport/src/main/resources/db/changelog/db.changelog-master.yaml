@@ -19,3 +19,5 @@ databaseChangeLog:
       file: db/changelog/changed-user-to-message-relation.yaml
   - include:
       file: db/changelog/changed-service-date-format.yaml
+  - include:
+      file: db/changelog/changed-room-service-relation.yaml

@@ -1,0 +1,45 @@
+databaseChangeLog:
+- changeSet:
+    id: 1672267983985-1
+    author: 0_0 (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: service_id
+            type: int8
+        tableName: services
+- changeSet:
+    id: 1672267983985-2
+    author: 0_0 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: service_id
+        baseTableName: services
+        constraintName: FK5w4ucw07v5p3lf1cyylcgwdxv
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: rooms
+        validate: true
+- changeSet:
+    id: 1672267983985-3
+    author: 0_0 (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: room_services
+        constraintName: FKewq1euu8r5i0c2f1ejfout7ty
+- changeSet:
+    id: 1672267983985-4
+    author: 0_0 (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: room_services
+        constraintName: FKrvoqlh9yqrup1v41ejfevv6po
+- changeSet:
+    id: 1672267983985-5
+    author: 0_0 (generated)
+    changes:
+    - dropTable:
+        tableName: room_services
+

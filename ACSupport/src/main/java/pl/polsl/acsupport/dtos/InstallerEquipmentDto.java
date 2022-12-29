@@ -14,6 +14,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class InstallerEquipmentDto {
 
+    private Long id;
+
     private String name;
 
     private BigDecimal price;
@@ -23,6 +25,7 @@ public class InstallerEquipmentDto {
     private String description;
 
     public InstallerEquipmentDto(InstallerEquipment installerEquipment){
+        this.id = installerEquipment.getId();
         this.name = installerEquipment.getName();
         this.price = installerEquipment.getPrice();
         this.producer = installerEquipment.getProducer();

@@ -1,10 +1,14 @@
 package pl.polsl.acsupport.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import pl.polsl.acsupport.dtos.OperatorServiceDto;
 import pl.polsl.acsupport.dtos.ServiceDto;
 import pl.polsl.acsupport.dtos.ServiceTypeDto;
 import pl.polsl.acsupport.services.ServiceService;
@@ -61,5 +65,31 @@ public class ServiceController {
     @PatchMapping("/reverttype/{serviceId}")
     public void revertAssigningTypeToService(@PathVariable Long serviceId){
         serviceService.revertAssigningTypeFromService(serviceId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_SERVICE')")
+    @PatchMapping("/assignroom/{serviceId}")
+    public void assignServiceToRoom(@PathVariable Long serviceId, @RequestBody Long roomId){
+        serviceService.assignServiceToRoom(serviceId, roomId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_SERVICE')")
+    @PatchMapping("/revertroom/{serviceId}")
+    public void revertAssigningServiceFromRoom(@PathVariable Long serviceId){
+        serviceService.revertAssigningServiceFromRoom(serviceId);
+    }
+
+    @PreAuthorize("hasAuthority('FIND_SERVICE')")
+    @GetMapping("/building/{buildingId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<ServiceDto> findServiceByBuildingId (@PathVariable Long buildingId, @PageableDefault Pageable pageable){
+        return serviceService.findServiceByBuildingId(buildingId, pageable);
+    }
+
+    @PreAuthorize("hasAuthority('FIND_SERVICE')")
+    @GetMapping("/operator/{buildingId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<OperatorServiceDto> findAllOperatorServices (@PathVariable Long buildingId, @PageableDefault Pageable pageable){
+        return serviceService.findAllOperatorServices(buildingId, pageable);
     }
 }
