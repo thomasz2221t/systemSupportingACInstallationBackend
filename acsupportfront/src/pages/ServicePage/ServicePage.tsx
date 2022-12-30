@@ -9,7 +9,8 @@ import UserAccount from 'components/UserAccount/UserAccount';
 import BuildingService from 'services/BuildingService';
 import BuildingType from 'types/BuildingType';
 import AuthService from 'services/auth/AuthService';
-import { buildIcon } from '@iconify/react';
+
+import './ServicePage.scss';
 
 export function ServicePage() {
   const [userId, setUserId] = useState<number>(0);
@@ -25,7 +26,16 @@ export function ServicePage() {
 
   const flatProps = {
     options: userBuildings.map(
-      (option) => option.name + ' ' + option.street + ' ' + option.city
+      (option) =>
+        option.name +
+        ', ' +
+        option.street +
+        ' ' +
+        option.city +
+        ', ' +
+        option.postCode +
+        ', ' +
+        option.region
     ),
   };
 
@@ -42,13 +52,14 @@ export function ServicePage() {
       <Navbar />
       <UserAccount />
       <div id="building-autocomplete">
-        <text choose-building-header>Wybierz budynek:</text>
+        <text id="choose-building-header">Wybierz budynek:</text>
         <Autocomplete
           {...flatProps}
+          autoComplete
           disablePortal
           autoHighlight
           id="combo-box-demo"
-          sx={{ width: 300 }}
+          sx={{ width: 800 }}
           renderInput={(params) => <TextField {...params} label="Buildings" />}
         />
       </div>
