@@ -7,6 +7,7 @@ import lombok.Setter;
 import pl.polsl.acsupport.entities.Message;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,6 +19,8 @@ public class MessageDto {
 
     private String message;
 
+    private String date;
+
     @NotNull
     private Long chatId;
 
@@ -27,6 +30,7 @@ public class MessageDto {
     public MessageDto(Message message){
         this.id = message.getId();
         this.message = message.getMessage();
+        this.date = message.getCreatedAt().toString();
         this.chatId = message.getChat().getId();
         this.userId = message.getUser().getId();
     }

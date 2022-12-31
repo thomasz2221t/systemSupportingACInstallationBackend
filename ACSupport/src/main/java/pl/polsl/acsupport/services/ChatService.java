@@ -11,6 +11,7 @@ import pl.polsl.acsupport.entities.Message;
 import pl.polsl.acsupport.entities.User;
 import pl.polsl.acsupport.repositories.ChatRepository;
 import pl.polsl.acsupport.repositories.MessageRepository;
+import pl.polsl.acsupport.repositories.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -26,6 +27,8 @@ public class ChatService {
     private final ChatRepository chatRepository;
 
     private final MessageRepository messageRepository;
+
+    private final UserRepository userRepository;
 
     public Page<MessageDto> getAllMessageByChatId(Long chatId){
         final Chat chat = chatRepository.findById(chatId)
@@ -44,6 +47,10 @@ public class ChatService {
         message.setMessage(messageDto.getMessage());
         message.setUser(user);
         message.setChat(chat);
+        Set<Message> messages = user.getMessage();
+        messages.add(message);
+        user.setMessage(messages);
+        userRepository.save(user);
         return messageRepository.save(message);
     }
 }

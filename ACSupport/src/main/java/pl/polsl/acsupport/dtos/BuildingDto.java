@@ -34,6 +34,8 @@ public class BuildingDto {
 
     private String description;
 
+    private Long chatId;
+
     public BuildingDto(Building building){
         this.id = building.getId();
         this.name = building.getName();
@@ -43,6 +45,7 @@ public class BuildingDto {
         this.city = building.getCity();
         this.region = building.getRegion();
         this.description = building.getDescription();
+        this.chatId = building.getChat().getId();
     }
 
 }
