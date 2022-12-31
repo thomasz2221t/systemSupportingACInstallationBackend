@@ -7,6 +7,7 @@ type BuildingType = {
   city: string;
   region: string;
   description: string;
+  chatId: number;
 };
 
 export default BuildingType;

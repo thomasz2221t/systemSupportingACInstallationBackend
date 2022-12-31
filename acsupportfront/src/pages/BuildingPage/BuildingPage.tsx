@@ -22,6 +22,7 @@ const DEFAULT_BUILDING_OBJECT = {
   city: '',
   region: '',
   description: '',
+  chatId: 0,
 };
 
 const DEFAULT_TYPE_OBJECT = {
@@ -130,6 +131,7 @@ export function BuildingPage() {
           city={buildingBody.city}
           region={buildingBody.region}
           description={buildingBody.description}
+          chatId={buildingBody.chatId}
           //isEditable={handleEditFormState}
           mustCreate={false}
           userId={0}

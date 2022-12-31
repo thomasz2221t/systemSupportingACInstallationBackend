@@ -25,6 +25,7 @@ export type buildingDetailsFormProp = {
   city: string;
   region: string;
   description: string;
+  chatId: number;
   userId: number;
   mustCreate: boolean;
   isEditable: () => boolean;
@@ -47,6 +48,7 @@ export function BuildingDetailsForm({
   city,
   region,
   description,
+  chatId,
   userId,
   mustCreate,
   isEditable,
@@ -72,6 +74,7 @@ export function BuildingDetailsForm({
     city: city,
     region: region,
     description: description,
+    chatId: chatId,
   });
   const [buildingTypePage, setBuildingTypePage] = useState<BuildingTypeType[]>(
     []
@@ -207,6 +210,7 @@ export function BuildingDetailsForm({
         city: city,
         region: region,
         description: description,
+        chatId: chatId,
       });
     }
   }, [editableState]);

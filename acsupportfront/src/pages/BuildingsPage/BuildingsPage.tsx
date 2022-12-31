@@ -134,6 +134,7 @@ export function BuildingsPage() {
             city={''}
             region={''}
             description={''}
+            chatId={0}
             userId={userId}
             mustCreate={true}
             isEditable={() => {

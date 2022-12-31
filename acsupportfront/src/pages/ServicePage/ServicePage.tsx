@@ -53,6 +53,7 @@ export function ServicePage() {
         id: response.data.content[0].id,
       });
       setChosenBuildingId(response.data.content[0].id);
+      console.log(chosenBuildingId);
     });
   };
 
@@ -103,7 +104,7 @@ export function ServicePage() {
         />
       </div>
       <div id="chat-component">
-        <Chat chatIdentifiaction={chosenBuildingId} />
+        <Chat buildingId={chosenBuildingId} userId={userId} />
       </div>
       <div id="offer-details-component">
         <OfferDetailsForm />
