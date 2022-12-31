@@ -19,6 +19,7 @@ public class Message extends BaseEntity {
     @JoinColumn(name = "chat_id")
     private Chat chat;
 
-    @OneToOne(mappedBy = "message")
+    @ManyToOne
+    @JoinColumn(name="user_id")
     private User user;
 }

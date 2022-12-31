@@ -48,9 +48,8 @@ public class User extends BaseEntity{
     )
     private Set<Role> roles = new LinkedHashSet<>();
 
-    @OneToOne
-    @JoinColumn(name="message_id")
-    private Message message;
+    @OneToMany(mappedBy = "user")
+    private Set<Message> message = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user")
     private Set<Offer> offers = new LinkedHashSet<>();
