@@ -62,7 +62,7 @@ export default function Chat({ chatIdentifiaction }: ChatPropType) {
           <Paper elevation={5}>
             <Box p={3}>
               <Typography variant="h4" gutterBottom>
-                Chat dotyczący budynku
+                Chat dotyczący budynku {`${chatIdentifiaction}`}
               </Typography>
               <Divider />
               <Grid container spacing={4} alignItems="center">

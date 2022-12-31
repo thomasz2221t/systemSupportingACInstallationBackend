@@ -52,7 +52,7 @@ export function ServicePage() {
           response.data.content[0].region,
         id: response.data.content[0].id,
       });
-      setChosenBuildingId(chosenBuilding.id);
+      setChosenBuildingId(response.data.content[0].id);
     });
   };
 
@@ -103,7 +103,7 @@ export function ServicePage() {
         />
       </div>
       <div id="chat-component">
-        <Chat chatIdentifiaction={1} />
+        <Chat chatIdentifiaction={chosenBuildingId} />
       </div>
       <div id="offer-details-component">
         <OfferDetailsForm />
