@@ -3,21 +3,21 @@ import MessageType from 'types/MessageType';
 import API_URL from 'utils/ApiUrl';
 import { authHeader } from './auth/AuthHeaders';
 
-const findChatMessage = (chatId: number) => {
+const getFindChatMessage = (chatId: number) => {
   return axios.get(`${API_URL}/chat/${chatId}`, {
     headers: authHeader(),
   });
 };
 
-const receiveChatMessage = (messageBody: MessageType) => {
+const getReceiveChatMessage = (messageBody: MessageType) => {
   return axios.post(`${API_URL}/chat`, messageBody, {
     headers: authHeader(),
   });
 };
 
 const ChatService = {
-  findChatMessage,
-  receiveChatMessage,
+  getFindChatMessage,
+  getReceiveChatMessage,
 };
 
 export default ChatService;

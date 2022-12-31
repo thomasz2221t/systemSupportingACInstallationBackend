@@ -43,7 +43,7 @@ export default function Chat({ chatIdentifiaction }: ChatPropType) {
   };
 
   const handleDownloadingMessages = async (chatId: number) => {
-    await ChatService.findChatMessage(chatId).then((response) => {
+    await ChatService.getFindChatMessage(chatId).then((response) => {
       console.log(response.data.content);
       setChatMessages(response.data.content);
     });
@@ -62,7 +62,7 @@ export default function Chat({ chatIdentifiaction }: ChatPropType) {
           <Paper elevation={5}>
             <Box p={3}>
               <Typography variant="h4" gutterBottom>
-                Building Chat
+                Chat dotyczący budynku
               </Typography>
               <Divider />
               <Grid container spacing={4} alignItems="center">
