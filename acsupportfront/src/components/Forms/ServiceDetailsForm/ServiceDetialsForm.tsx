@@ -10,20 +10,18 @@ import { Icon } from '@iconify/react';
 
 import BuildingService from 'services/BuildingService';
 import ServiceTypeService from 'services/ServiceTypeService';
+import ServiceService from 'services/ServiceService';
 import RoomType from 'types/RoomType';
 import ServiceType from 'types/ServiceType';
 import ServiceTypeType from 'types/ServiceTypeType';
 
 import './ServiceDetailsForm.scss';
+import RoomService from 'services/RoomService';
 
 export type ServiceDetailsFormPropType = {
   id: number;
   date: Date;
-  serviceId: number;
-  serviceTypeName: string;
   buildingId: number;
-  roomId: number;
-  roomName: string;
   description: String;
   mustCreate: boolean;
   //refreshParentData?: (buildingId: number) => void;
@@ -33,11 +31,7 @@ export type ServiceDetailsFormPropType = {
 export default function ServiceDetailsForm({
   id,
   date,
-  serviceId,
-  serviceTypeName,
   buildingId,
-  roomId,
-  roomName,
   description,
   mustCreate,
   //refreshParentData,
@@ -63,22 +57,21 @@ export default function ServiceDetailsForm({
     !mustCreate
   );
   const [buildingIdNumber] = useState<number>(buildingId);
-  const [serviceTypeId, setServiceTypeId] = useState<number>(serviceId);
-  // const [serviceTypeBody, setServiceTypeBody] = useState<ServiceTypeType>({
-  //   id: 0,
-  //   name: '',
-  // });
-  const [roomIdNumber, setRoomIdNumber] = useState<number>(roomId);
-  // const [roomBody, setRoomBody] = useState<RoomType>({
-  //   id: 0,
-  //   name: '',
-  //   areaWidth: 0,
-  //   areaHeight: 0,
-  //   height: 0,
-  //   energyGivenOut: 0,
-  //   peopleNumber: 0,
-  //   description: '',
-  // });
+  const [serviceTypeId, setServiceTypeId] = useState<number>(id);
+  const [serviceTypeBody, setServiceTypeBody] = useState<ServiceTypeType>({
+    id: 0,
+    name: '',
+  });
+  const [roomBody, setRoomBody] = useState<RoomType>({
+    id: 0,
+    name: '',
+    areaWidth: 0,
+    areaHeight: 0,
+    height: 0,
+    energyGivenOut: 0,
+    peopleNumber: 0,
+    description: '',
+  });
   const [roomPage, setRoomPage] = useState<RoomType[]>([]);
   const [serviceTypesPage, setServiceTypePage] = useState<ServiceTypeType[]>(
     []
@@ -102,18 +95,37 @@ export default function ServiceDetailsForm({
     });
   };
 
+  const handleGettingServiceDetails = async (serviceId: number) => {
+    await ServiceService.getFindServiceType(serviceId).then((response) => {
+      console.log(response.data);
+      setServiceTypeBody(response.data);
+    });
+  };
+
+  const handleGettingRoomDetails = async (serviceId: number) => {
+    await ServiceService.getFindServiceRoom(serviceId).then((response) => {
+      console.log(response.data);
+      setRoomBody(response.data);
+    });
+  };
+
   const onChangeServiceType = (event: SelectChangeEvent<number>) => {
     setServiceTypeId(Number(event.target.value));
   };
 
   const onChangeRoom = (event: SelectChangeEvent<number>) => {
-    setRoomIdNumber(Number(event.target.value));
+    setRoomBody({ ...roomBody, id: Number(event.target.value) });
   };
 
   useEffect(() => {
     handleFindingAllRoomsAssignedToBuilding(buildingIdNumber);
     handleFindingServiceTypes();
   }, []);
+
+  useEffect(() => {
+    handleGettingServiceDetails(id);
+    handleGettingRoomDetails(id);
+  }, [id]); //serviceTypeId
 
   return isServiceFormEditable === true ? (
     <>
@@ -149,7 +161,7 @@ export default function ServiceDetailsForm({
             inputProps={{ readOnly: true }}
             onChange={onChangeServiceType}
           >
-            <MenuItem value={0}>{serviceTypeName}</MenuItem>
+            <MenuItem value={0}>{serviceTypeBody.name}</MenuItem>
             {serviceTypesPage.map((data, id) => (
               <MenuItem key={data.id} value={data.id}>
                 {data.name}
@@ -164,11 +176,11 @@ export default function ServiceDetailsForm({
             label="Wybierz pomieszczenie"
             size="small"
             displayEmpty
-            value={roomIdNumber}
+            value={roomBody.id}
             inputProps={{ readOnly: true }}
             onChange={onChangeRoom}
           >
-            <MenuItem value={0}>{roomName}</MenuItem>
+            <MenuItem value={0}>{roomBody.name}</MenuItem>
             {roomPage.map((data, id) => (
               <MenuItem key={data.id} value={data.id}>
                 {data.name}
@@ -242,7 +254,7 @@ export default function ServiceDetailsForm({
             inputProps={{ readOnly: false }}
             onChange={onChangeServiceType}
           >
-            <MenuItem value={0}>{serviceTypeName}</MenuItem>
+            <MenuItem value={0}>{serviceTypeBody.name}</MenuItem>
             {serviceTypesPage.map((data, id) => (
               <MenuItem key={data.id} value={data.id}>
                 {data.name}
@@ -257,11 +269,11 @@ export default function ServiceDetailsForm({
             label="Wybierz pomieszczenie"
             size="small"
             displayEmpty
-            value={roomIdNumber}
+            value={roomBody.id}
             inputProps={{ readOnly: false }}
             onChange={onChangeRoom}
           >
-            <MenuItem value={0}>{roomName}</MenuItem>
+            <MenuItem value={0}>{roomBody.name}</MenuItem>
             {roomPage.map((data, id) => (
               <MenuItem key={data.id} value={data.id}>
                 {data.name}

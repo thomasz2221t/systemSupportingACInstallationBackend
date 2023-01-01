@@ -11,13 +11,14 @@ import BuildingType from 'types/BuildingType';
 import AuthService from 'services/auth/AuthService';
 import OfferDetailsForm from 'components/Forms/OfferDetailsForm/OfferDetailsForm';
 import ServiceType from 'types/ServiceType';
+import ServiceService from 'services/ServiceService';
 
 import './ServicePage.scss';
 
 export function ServicePage() {
   const [userId, setUserId] = useState<number>(0);
   const [userBuildings, setUserBuildings] = useState<BuildingType[]>([]);
-  //const [servicePage, setServicePage] = useState<ServiceType[]>([]);
+  const [servicePage, setServicePage] = useState<ServiceType[]>([]);
   const flatProps = {
     options: userBuildings.map((option) => ({
       label:
@@ -35,6 +36,9 @@ export function ServicePage() {
   };
   const [chosenBuilding, setChosenBuilding] = useState<any>('');
   const [chosenBuildingId, setChosenBuildingId] = useState<number>(0);
+  const [servicePageNumber, setServicePageNumber] = useState(0);
+  const [serivceRowsPerPage, setServiceRowsPerPage] = useState<number>(5);
+  const [serviceRowsPerPageOption] = useState(1);
 
   const handleGetingUserBuildings = async (userId: number) => {
     await BuildingService.getUserBuildings(userId).then((response) => {
@@ -59,7 +63,13 @@ export function ServicePage() {
     });
   };
 
-  //const handleGettingServices = async ()
+  const handleGettingBuildingServices = async (buildingId: number) => {
+    await ServiceService.getFindServiceByBuildingId(buildingId).then(
+      (response) => {
+        setServicePage(response.data.content);
+      }
+    );
+  };
 
   useEffect(() => {
     setUserId(AuthService.getCurrentUserId());
@@ -68,6 +78,10 @@ export function ServicePage() {
   useEffect(() => {
     handleGetingUserBuildings(userId);
   }, [userId]);
+
+  useEffect(() => {
+    handleGettingBuildingServices(chosenBuildingId);
+  }, [chosenBuildingId]);
 
   console.log(chosenBuilding);
   return (
@@ -94,7 +108,7 @@ export function ServicePage() {
         />
       </div>
       <text id="service-details-header">Dane dotyczące usługi:</text>
-      <div id="service-details-component">
+      {/* <div id="service-details-component">
         <ServiceDetailsForm
           id={0}
           date={new Date()}
@@ -108,8 +122,27 @@ export function ServicePage() {
           handleFormClose={() => {
             return false;
           }}
-        />
-      </div>
+        /> 
+        </div>*/}
+      {servicePage
+        .sort((a, b) => a.id - b.id)
+        //.slice(servicePageNumber * serviceRowsPerPage, servicePageNumber * serviceRowsPerPage + serivceRowsPerPage)
+        .map((data) => {
+          return (
+            <div id={`${data.id}`} className="service-details-component">
+              <ServiceDetailsForm
+                id={data.id}
+                date={data.date}
+                buildingId={chosenBuildingId}
+                description={data.description}
+                mustCreate={false}
+                handleFormClose={() => {
+                  return false;
+                }}
+              />
+            </div>
+          );
+        })}
       <div id="chat-component">
         <Chat buildingId={chosenBuildingId} userId={userId} />
       </div>

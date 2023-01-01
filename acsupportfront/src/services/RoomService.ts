@@ -6,6 +6,12 @@ import {
   authHeaderForPrimitiveTypePatch,
 } from './auth/AuthHeaders';
 
+const getFindRoomById = (roomId: number) => {
+  return axios.get(`${API_URL}/room/${roomId}`, {
+    headers: authHeader(),
+  });
+};
+
 const getFindRoomType = (roomId: number) => {
   return axios.get(`${API_URL}/room/type/${roomId}`, {
     headers: authHeader(),
@@ -33,6 +39,7 @@ const patchAssignTypeToRoom = (roomId: Number, roomTypeId: Number) => {
 };
 
 const RoomService = {
+  getFindRoomById,
   getFindRoomType,
   postCreateRoom,
   patchUpdateRoom,
