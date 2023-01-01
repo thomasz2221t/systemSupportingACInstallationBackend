@@ -5,9 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.polsl.acsupport.dtos.OperatorServiceDto;
-import pl.polsl.acsupport.dtos.ServiceDto;
-import pl.polsl.acsupport.dtos.ServiceTypeDto;
+import pl.polsl.acsupport.dtos.*;
 import pl.polsl.acsupport.entities.Offer;
 import pl.polsl.acsupport.entities.Room;
 import pl.polsl.acsupport.entities.ServiceType;
@@ -98,6 +96,12 @@ public class ServiceService {
 
         serviceRepository.save(service);
         serviceTypeRepository.save(type);
+    }
+
+    public RoomDto findServiceRoom(Long serviceId){
+        pl.polsl.acsupport.entities.Service service = findById(serviceId);
+        Room room = service.getRoom();
+        return new RoomDto(room);
     }
 
     @Transactional

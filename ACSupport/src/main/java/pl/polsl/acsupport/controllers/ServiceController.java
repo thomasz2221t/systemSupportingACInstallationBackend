@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.polsl.acsupport.dtos.OperatorServiceDto;
+import pl.polsl.acsupport.dtos.RoomDto;
 import pl.polsl.acsupport.dtos.ServiceDto;
 import pl.polsl.acsupport.dtos.ServiceTypeDto;
 import pl.polsl.acsupport.services.ServiceService;
@@ -65,6 +66,12 @@ public class ServiceController {
     @PatchMapping("/reverttype/{serviceId}")
     public void revertAssigningTypeToService(@PathVariable Long serviceId){
         serviceService.revertAssigningTypeFromService(serviceId);
+    }
+
+    @PreAuthorize("hasAuthority('FIND_SERVICE')")
+    @GetMapping("/room/{serviceId}")
+    public RoomDto findServiceRoom(@PathVariable Long serviceId){
+        return serviceService.findServiceRoom(serviceId);
     }
 
     @PreAuthorize("hasAuthority('UPDATE_SERVICE')")
