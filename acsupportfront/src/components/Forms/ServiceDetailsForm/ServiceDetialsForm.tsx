@@ -1,22 +1,48 @@
-import { Button, Select, SelectChangeEvent, TextField } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import {
+  Button,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
+} from '@mui/material';
+import { Icon } from '@iconify/react';
+
+import BuildingService from 'services/BuildingService';
+import ServiceTypeService from 'services/ServiceTypeService';
+import RoomType from 'types/RoomType';
+import ServiceType from 'types/ServiceType';
+import ServiceTypeType from 'types/ServiceTypeType';
 
 import './ServiceDetailsForm.scss';
 
 export type ServiceDetailsFormPropType = {
   id: number;
-  date: number[];
+  date: Date;
   serviceId: number;
+  serviceTypeName: string;
   buildingId: number;
   roomId: number;
+  roomName: string;
   description: String;
-  isEditable: () => boolean;
+  mustCreate: boolean;
+  //refreshParentData?: (buildingId: number) => void;
+  handleFormClose?: () => void;
 };
 
 export default function ServiceDetailsForm({
-  isEditable,
+  id,
+  date,
+  serviceId,
+  serviceTypeName,
+  buildingId,
+  roomId,
+  roomName,
+  description,
+  mustCreate,
+  //refreshParentData,
+  handleFormClose,
 }: ServiceDetailsFormPropType) {
-  const editableState = isEditable();
   let today = new Date();
   let defaultDate =
     today.getFullYear() +
@@ -28,18 +54,90 @@ export default function ServiceDetailsForm({
     String(today.getHours()).padStart(2, '0') +
     ':' +
     String(today.getMinutes()).padStart(2, '0');
+  const [data, setData] = useState<ServiceType>({
+    id: id,
+    date: date,
+    description: description,
+  });
+  const [isServiceFormEditable, setIsServiceFormEditable] = useState<boolean>(
+    !mustCreate
+  );
+  const [buildingIdNumber] = useState<number>(buildingId);
+  const [serviceTypeId, setServiceTypeId] = useState<number>(serviceId);
+  // const [serviceTypeBody, setServiceTypeBody] = useState<ServiceTypeType>({
+  //   id: 0,
+  //   name: '',
+  // });
+  const [roomIdNumber, setRoomIdNumber] = useState<number>(roomId);
+  // const [roomBody, setRoomBody] = useState<RoomType>({
+  //   id: 0,
+  //   name: '',
+  //   areaWidth: 0,
+  //   areaHeight: 0,
+  //   height: 0,
+  //   energyGivenOut: 0,
+  //   peopleNumber: 0,
+  //   description: '',
+  // });
+  const [roomPage, setRoomPage] = useState<RoomType[]>([]);
+  const [serviceTypesPage, setServiceTypePage] = useState<ServiceTypeType[]>(
+    []
+  );
 
-  const onChangeService = (event: SelectChangeEvent<number>) => {
-    //setTypeIdNumber(Number(event.target.value));
+  const handleFindingAllRoomsAssignedToBuilding = async (
+    buildingId: number
+  ) => {
+    await BuildingService.getFindAllBuildingsRooms(buildingId).then(
+      (response) => {
+        console.log(response.data.content);
+        setRoomPage(response.data.content);
+      }
+    );
+  };
+
+  const handleFindingServiceTypes = async () => {
+    await ServiceTypeService.getFindAllServiceTypes().then((response) => {
+      console.log(response.data.content);
+      setServiceTypePage(response.data.content);
+    });
+  };
+
+  const onChangeServiceType = (event: SelectChangeEvent<number>) => {
+    setServiceTypeId(Number(event.target.value));
   };
 
   const onChangeRoom = (event: SelectChangeEvent<number>) => {
-    //setTypeIdNumber(Number(event.target.value));
+    setRoomIdNumber(Number(event.target.value));
   };
 
-  return (
+  useEffect(() => {
+    handleFindingAllRoomsAssignedToBuilding(buildingIdNumber);
+    handleFindingServiceTypes();
+  }, []);
+
+  return isServiceFormEditable === true ? (
     <>
       <div className="service-details-form">
+        {mustCreate === false ? (
+          <div className="edit-service-button">
+            <Icon
+              className="return-icon"
+              icon="material-symbols:room-preferences-outline"
+              color="#4e4e4e"
+              height="21"
+            />
+            <Button
+              sx={{
+                color: '#ffffff',
+              }}
+              onClick={() => {
+                setIsServiceFormEditable(!isServiceFormEditable);
+              }}
+            >
+              Edytuj pomieszczenie
+            </Button>
+          </div>
+        ) : null}
         <div className="service-pick-form">
           <text className="service-form-header">Wybierz usługę</text>
           <Select
@@ -47,16 +145,16 @@ export default function ServiceDetailsForm({
             label="Wybierz Usługę"
             size="small"
             displayEmpty
-            value={0} //typeIdNumber
-            inputProps={{ readOnly: editableState }}
-            onChange={onChangeService}
+            value={serviceTypeId}
+            inputProps={{ readOnly: true }}
+            onChange={onChangeServiceType}
           >
-            {/*<MenuItem value={0}>{typeName}</MenuItem>
-            {buildingTypePage.map((data, id) => (
+            <MenuItem value={0}>{serviceTypeName}</MenuItem>
+            {serviceTypesPage.map((data, id) => (
               <MenuItem key={data.id} value={data.id}>
                 {data.name}
               </MenuItem>
-            ))}*/}
+            ))}
           </Select>
         </div>
         <div className="room-pick-form">
@@ -66,16 +164,16 @@ export default function ServiceDetailsForm({
             label="Wybierz pomieszczenie"
             size="small"
             displayEmpty
-            value={0} //roomIdNumber
-            inputProps={{ readOnly: editableState }}
+            value={roomIdNumber}
+            inputProps={{ readOnly: true }}
             onChange={onChangeRoom}
           >
-            {/*<MenuItem value={0}>{typeName}</MenuItem>
-            {buildingTypePage.map((data, id) => (
+            <MenuItem value={0}>{roomName}</MenuItem>
+            {roomPage.map((data, id) => (
               <MenuItem key={data.id} value={data.id}>
                 {data.name}
               </MenuItem>
-            ))}*/}
+            ))}
           </Select>
         </div>
         <div className="date-pick-form">
@@ -85,6 +183,7 @@ export default function ServiceDetailsForm({
             label="Wybierz termin instalacji"
             type="datetime-local"
             //defaultValue="2022-12-31T12:30"
+            value={data.date}
             defaultValue={defaultDate}
             //sx={{ width: 250 }}
             InputLabelProps={
@@ -92,7 +191,7 @@ export default function ServiceDetailsForm({
                 //shrink: true,
               }
             }
-            inputProps={{ readOnly: editableState }}
+            inputProps={{ readOnly: true }}
           />
         </div>
         <div className="description-service-form">
@@ -101,10 +200,115 @@ export default function ServiceDetailsForm({
             label="Opis usługi"
             variant="filled"
             fullWidth
-            value={'mock'}
+            value={data.description}
             InputProps={{
               readOnly: true,
             }}
+          />
+        </div>
+      </div>
+    </>
+  ) : (
+    <>
+      <div className="service-details-form">
+        {mustCreate === false ? (
+          <div className="edit-service-button">
+            <Icon
+              className="return-icon"
+              icon="material-symbols:room-preferences-outline"
+              color="#4e4e4e"
+              height="21"
+            />
+            <Button
+              sx={{
+                color: '#ffffff',
+              }}
+              onClick={() => {
+                setIsServiceFormEditable(!isServiceFormEditable);
+              }}
+            >
+              Edytuj pomieszczenie
+            </Button>
+          </div>
+        ) : null}
+        <div className="service-pick-form">
+          <text className="service-form-header">Wybierz usługę</text>
+          <Select
+            id="pick-service-select"
+            label="Wybierz Usługę"
+            size="small"
+            displayEmpty
+            value={serviceTypeId}
+            inputProps={{ readOnly: false }}
+            onChange={onChangeServiceType}
+          >
+            <MenuItem value={0}>{serviceTypeName}</MenuItem>
+            {serviceTypesPage.map((data, id) => (
+              <MenuItem key={data.id} value={data.id}>
+                {data.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
+        <div className="room-pick-form">
+          <text className="service-form-header">Wybierz pomieszczenie</text>
+          <Select
+            id="pick-room-select"
+            label="Wybierz pomieszczenie"
+            size="small"
+            displayEmpty
+            value={roomIdNumber}
+            inputProps={{ readOnly: false }}
+            onChange={onChangeRoom}
+          >
+            <MenuItem value={0}>{roomName}</MenuItem>
+            {roomPage.map((data, id) => (
+              <MenuItem key={data.id} value={data.id}>
+                {data.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
+        <div className="date-pick-form">
+          <text className="service-form-header">Wybierz termin instalacji</text>
+          <TextField
+            id="datetime-select"
+            label="Wybierz termin instalacji"
+            type="datetime-local"
+            //defaultValue="2022-12-31T12:30"
+            value={data.date}
+            defaultValue={defaultDate}
+            //sx={{ width: 250 }}
+            InputLabelProps={
+              {
+                //shrink: true,
+              }
+            }
+            inputProps={{ readOnly: false }}
+            onChange={(e) =>
+              setData({
+                ...data,
+                date: new Date(e.target.value),
+              })
+            }
+          />
+        </div>
+        <div className="description-service-form">
+          <text className="service-form-header">Opis usługi</text>
+          <TextField
+            label="Opis usługi"
+            variant="filled"
+            fullWidth
+            value={data.description}
+            InputProps={{
+              readOnly: true,
+            }}
+            onChange={(e) =>
+              setData({
+                ...data,
+                description: e.target.value,
+              })
+            }
           />
         </div>
 
@@ -113,7 +317,11 @@ export default function ServiceDetailsForm({
             sx={{
               color: '#ffffff',
             }}
-            onClick={() => {}}
+            onClick={() => {
+              if (handleFormClose) {
+                handleFormClose();
+              }
+            }}
           >
             Zatwierdź
           </Button>

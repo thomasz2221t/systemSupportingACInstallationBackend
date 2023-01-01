@@ -10,12 +10,14 @@ import BuildingService from 'services/BuildingService';
 import BuildingType from 'types/BuildingType';
 import AuthService from 'services/auth/AuthService';
 import OfferDetailsForm from 'components/Forms/OfferDetailsForm/OfferDetailsForm';
+import ServiceType from 'types/ServiceType';
 
 import './ServicePage.scss';
 
 export function ServicePage() {
   const [userId, setUserId] = useState<number>(0);
   const [userBuildings, setUserBuildings] = useState<BuildingType[]>([]);
+  //const [servicePage, setServicePage] = useState<ServiceType[]>([]);
   const flatProps = {
     options: userBuildings.map((option) => ({
       label:
@@ -57,6 +59,8 @@ export function ServicePage() {
     });
   };
 
+  //const handleGettingServices = async ()
+
   useEffect(() => {
     setUserId(AuthService.getCurrentUserId());
   }, []);
@@ -93,12 +97,15 @@ export function ServicePage() {
       <div id="service-details-component">
         <ServiceDetailsForm
           id={0}
-          date={[]}
+          date={new Date()}
           serviceId={0}
+          serviceTypeName={''}
           buildingId={0}
           roomId={0}
+          roomName={''}
           description={''}
-          isEditable={() => {
+          mustCreate={false}
+          handleFormClose={() => {
             return false;
           }}
         />
