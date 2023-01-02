@@ -10,6 +10,7 @@ import pl.polsl.acsupport.dtos.BuildingDto;
 import pl.polsl.acsupport.dtos.BuildingTypeDto;
 import pl.polsl.acsupport.dtos.RoomDto;
 import pl.polsl.acsupport.entities.*;
+import pl.polsl.acsupport.enums.OfferStatusType;
 import pl.polsl.acsupport.enums.PermissionName;
 import pl.polsl.acsupport.enums.RoleName;
 import pl.polsl.acsupport.repositories.*;
@@ -17,6 +18,7 @@ import pl.polsl.acsupport.services.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -62,6 +64,33 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
     @Autowired
     RoomTypeService roomTypeService;
 
+    @Autowired
+    ServiceTypeRepository serviceTypeRepository;
+
+    @Autowired
+    ServiceTypeService serviceTypeService;
+
+    @Autowired
+    ServiceRepository serviceRepository;
+
+    @Autowired
+    ServiceService serviceService;
+
+    @Autowired
+    ChatRepository chatRepository;
+
+    @Autowired
+    MessageRepository messageRepository;
+
+    @Autowired
+    InstallerEquipmentRepository installerEquipmentRepository;
+
+    @Autowired
+    InstallerEquipmentService installerEquipmentService;
+
+    @Autowired
+    OfferRepository offerRepository;
+
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
@@ -78,6 +107,11 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.ASSING_DEFAULT_ROOM_TO_BUILDINGS,this::assignDefaultRoomsToDefaultBuildings);
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_ROOM_TYPES, this::createDefaultRoomTypes);
         bootStrapingEntryService.createIfNotExists(BootStrapingLabel.ASSING_DEFAULT_ROOM_TYPES_TO_ROOMS,this::assignDefaultRoomTypesToRooms);
+        bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_SERVICE_TYPES, this::createDefaultServiceTypes);
+        bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_SERVICES , this::createDefaultServices);
+        bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_MESSAGES, this::createDefaultMessages);
+        bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_INSTALLER_EQUIPMENT, this::createDefaultInstallerEquipment);
+        bootStrapingEntryService.createIfNotExists(BootStrapingLabel.CREATE_DEFAULT_OFFERS, this::createDefaultOffers);
     }
 
     private void createDefaultBuildings(){
@@ -88,6 +122,7 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         building1.setCity("Katowice");
         building1.setRegion("Śląskie");
         building1.setDescription("Przedsiębiorstwo piekarnicze składające się z częsci usługowej oraz produkcyjnej.");
+        building1.setChat(new Chat());
         buildingService.create(new BuildingDto(building1));
 
         Building building2 = new Building();
@@ -97,6 +132,7 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         building2.setCity("Katowice");
         building2.setRegion("Śląskie");
         building2.setDescription("Pub w budynku jednopiętrowym z niewielkimi oknami.");
+        building2.setChat(new Chat());
         buildingService.create(new BuildingDto(building2));
 
         Building building3 = new Building();
@@ -106,6 +142,7 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         building3.setCity("Chorzów");
         building3.setRegion("Śląskie");
         building3.setDescription("Budynek dworca kolejowego Chorzów Batory.");
+        building3.setChat(new Chat());
         buildingService.create(new BuildingDto(building3));
 
         Building building4 = new Building();
@@ -115,6 +152,7 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         building4.setCity("Katowice");
         building4.setRegion("Śląskie");
         building4.setDescription("Dom prywatny jednopiętrowy.");
+        building4.setChat(new Chat());
         buildingService.create(new BuildingDto(building4));
     }
 
@@ -575,5 +613,336 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         roomTypeRepository.save(roomType9);
     }
 
+    public void createDefaultServiceTypes(){
+        ServiceType serviceType1 = new ServiceType();
+        serviceType1.setName("Instalacja klimatyzacji");
+        serviceTypeRepository.save(serviceType1);
 
+        ServiceType serviceType2 = new ServiceType();
+        serviceType2.setName("Serwis klimatyzacji");
+        serviceTypeRepository.save(serviceType2);
+
+        ServiceType serviceType3 = new ServiceType();
+        serviceType3.setName("Wymiana klimatyzatora");
+        serviceTypeRepository.save(serviceType3);
+
+        ServiceType serviceType4 = new ServiceType();
+        serviceType4.setName("Instalacja sterowania klimatyzacji urządzeniem IoT");
+        serviceTypeRepository.save(serviceType4);
+    }
+
+    public void createDefaultServices(){
+        Room roomBakery1 = roomService.findById(1l);
+        Room roomBakery2 = roomService.findById(2l);
+        Room roomPub1 = roomService.findById(3l);
+        Room roomPub2 = roomService.findById(4l);
+        Room roomStation1 = roomService.findById(5l);
+        Room roomHouse1 = roomService.findById(6l);
+        Room roomHouse2 = roomService.findById(7l);
+
+        ServiceType ACInstalation = serviceTypeService.findById(1l);
+        ServiceType ACService = serviceTypeService.findById(2l);
+        ServiceType ACChange = serviceTypeService.findById(3l);
+        ServiceType ACIot = serviceTypeService.findById(4l);
+
+        pl.polsl.acsupport.entities.Service service1 = new pl.polsl.acsupport.entities.Service();
+        service1.setDate(LocalDateTime.of(2023,03,10,17,20));
+        service1.setDescription("Miejsce przygotowane pod montaż");
+        service1.setRoom(roomBakery1);
+        service1.setType(ACInstalation);
+
+        pl.polsl.acsupport.entities.Service service2 = new pl.polsl.acsupport.entities.Service();
+        service2.setDate(LocalDateTime.of(2023,03,10,15,20));
+        service2.setDescription("Montaż ścienny przy drzwiach służbowych");
+        service2.setRoom(roomBakery1);
+        service2.setType(ACIot);
+
+        pl.polsl.acsupport.entities.Service service3 = new pl.polsl.acsupport.entities.Service();
+        service3.setDate(LocalDateTime.of(2023,03,11,12,00));
+        service3.setDescription("Serwis klimatyzacji");
+        service3.setRoom(roomBakery2);
+        service3.setType(ACService);
+
+        pl.polsl.acsupport.entities.Service service4 = new pl.polsl.acsupport.entities.Service();
+        service4.setDate(LocalDateTime.of(2023,04,01,12,00));
+        service4.setDescription("Wymiana starego klimatyzatora w sali dla gości");
+        service4.setRoom(roomPub1);
+        service4.setType(ACChange);
+
+        pl.polsl.acsupport.entities.Service service5 = new pl.polsl.acsupport.entities.Service();
+        service5.setDate(LocalDateTime.of(2023,04,01,13,00));
+        service5.setDescription("Wymiana starego klimatyzatora w pomieszczeniu przemysłowym");
+        service5.setRoom(roomPub2);
+        service5.setType(ACChange);
+
+        pl.polsl.acsupport.entities.Service service6 = new pl.polsl.acsupport.entities.Service();
+        service6.setDate(LocalDateTime.of(2023,06,12,9,00));
+        service6.setDescription("Instalacja klimatyzacji w hali dworca");
+        service6.setRoom(roomStation1);
+        service6.setType(ACInstalation);
+
+        pl.polsl.acsupport.entities.Service service7 = new pl.polsl.acsupport.entities.Service();
+        service7.setDate(LocalDateTime.of(2023,03,18,12,00));
+        service7.setDescription("Instalacja sterownika IoT w serwerowni");
+        service7.setRoom(roomHouse2);
+        service7.setType(ACIot);
+
+        pl.polsl.acsupport.entities.Service service8 = new pl.polsl.acsupport.entities.Service();
+        service8.setDate(LocalDateTime.of(2023,03,18,14,00));
+        service8.setDescription("Instalacja dodatkowych klimatyzatorów w serwerowni");
+        service8.setRoom(roomHouse2);
+        service8.setType(ACInstalation);
+
+        Set<pl.polsl.acsupport.entities.Service> installationServices = ACInstalation.getService();
+        installationServices.add(service1);
+        installationServices.add(service6);
+        installationServices.add(service8);
+        ACInstalation.setService(installationServices);
+        serviceTypeRepository.save(ACInstalation);
+
+        Set<pl.polsl.acsupport.entities.Service> serviceServices = ACService.getService();
+        serviceServices.add(service3);
+        ACService.setService(serviceServices);
+        serviceTypeRepository.save(ACService);
+
+        Set<pl.polsl.acsupport.entities.Service> changeServices = ACChange.getService();
+        changeServices.add(service4);
+        changeServices.add(service5);
+        ACChange.setService(changeServices);
+        serviceTypeRepository.save(ACChange);
+
+        Set<pl.polsl.acsupport.entities.Service> iotServices = ACIot.getService();
+        iotServices.add(service2);
+        iotServices.add(service7);
+        ACIot.setService(iotServices);
+        serviceTypeRepository.save(ACIot);
+
+        Set<pl.polsl.acsupport.entities.Service> roomBakery1Services = roomBakery1.getServices();
+        roomBakery1Services.add(service1);
+        roomBakery1Services.add(service2);
+        roomBakery1.setServices(roomBakery1Services);
+        roomRepository.save(roomBakery1);
+
+        Set<pl.polsl.acsupport.entities.Service> roomBakery2Services = roomBakery2.getServices();
+        roomBakery2Services.add(service3);
+        roomBakery2.setServices(roomBakery2Services);
+        roomRepository.save(roomBakery2);
+
+        Set<pl.polsl.acsupport.entities.Service> roomPub1Services = roomPub1.getServices();
+        roomPub1Services.add(service4);
+        roomPub1.setServices(roomPub1Services);
+        roomRepository.save(roomPub1);
+
+        Set<pl.polsl.acsupport.entities.Service> roomPub2Services = roomPub2.getServices();
+        roomPub2Services.add(service5);
+        roomPub2.setServices(roomPub2Services);
+        roomRepository.save(roomPub2);
+
+        Set<pl.polsl.acsupport.entities.Service> roomStation1Services = roomStation1.getServices();
+        roomStation1Services.add(service6);
+        roomStation1.setServices(roomStation1Services);
+        roomRepository.save(roomStation1);
+
+        Set<pl.polsl.acsupport.entities.Service> roomHouse2Services = roomHouse1.getServices();
+        roomHouse2Services.add(service7);
+        roomHouse2Services.add(service8);
+        roomHouse1.setServices(roomHouse2Services);
+        roomRepository.save(roomHouse1);
+
+        serviceRepository.save(service1);
+        serviceRepository.save(service2);
+        serviceRepository.save(service3);
+        serviceRepository.save(service4);
+        serviceRepository.save(service5);
+        serviceRepository.save(service6);
+        serviceRepository.save(service7);
+        serviceRepository.save(service8);
+    }
+
+    public void createDefaultMessages(){
+        Chat chat1 = chatRepository.findById(1l)
+                .orElseThrow(() -> new EntityNotFoundException("Chat with given id not found"));
+        Chat chat2 = chatRepository.findById(2l)
+                .orElseThrow(() -> new EntityNotFoundException("Chat with given id not found"));
+        Chat chat4 = chatRepository.findById(4l)
+                .orElseThrow(() -> new EntityNotFoundException("Chat with given id not found"));
+
+        User client1 = userRepository.findUserByLogin("client1").orElseThrow(EntityNotFoundException::new);
+        User client2 = userRepository.findUserByLogin("client2").orElseThrow(EntityNotFoundException::new);
+        User operator1 = userRepository.findUserByLogin("operator1").orElseThrow(EntityNotFoundException::new);
+
+        Message message1 = new Message();
+        message1.setMessage("Dzień dobry, proszę o wycene zamówienia.");
+        message1.setChat(chat1);
+        message1.setUser(client1);
+        messageRepository.save(message1);
+
+        Message message2 = new Message();
+        message2.setMessage("Dzień dobry, wysłałem wstępną wycenę.");
+        message2.setChat(chat1);
+        message2.setUser(operator1);
+        messageRepository.save(message2);
+
+        Message message3 = new Message();
+        message3.setMessage("Dziękuję, jednak chciałbym zmienić termin, ustawiłem status oferty jako do zmiany.");
+        message3.setChat(chat1);
+        message3.setUser(client1);
+        messageRepository.save(message3);
+
+        Message message4 = new Message();
+        message4.setMessage("Chciałbym aby zamontować klimatyzatory innej firmy, już je kupiłem");
+        message4.setChat(chat2);
+        message4.setUser(client1);
+        messageRepository.save(message4);
+
+        Message message5 = new Message();
+        message5.setMessage("Czy może Pan uwzględnić to w wycenie?");
+        message5.setChat(chat2);
+        message5.setUser(client1);
+        messageRepository.save(message5);
+
+        Message message6 = new Message();
+        message6.setMessage("Dzień dobry, przesłałem korektę wyceny.");
+        message6.setChat(chat2);
+        message6.setUser(operator1);
+        messageRepository.save(message6);
+
+        Message message7 = new Message();
+        message7.setMessage("Dzień dobry, jak daleko Państwo dojeżdżacie, czy możecie Państwo wykonać usługę w moim miejscu zamieszkania?");
+        message7.setChat(chat4);
+        message7.setUser(client2);
+        messageRepository.save(message7);
+
+        Message message8 = new Message();
+        message8.setMessage("Tak, nie ma problemu. Może Pan wysłać zamówienie na usługę.");
+        message8.setChat(chat4);
+        message8.setUser(operator1);
+        messageRepository.save(message8);
+
+        Set<Message> chat1Messages = chat1.getMessages();
+        chat1Messages.add(message1);
+        chat1Messages.add(message2);
+        chat1Messages.add(message3);
+        chat1.setMessages(chat1Messages);
+        chatRepository.save(chat1);
+
+        Set<Message> chat2Messages = chat2.getMessages();
+        chat2Messages.add(message4);
+        chat2Messages.add(message5);
+        chat2Messages.add(message6);
+        chat2.setMessages(chat2Messages);
+        chatRepository.save(chat2);
+
+        Set<Message> chat4Messages = chat4.getMessages();
+        chat4Messages.add(message7);
+        chat4Messages.add(message8);
+        chat4.setMessages(chat4Messages);
+        chatRepository.save(chat4);
+
+        Set<Message> client1Messages = client1.getMessage();
+        client1Messages.add(message1);
+        client1Messages.add(message3);
+        client1Messages.add(message4);
+        client1Messages.add(message5);
+        client1.setMessage(client1Messages);
+        userRepository.save(client1);
+
+        Set<Message> operator1Messages = operator1.getMessage();
+        operator1Messages.add(message2);
+        operator1Messages.add(message6);
+        operator1Messages.add(message8);
+        operator1.setMessage(operator1Messages);
+        userRepository.save(operator1);
+
+        Set<Message> client2Messages = client2.getMessage();
+        client2Messages.add(message7);
+        client2.setMessage(client2Messages);
+        userRepository.save(client2);
+    }
+
+    public void createDefaultInstallerEquipment(){
+        InstallerEquipment installerEquipment1 = new InstallerEquipment();
+        installerEquipment1.setName("Klimatyzator Split Seria Ray SIH-09BIR+SOH-09BIR");
+        installerEquipment1.setPrice(BigDecimal.valueOf(3179.00));
+        installerEquipment1.setProducer("Sinclair");
+        installerEquipment1.setDescription("Chłodzenie moc 2,5kW, Grzanie moc 2,7kW");
+        installerEquipmentRepository.save(installerEquipment1);
+
+        InstallerEquipment installerEquipment2 = new InstallerEquipment();
+        installerEquipment2.setName("Klimatyzator Kasetonowy R32 ASC-12BI");
+        installerEquipment2.setPrice(BigDecimal.valueOf(7284.00));
+        installerEquipment2.setProducer("Sinclair");
+        installerEquipment2.setDescription("Chłodzenie moc 3,5kW, Grzanie moc 4,0kW");
+        installerEquipmentRepository.save(installerEquipment2);
+
+        InstallerEquipment installerEquipment3 = new InstallerEquipment();
+        installerEquipment3.setName("Klimatyzator Split Luzon AR09TXHZAWK/EU");
+        installerEquipment3.setPrice(BigDecimal.valueOf(3899.00));
+        installerEquipment3.setProducer("Samsung");
+        installerEquipment3.setDescription("Chłodzenie/Grzanie moc 2,5kW");
+        installerEquipmentRepository.save(installerEquipment3);
+
+        InstallerEquipment installerEquipment4 = new InstallerEquipment();
+        installerEquipment4.setName("Sterownik IoT SmartHome Klimatyzacja+");
+        installerEquipment4.setPrice(BigDecimal.valueOf(149.00));
+        installerEquipment4.setProducer("Eura-Tech WS-03H1");
+        installerEquipment4.setDescription("Sterownik inteligentnego domu kompatybilny ze sterowaniem klimatyzacją");
+        installerEquipmentRepository.save(installerEquipment4);
+    }
+
+    public void createDefaultOffers(){
+        User operator1 = userRepository.findUserByLogin("operator1").orElseThrow(EntityNotFoundException::new);
+
+        pl.polsl.acsupport.entities.Service serviceBakery1 = serviceService.findById(1l);
+        pl.polsl.acsupport.entities.Service serviceBakery2 = serviceService.findById(2l);
+
+        InstallerEquipment installerEquipment1 = installerEquipmentService.findById(1l);
+        InstallerEquipment installerEquipment4 = installerEquipmentService.findById(4l);
+
+        Offer offer1 = new Offer();
+        offer1.setService(serviceBakery1);
+        offer1.setDatesBegining(LocalDateTime.of(2023,03,10,17,30));
+        offer1.setDatesEnd(LocalDateTime.of(2023,03,10,20,00));
+        offer1.setCost(BigDecimal.valueOf(10000.00));
+        offer1.setStatusType(OfferStatusType.IN_PROGRESS);
+        offer1.setUser(operator1);
+        Set<InstallerEquipment> installerEquipments1 = offer1.getInstallerEquipments();
+        installerEquipments1.add(installerEquipment1);
+        offer1.setInstallerEquipments(installerEquipments1);
+        offerRepository.save(offer1);
+
+        Offer offer2 = new Offer();
+        offer2.setService(serviceBakery2);
+        offer2.setDatesBegining(LocalDateTime.of(2023,03,10,15,30));
+        offer2.setDatesEnd(LocalDateTime.of(2023,03,10,17,30));
+        offer2.setCost(BigDecimal.valueOf(500.00));
+        offer2.setStatusType(OfferStatusType.IN_PROGRESS);
+        offer2.setUser(operator1);
+        Set<InstallerEquipment> installerEquipments2 = offer2.getInstallerEquipments();
+        installerEquipments2.add(installerEquipment4);
+        offer2.setInstallerEquipments(installerEquipments2);
+        offerRepository.save(offer2);
+
+        Set<Offer> operator1Offers = operator1.getOffers();
+        operator1Offers.add(offer1);
+        operator1Offers.add(offer2);
+        operator1.setOffers(operator1Offers);
+        userRepository.save(operator1);
+
+        serviceBakery1.setOffer(offer1);
+        serviceRepository.save(serviceBakery1);
+
+        serviceBakery2.setOffer(offer2);
+        serviceRepository.save(serviceBakery2);
+
+        Set<Offer> installerEquipment1Offers = installerEquipment1.getOffers();
+        installerEquipment1Offers.add(offer1);
+        installerEquipment1.setOffers(installerEquipment1Offers);
+        installerEquipmentRepository.save(installerEquipment1);
+
+        Set<Offer> installerEquipment4Offer = installerEquipment4.getOffers();
+        installerEquipment4Offer.add(offer2);
+        installerEquipment4.setOffers(installerEquipment4Offer);
+        installerEquipmentRepository.save(installerEquipment4);
+    }
 }
