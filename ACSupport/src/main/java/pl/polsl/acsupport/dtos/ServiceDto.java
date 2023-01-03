@@ -16,13 +16,13 @@ public class ServiceDto {
 
     private Long id;
 
-    private LocalDateTime date;
+    private String date;
 
     private String description;
 
     public ServiceDto(Service service){
         this.id = service.getId();
-        this.date = service.getDate();
+        this.date = service.getDate().toString();
         this.description = service.getDescription();
     }
 }

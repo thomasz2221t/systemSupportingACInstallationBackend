@@ -16,6 +16,7 @@ import pl.polsl.acsupport.repositories.ServiceTypeRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -57,9 +58,12 @@ public class ServiceService {
     public pl.polsl.acsupport.entities.Service create(ServiceDto serviceDto){
         pl.polsl.acsupport.entities.Service service = new pl.polsl.acsupport.entities.Service();
         Offer offer = new Offer();
-        service.setDate(serviceDto.getDate());
+        offer.setDatesBegining(LocalDateTime.now());
+        offer.setDatesEnd(LocalDateTime.now());
+        service.setDate(LocalDateTime.parse(serviceDto.getDate()));
         service.setDescription(serviceDto.getDescription());
         service.setOffer(offer);
+        offer.setService(service);
         offerRepository.save(offer);
         return serviceRepository.save(service);
     }
@@ -67,7 +71,7 @@ public class ServiceService {
     @Transactional
     public pl.polsl.acsupport.entities.Service update(Long id, ServiceDto serviceDto){
         pl.polsl.acsupport.entities.Service service = findById(id);
-        service.setDate(serviceDto.getDate());
+        service.setDate(LocalDateTime.parse(serviceDto.getDate()));
         service.setDescription(serviceDto.getDescription());
         return serviceRepository.save(service);
     }

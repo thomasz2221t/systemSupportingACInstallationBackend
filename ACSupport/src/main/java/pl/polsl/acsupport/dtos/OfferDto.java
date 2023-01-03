@@ -20,21 +20,18 @@ public class OfferDto {
 
     private BigDecimal cost;
 
-    private LocalDateTime datesBegining;
+    private String datesBegining;
 
-    private LocalDateTime datesEnd;
+    private String datesEnd;
 
     private OfferStatusType statusType;
-
-    private Long userId;
 
     public OfferDto(Offer offer){
         this.id = offer.getId();
         this.cost = offer.getCost();
-        this.datesBegining = offer.getDatesBegining();
-        this.datesEnd = offer.getDatesEnd();
+        this.datesBegining = offer.getDatesBegining().toString();
+        this.datesEnd = offer.getDatesEnd().toString();
         this.statusType = offer.getStatusType();
-        this.userId = offer.getUser().getId();
     }
 
 }

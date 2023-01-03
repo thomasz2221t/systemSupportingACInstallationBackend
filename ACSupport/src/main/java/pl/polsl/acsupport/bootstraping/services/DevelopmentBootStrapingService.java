@@ -650,48 +650,96 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         service1.setDescription("Miejsce przygotowane pod montaż");
         service1.setRoom(roomBakery1);
         service1.setType(ACInstalation);
+        Offer offer1 = new Offer();;
+        offer1.setService(service1);
+        offer1.setDatesBegining(LocalDateTime.now());
+        offer1.setDatesEnd(LocalDateTime.now());
+        service1.setOffer(offer1);
+        offerRepository.save(offer1);
 
         pl.polsl.acsupport.entities.Service service2 = new pl.polsl.acsupport.entities.Service();
         service2.setDate(LocalDateTime.of(2023,03,10,15,20));
         service2.setDescription("Montaż ścienny przy drzwiach służbowych");
         service2.setRoom(roomBakery1);
         service2.setType(ACIot);
+        Offer offer2 = new Offer();
+        offer2.setService(service2);
+        offer2.setDatesBegining(LocalDateTime.now());
+        offer2.setDatesEnd(LocalDateTime.now());
+        service2.setOffer(offer2);
+        offerRepository.save(offer2);
 
         pl.polsl.acsupport.entities.Service service3 = new pl.polsl.acsupport.entities.Service();
         service3.setDate(LocalDateTime.of(2023,03,11,12,00));
         service3.setDescription("Serwis klimatyzacji");
         service3.setRoom(roomBakery2);
         service3.setType(ACService);
+        Offer offer3 = new Offer();
+        offer3.setService(service3);
+        offer3.setDatesBegining(LocalDateTime.now());
+        offer3.setDatesEnd(LocalDateTime.now());
+        service3.setOffer(offer3);
+        offerRepository.save(offer3);
 
         pl.polsl.acsupport.entities.Service service4 = new pl.polsl.acsupport.entities.Service();
         service4.setDate(LocalDateTime.of(2023,04,01,12,00));
         service4.setDescription("Wymiana starego klimatyzatora w sali dla gości");
         service4.setRoom(roomPub1);
         service4.setType(ACChange);
+        Offer offer4 = new Offer();
+        offer4.setService(service4);
+        offer4.setDatesBegining(LocalDateTime.now());
+        offer4.setDatesEnd(LocalDateTime.now());
+        service4.setOffer(offer4);
+        offerRepository.save(offer4);
 
         pl.polsl.acsupport.entities.Service service5 = new pl.polsl.acsupport.entities.Service();
         service5.setDate(LocalDateTime.of(2023,04,01,13,00));
         service5.setDescription("Wymiana starego klimatyzatora w pomieszczeniu przemysłowym");
         service5.setRoom(roomPub2);
         service5.setType(ACChange);
+        Offer offer5 = new Offer();
+        offer5.setService(service5);
+        offer5.setDatesBegining(LocalDateTime.now());
+        offer5.setDatesEnd(LocalDateTime.now());
+        service5.setOffer(offer5);
+        offerRepository.save(offer5);
 
         pl.polsl.acsupport.entities.Service service6 = new pl.polsl.acsupport.entities.Service();
         service6.setDate(LocalDateTime.of(2023,06,12,9,00));
         service6.setDescription("Instalacja klimatyzacji w hali dworca");
         service6.setRoom(roomStation1);
         service6.setType(ACInstalation);
+        Offer offer6 = new Offer();
+        offer6.setService(service6);
+        offer6.setDatesBegining(LocalDateTime.now());
+        offer6.setDatesEnd(LocalDateTime.now());
+        service6.setOffer(offer6);
+        offerRepository.save(offer6);
 
         pl.polsl.acsupport.entities.Service service7 = new pl.polsl.acsupport.entities.Service();
         service7.setDate(LocalDateTime.of(2023,03,18,12,00));
         service7.setDescription("Instalacja sterownika IoT w serwerowni");
         service7.setRoom(roomHouse2);
         service7.setType(ACIot);
+        Offer offer7 = new Offer();
+        offer7.setService(service7);
+        offer7.setDatesBegining(LocalDateTime.now());
+        offer7.setDatesEnd(LocalDateTime.now());
+        service7.setOffer(offer7);
+        offerRepository.save(offer7);
 
         pl.polsl.acsupport.entities.Service service8 = new pl.polsl.acsupport.entities.Service();
         service8.setDate(LocalDateTime.of(2023,03,18,14,00));
         service8.setDescription("Instalacja dodatkowych klimatyzatorów w serwerowni");
         service8.setRoom(roomHouse2);
         service8.setType(ACInstalation);
+        Offer offer8 = new Offer();
+        offer8.setService(service8);
+        offer8.setDatesBegining(LocalDateTime.now());
+        offer8.setDatesEnd(LocalDateTime.now());
+        service8.setOffer(offer8);
+        offerRepository.save(offer8);
 
         Set<pl.polsl.acsupport.entities.Service> installationServices = ACInstalation.getService();
         installationServices.add(service1);
@@ -899,8 +947,7 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         InstallerEquipment installerEquipment1 = installerEquipmentService.findById(1l);
         InstallerEquipment installerEquipment4 = installerEquipmentService.findById(4l);
 
-        Offer offer1 = new Offer();
-        offer1.setService(serviceBakery1);
+        Offer offer1 = serviceBakery1.getOffer();
         offer1.setDatesBegining(LocalDateTime.of(2023,03,10,17,30));
         offer1.setDatesEnd(LocalDateTime.of(2023,03,10,20,00));
         offer1.setCost(BigDecimal.valueOf(10000.00));
@@ -911,8 +958,7 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         offer1.setInstallerEquipments(installerEquipments1);
         offerRepository.save(offer1);
 
-        Offer offer2 = new Offer();
-        offer2.setService(serviceBakery2);
+        Offer offer2 = serviceBakery2.getOffer();
         offer2.setDatesBegining(LocalDateTime.of(2023,03,10,15,30));
         offer2.setDatesEnd(LocalDateTime.of(2023,03,10,17,30));
         offer2.setCost(BigDecimal.valueOf(500.00));

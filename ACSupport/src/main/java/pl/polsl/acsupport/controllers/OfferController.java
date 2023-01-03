@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.polsl.acsupport.dtos.InstallerEquipmentDto;
 import pl.polsl.acsupport.dtos.OfferDto;
+import pl.polsl.acsupport.dtos.UserDto;
 import pl.polsl.acsupport.services.OfferService;
 
 @RequiredArgsConstructor
@@ -47,19 +48,64 @@ public class OfferController {
 
     @PreAuthorize("hasAuthority('FIND_OFFER')")
     @GetMapping("/equipment/{offerId}")
+    @ResponseStatus(HttpStatus.OK)
     public Page<InstallerEquipmentDto> findAllEquipmentInOffer(@PathVariable Long offerId){
         return offerService.findAllEquipmentInOffer(offerId);
     }
 
     @PreAuthorize("hasAuthority('UPDATE_OFFER')")
     @PatchMapping("/assignequipment/{offerId}")
+    @ResponseStatus(HttpStatus.OK)
     public void assignEquipmentToOffer(@PathVariable Long offerId, @RequestBody Long equipmentId){
         offerService.assignEquipmentToOffer(offerId, equipmentId);
     }
 
     @PreAuthorize("hasAuthority('UPDATE_OFFER')")
     @PatchMapping("/revertequipment/{offerId}")
+    @ResponseStatus(HttpStatus.OK)
     public void revertAssigningEquipmentFromOffer(@PathVariable Long offerId, @RequestBody Long equipmentId){
         offerService.revertAssigningEquipmentFromOffer(offerId, equipmentId);
+    }
+
+    @PreAuthorize("hasAuthority('FIND_OFFER')")
+    @GetMapping("/service/{serviceId}")
+    @ResponseStatus(HttpStatus.OK)
+    public OfferDto findOfferByServiceId(@PathVariable Long serviceId){
+        return offerService.findOfferByServiceId(serviceId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_OFFER')")
+    @PatchMapping("/assignservice/{serviceId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void assignServiceToOffer(@PathVariable Long serviceId, @RequestBody Long offerId){
+        offerService.assignServiceToOffer(serviceId, offerId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_OFFER')")
+    @PatchMapping("/revertservice/{serviceId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void revertAssigningServiceFromOffer(@PathVariable Long serviceId){
+        offerService.revertAssigningServiceFromOffer(serviceId);
+    }
+
+    @PreAuthorize("hasAuthority('FIND_OFFER')")
+    @GetMapping("/user/{offerId}")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDto findUserAssignedToOffer(@PathVariable Long offerId){
+        return offerService.findUserAssignedToOffer(offerId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_OFFER')")
+    @PatchMapping("/assignuser/{offerId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void assignUserToOffer(@PathVariable Long offerId, @RequestBody Long userId){
+        offerService.assignUserToOffer(offerId, userId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_OFFER')")
+    @PatchMapping("/revertuser/{offerId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void revertAssigningUserFromOffer(@PathVariable Long offerId){
+        offerService.revertAssigningUserFromOffer(offerId);
     }
 }

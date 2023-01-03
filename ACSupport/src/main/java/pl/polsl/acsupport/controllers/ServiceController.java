@@ -20,7 +20,7 @@ import pl.polsl.acsupport.services.ServiceService;
 @Validated
 public class ServiceController {
 
-    public ServiceService serviceService;
+    private final ServiceService serviceService;
 
     @PreAuthorize("hasAuthority('FIND_SERVICE')")
     @GetMapping("/{id}")
