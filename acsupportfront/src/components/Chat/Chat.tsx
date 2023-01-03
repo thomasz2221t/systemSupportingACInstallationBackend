@@ -28,6 +28,14 @@ export type ChatPropType = {
   buildingId: number;
 };
 
+export type MessageTypeWithUser = {
+  id: number;
+  message: string;
+  date: string;
+  userName: string;
+  userLastName: string;
+};
+
 export default function Chat({ userId, buildingId }: ChatPropType) {
   const [message, setMessage] = useState<MessageType>({
     id: 0,
@@ -51,6 +59,13 @@ export default function Chat({ userId, buildingId }: ChatPropType) {
   });
   //const [chat, setChat] = useState<number>(0);
   const [user, setUser] = useState<String>('');
+  const [data, setData] = useState<MessageTypeWithUser>({
+    id: 0,
+    message: '',
+    date: '',
+    userName: '',
+    userLastName: '',
+  });
 
   const handleSendingMessage = () => {
     setMessage({
@@ -103,7 +118,7 @@ export default function Chat({ userId, buildingId }: ChatPropType) {
   const listChatMessages = chatMessages
     .sort((a, b) => a.id - b.id)
     .map((chatMessageDto, index) => {
-      handleGettingUserDetails(chatMessageDto.userId);
+      //handleGettingUserDetails(chatMessageDto.userId);
       console.log(chatMessageDto.date);
       const date: Date = new Date(chatMessageDto.date);
       console.log(date.getFullYear());
@@ -113,9 +128,11 @@ export default function Chat({ userId, buildingId }: ChatPropType) {
       return (
         <ListItem key={index}>
           <ListItemText
-            primary={`${user}: ${
+            primary={`${chatMessageDto.userId}: ${
               chatMessageDto.message
-            } wysłano: ${date.getDay()}.${date.getMonth()}.${date.getFullYear()} ${String(
+            } wysłano: ${String(date.getDay()).padStart(2, '0')}.${String(
+              date.getMonth() + 1
+            ).padStart(2, '0')}.${date.getFullYear()} ${String(
               date.getHours()
             ).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')} `}
           />

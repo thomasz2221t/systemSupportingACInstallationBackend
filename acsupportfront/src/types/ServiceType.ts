@@ -1,7 +1,7 @@
 type ServiceType = {
   id: number;
-  date: Date;
-  description: String;
+  date: string;
+  description: string;
 };
 
 export default ServiceType;

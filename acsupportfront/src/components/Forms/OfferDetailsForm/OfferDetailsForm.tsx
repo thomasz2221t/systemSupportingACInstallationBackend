@@ -1,20 +1,102 @@
-import React from 'react';
-import { Button, TextField } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Autocomplete, Button, Checkbox, TextField } from '@mui/material';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+
+import getUserBody from 'services/UserService';
+import OfferService from 'services/OfferService';
+import { UserType } from 'types/UserType';
+import OfferType from 'types/OfferType';
 
 import './OfferDetailsForm.scss';
+import InstallerEquipmentType from 'types/InstallerEquipmentType';
 
-export default function OfferDetailsForm() {
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
+export type OfferDetailsFormPropType = {
+  serviceId: number;
+  //refreshParentData?: (buildingId: number) => void;
+  handleFormClose?: () => void;
+};
+
+export default function OfferDetailsForm({
+  serviceId,
+}: OfferDetailsFormPropType) {
   let today = new Date();
-  let defaultDate =
+
+  let defaultDateBeginning =
     today.getFullYear() +
     '-' +
-    (today.getMonth() + 1) +
+    String(today.getMonth() + 1).padStart(2, '0') +
     '-' +
-    today.getDate() +
+    String(today.getDate()).padStart(2, '0') +
     'T' +
     String(today.getHours()).padStart(2, '0') +
     ':' +
     String(today.getMinutes()).padStart(2, '0');
+
+  let defaultDateEnd =
+    today.getFullYear() +
+    '-' +
+    String(today.getMonth() + 1).padStart(2, '0') +
+    '-' +
+    String(today.getDate()).padStart(2, '0') +
+    'T' +
+    String(today.getHours() + 1).padStart(2, '0') +
+    ':' +
+    String(today.getMinutes()).padStart(2, '0');
+
+  const [serviceIdNumber] = useState<number>(serviceId);
+  const [offerBody, setOfferBody] = useState<OfferType>({
+    id: 0,
+    cost: 0,
+    datesBegining: defaultDateBeginning,
+    datesEnd: defaultDateEnd,
+    statusType: '',
+  });
+  const [userBody, setUserBody] = useState<UserType>({
+    id: 0,
+    login: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    telephone: '',
+  });
+  const [equipmentPage, setEquipmentPage] = useState<InstallerEquipmentType[]>(
+    []
+  );
+  const [equipmentUnit, setEquipmentUnit] = React.useState<any>([]);
+
+  const handleGettingUserById = (offerId: number) => {
+    OfferService.getFindUserAssignedToOffer(offerId).then((response) => {
+      setUserBody(response.data);
+    });
+  };
+
+  const handleGettingOfferEquipment = (offerId: number) => {
+    OfferService.getFindAllEquipmentInOffer(offerId).then((response) => {
+      setEquipmentPage(response.data.content);
+    });
+  };
+
+  const handleGettingOfferData = (serviceId: number) => {
+    OfferService.getFindOfferByServiceId(serviceId).then((response) => {
+      setOfferBody(response.data);
+      console.log(response.data.id);
+      handleGettingOfferEquipment(response.data.id);
+      //handleGettingUserById(response.data.id);
+    });
+  };
+
+  useEffect(() => {
+    handleGettingOfferData(serviceIdNumber);
+  }, [serviceIdNumber]); //serviceId
+
+  /*useEffect(() => {
+    setEquipmentUnit([equipmentPage[0].name]);
+  }, [equipmentPage]);*/
 
   return (
     <>
@@ -25,7 +107,8 @@ export default function OfferDetailsForm() {
             label="Operator:"
             variant="filled"
             fullWidth
-            value={'mock'}
+            //value={`${userBody.firstName} ${userBody.lastName}`}
+            value={''}
             InputProps={{
               readOnly: true,
             }}
@@ -39,11 +122,72 @@ export default function OfferDetailsForm() {
             label="Komponenty potrzebne do instalacji"
             variant="filled"
             fullWidth
-            value={'mock'}
+            value={''}
             InputProps={{
               readOnly: true,
             }}
           />
+          {/* <Autocomplete
+            value={equipmentUnit}
+            // onChange={(event, newValue) => {
+            //   setEquipmentUnit(newValue);
+            // }}
+            multiple
+            id="tags-filled"
+            options={equipmentPage.map((equipment) => equipment.name)}
+            freeSolo
+            renderTags={(value: string[], getTagProps) =>
+              value.map((option: string, index: number) => (
+                <Chip
+                  variant="outlined"
+                  label={option}
+                  {...getTagProps({ index })}
+                />
+              ))
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Komponenty potrzebne do instalacji"
+                variant="filled"
+                fullWidth
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+            )}
+          /> */}
+          {/* <Autocomplete
+            multiple
+            id="checkboxes-tags-demo"
+            options={equipmentPage}
+            value={equipmentUnit}
+            disableCloseOnSelect
+            getOptionLabel={(option) => {
+              if (option) {
+                return option.name;
+              }
+            }}
+            renderOption={(props, option, { selected }) => (
+              <li {...props}>
+                <Checkbox
+                  icon={icon}
+                  checkedIcon={checkedIcon}
+                  style={{ marginRight: 8 }}
+                  checked={selected}
+                />
+                {option.title}
+              </li>
+            )}
+            style={{ width: 500 }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Checkboxes"
+                placeholder="Favorites"
+              />
+            )}
+          /> */}
         </div>
         <div className="offer-cost-form">
           <text>Szacowany koszt wykonania usługi</text>
@@ -51,20 +195,38 @@ export default function OfferDetailsForm() {
             label="Szacowany koszt wykonania usługi"
             variant="filled"
             fullWidth
-            value={'mock'}
+            //value={offerBody.cost}
+            value={''}
             InputProps={{
               readOnly: true,
             }}
           />
         </div>
-        <div className="offer-date-form">
-          <text>Proponowany termin wykonania usługi</text>
+        <div className="offer-date-beginning-form">
+          <text>Proponowane rozpoczęcie usługi</text>
           <TextField
             id="datetime-select"
-            label="Wybierz termin instalacji"
+            label="Wybierz początkowy termin instalacji"
             type="datetime-local"
             //defaultValue="2022-12-31T12:30"
-            defaultValue={defaultDate}
+            defaultValue={offerBody.datesBegining}
+            //sx={{ width: 250 }}
+            InputLabelProps={
+              {
+                //shrink: true,
+              }
+            }
+            inputProps={{ readOnly: false }}
+          />
+        </div>
+        <div className="offer-date-end-form">
+          <text>Proponowane zakończenie usługi</text>
+          <TextField
+            id="datetime-select"
+            label="Wybierz końcowy termin instalacji"
+            type="datetime-local"
+            //defaultValue="2022-12-31T12:30"
+            defaultValue={offerBody.datesEnd}
             //sx={{ width: 250 }}
             InputLabelProps={
               {
@@ -80,7 +242,8 @@ export default function OfferDetailsForm() {
             label="Status oferty"
             variant="filled"
             fullWidth
-            value={'mock'}
+            //value={offerBody.statusType}
+            value={''}
             InputProps={{
               readOnly: true,
             }}

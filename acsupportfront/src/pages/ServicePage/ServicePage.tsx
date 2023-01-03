@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Autocomplete, TextField } from '@mui/material';
+import {
+  Autocomplete,
+  Button,
+  Dialog,
+  DialogContent,
+  Pagination,
+  TablePagination,
+  TextField,
+} from '@mui/material';
 
 import Navbar from 'components/Navbar/Navbar';
 import Footer from 'components/Footer/Footer';
@@ -14,31 +22,44 @@ import ServiceType from 'types/ServiceType';
 import ServiceService from 'services/ServiceService';
 
 import './ServicePage.scss';
+import { Icon } from '@iconify/react';
 
 export function ServicePage() {
   const [userId, setUserId] = useState<number>(0);
   const [userBuildings, setUserBuildings] = useState<BuildingType[]>([]);
   const [servicePage, setServicePage] = useState<ServiceType[]>([]);
+  const [servicePageOffer, setServicePageOffer] = useState<ServiceType[]>([]);
   const flatProps = {
-    options: userBuildings.map((option) => ({
-      label:
-        option.name +
-        ', ' +
-        option.street +
-        ' ' +
-        option.city +
-        ', ' +
-        option.postCode +
-        ', ' +
-        option.region,
-      id: option.id,
-    })),
+    options: userBuildings
+      .sort((a, b) => a.id - b.id)
+      .map((option) => ({
+        label:
+          option.name +
+          ', ' +
+          option.street +
+          ' ' +
+          option.city +
+          ', ' +
+          option.postCode +
+          ', ' +
+          option.region,
+        id: option.id,
+      })),
   };
   const [chosenBuilding, setChosenBuilding] = useState<any>('');
   const [chosenBuildingId, setChosenBuildingId] = useState<number>(0);
+  const [serviceFormOpen, setServiceFormOpen] = useState<boolean>(false);
   const [servicePageNumber, setServicePageNumber] = useState(0);
-  const [serivceRowsPerPage, setServiceRowsPerPage] = useState<number>(5);
-  const [serviceRowsPerPageOption] = useState(1);
+  const [serviceRowsPerPage, setServiceRowsPerPage] = useState<number>(5);
+  const [serviceRowsPerPageOption] = useState([1, 2, 5, 10, 15]);
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    console.log(event.target.value);
+    setServiceRowsPerPage(parseInt(event.target.value, 10));
+    setServicePageNumber(0);
+  };
 
   const handleGetingUserBuildings = async (userId: number) => {
     await BuildingService.getUserBuildings(userId).then((response) => {
@@ -66,9 +87,19 @@ export function ServicePage() {
   const handleGettingBuildingServices = async (buildingId: number) => {
     await ServiceService.getFindServiceByBuildingId(buildingId).then(
       (response) => {
+        console.log(response.data.content);
         setServicePage(response.data.content);
+        setServicePageOffer(response.data.content);
       }
     );
+  };
+
+  const handleClickOpen = () => {
+    setServiceFormOpen(true);
+  };
+
+  const handleClose = () => {
+    setServiceFormOpen(false);
   };
 
   useEffect(() => {
@@ -78,6 +109,10 @@ export function ServicePage() {
   useEffect(() => {
     handleGetingUserBuildings(userId);
   }, [userId]);
+
+  // useEffect(() => {
+  //   handleGettingBuildingServices(chosenBuildingId);
+  // }, [servicePageNumber]);
 
   useEffect(() => {
     handleGettingBuildingServices(chosenBuildingId);
@@ -104,10 +139,47 @@ export function ServicePage() {
             console.log(newValue);
             console.log(newValue.id);
           }}
-          renderInput={(params) => <TextField {...params} label="Buildings" />}
+          renderInput={(params) => (
+            <TextField {...params} label="Buildings" id={params.id} />
+          )}
         />
       </div>
-      <text id="service-details-header">Dane dotyczące usługi:</text>
+      <div className="add-service-button">
+        <Icon
+          className="return-icon"
+          icon="material-symbols:meeting-room-outline"
+          color="#4e4e4e"
+          height="21"
+        />
+        <Button
+          sx={{
+            color: '#ffffff',
+          }}
+          onClick={handleClickOpen}
+        >
+          Dodaj zamówienie
+        </Button>
+      </div>
+      <text id="service-details-header">Dane dotyczące zamówienia:</text>
+      <TablePagination
+        component="div"
+        count={servicePage.length}
+        page={servicePageNumber}
+        rowsPerPageOptions={serviceRowsPerPageOption}
+        onPageChange={(_, newPage) => setServicePageNumber(newPage)}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        rowsPerPage={serviceRowsPerPage}
+        labelRowsPerPage={'Liczba elementów na stronie:'}
+      />
+      {/* <Pagination
+        sx={{
+          width: '300px',
+          marginLeft: '250px',
+        }}
+        count={servicePage.length}
+        showFirstButton
+        showLastButton
+      /> */}
       {/* <div id="service-details-component">
         <ServiceDetailsForm
           id={0}
@@ -126,30 +198,90 @@ export function ServicePage() {
         </div>*/}
       {servicePage
         .sort((a, b) => a.id - b.id)
-        //.slice(servicePageNumber * serviceRowsPerPage, servicePageNumber * serviceRowsPerPage + serivceRowsPerPage)
-        .map((data) => {
-          return (
-            <div id={`${data.id}`} className="service-details-component">
-              <ServiceDetailsForm
-                id={data.id}
-                date={data.date}
-                buildingId={chosenBuildingId}
-                description={data.description}
-                mustCreate={false}
-                handleFormClose={() => {
-                  return false;
-                }}
-              />
-            </div>
-          );
-        })}
+        .slice(
+          servicePageNumber * serviceRowsPerPage,
+          servicePageNumber * serviceRowsPerPage + serviceRowsPerPage
+        )
+        .map((data) => (
+          <div id={`${data.id}`} className="service-details-component">
+            <ServiceDetailsForm
+              id={data.id}
+              date={data.date}
+              buildingId={chosenBuildingId}
+              description={data.description}
+              mustCreate={false}
+              handleFormClose={() => {
+                return false;
+              }}
+            />
+          </div>
+        ))}
       <div id="chat-component">
         <Chat buildingId={chosenBuildingId} userId={userId} />
       </div>
-      <div id="offer-details-component">
-        <OfferDetailsForm />
-      </div>
+      {/* <div id="offer-details-component">
+        <OfferDetailsForm serviceId={0} />
+      </div> */}
+      {servicePageOffer
+        .sort((a, b) => a.id - b.id)
+        .slice(
+          servicePageNumber * serviceRowsPerPage,
+          servicePageNumber * serviceRowsPerPage + serviceRowsPerPage
+        )
+        .map((data) => (
+          <div id={`${data.id}`} className="offer-details-component">
+            <OfferDetailsForm serviceId={data.id} />
+          </div>
+        ))}
       <Footer />
+      <Dialog
+        sx={{
+          width: '1200px',
+          height: '612px',
+          alignItems: 'center',
+          marginLeft: '193px',
+          marginTop: '20px',
+        }}
+        open={serviceFormOpen}
+        onClose={handleClose}
+        fullWidth
+        maxWidth="lg"
+      >
+        <DialogContent
+          sx={{
+            padding: '0',
+            backgroundColor: '#d6e900',
+            alignItems: 'center',
+          }}
+        >
+          {/* <RoomDetailsForm
+            id={0}
+            name={''}
+            purpose={''}
+            areaX={0}
+            areaY={0}
+            height={0}
+            energyGiveOut={0}
+            numberOfPeople={0}
+            description={''}
+            buildingId={roomBuildingId}
+            mustCreate={true}
+            //isEditable={() => {
+            //  return true;
+            //}}
+            refreshParentData={handleGettingAllBuildingsRoomsData}
+            handleFormClose={handleClose}
+          /> */}
+          <ServiceDetailsForm
+            id={0}
+            date={''}
+            buildingId={chosenBuildingId}
+            description={''}
+            mustCreate={true}
+            handleFormClose={handleClose}
+          />
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

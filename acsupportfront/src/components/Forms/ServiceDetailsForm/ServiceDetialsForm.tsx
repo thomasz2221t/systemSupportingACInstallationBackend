@@ -16,15 +16,14 @@ import ServiceType from 'types/ServiceType';
 import ServiceTypeType from 'types/ServiceTypeType';
 
 import './ServiceDetailsForm.scss';
-import RoomService from 'services/RoomService';
 
 export type ServiceDetailsFormPropType = {
   id: number;
-  date: Date;
+  date: string;
   buildingId: number;
-  description: String;
+  description: string;
   mustCreate: boolean;
-  //refreshParentData?: (buildingId: number) => void;
+  refreshParentData?: (buildingId: number) => void;
   handleFormClose?: () => void;
 };
 
@@ -34,23 +33,23 @@ export default function ServiceDetailsForm({
   buildingId,
   description,
   mustCreate,
-  //refreshParentData,
+  refreshParentData,
   handleFormClose,
 }: ServiceDetailsFormPropType) {
   let today = new Date();
   let defaultDate =
     today.getFullYear() +
     '-' +
-    (today.getMonth() + 1) +
+    String(today.getMonth() + 1).padStart(2, '0') +
     '-' +
-    today.getDate() +
+    String(today.getDate()).padStart(2, '0') +
     'T' +
     String(today.getHours()).padStart(2, '0') +
     ':' +
     String(today.getMinutes()).padStart(2, '0');
   const [data, setData] = useState<ServiceType>({
     id: id,
-    date: date,
+    date: date === '' ? defaultDate : date,
     description: description,
   });
   const [isServiceFormEditable, setIsServiceFormEditable] = useState<boolean>(
@@ -99,6 +98,7 @@ export default function ServiceDetailsForm({
     await ServiceService.getFindServiceType(serviceId).then((response) => {
       console.log(response.data);
       setServiceTypeBody(response.data);
+      handleGettingRoomDetails(serviceId);
     });
   };
 
@@ -107,6 +107,24 @@ export default function ServiceDetailsForm({
       console.log(response.data);
       setRoomBody(response.data);
     });
+  };
+
+  const handleAssigningServiceTypeToService = async () => {};
+
+  const handleAssigningRoomToService = async () => {};
+
+  const handleCreatingServiceBody = async () => {};
+
+  const handleUpdatingServiceBody = async () => {};
+
+  const handleServiceFormSubmiting = (
+    serviceBody: ServiceType,
+    serviceTypeId: number,
+    roomId: number
+  ) => {
+    //mustCreate === true
+    //  ? handleCreatingServiceBody(roomBody, roomTypeId, buildingId)
+    //  : handleUpdatingServiceBody(roomBody, roomTypeId);
   };
 
   const onChangeServiceType = (event: SelectChangeEvent<number>) => {
@@ -125,7 +143,9 @@ export default function ServiceDetailsForm({
   useEffect(() => {
     handleGettingServiceDetails(id);
     handleGettingRoomDetails(id);
-  }, [id]); //serviceTypeId
+  }, [serviceTypeId]); //serviceTypeId
+
+  console.log(data.date);
 
   return isServiceFormEditable === true ? (
     <>
@@ -146,7 +166,7 @@ export default function ServiceDetailsForm({
                 setIsServiceFormEditable(!isServiceFormEditable);
               }}
             >
-              Edytuj pomieszczenie
+              Edytuj zamówienie
             </Button>
           </div>
         ) : null}
@@ -239,7 +259,7 @@ export default function ServiceDetailsForm({
                 setIsServiceFormEditable(!isServiceFormEditable);
               }}
             >
-              Edytuj pomieszczenie
+              Edytuj zamówienie
             </Button>
           </div>
         ) : null}
@@ -285,7 +305,7 @@ export default function ServiceDetailsForm({
           <text className="service-form-header">Wybierz termin instalacji</text>
           <TextField
             id="datetime-select"
-            label="Wybierz termin instalacji"
+            //label="Wybierz termin instalacji"
             type="datetime-local"
             //defaultValue="2022-12-31T12:30"
             value={data.date}
@@ -300,7 +320,7 @@ export default function ServiceDetailsForm({
             onChange={(e) =>
               setData({
                 ...data,
-                date: new Date(e.target.value),
+                date: e.target.value,
               })
             }
           />
@@ -313,7 +333,7 @@ export default function ServiceDetailsForm({
             fullWidth
             value={data.description}
             InputProps={{
-              readOnly: true,
+              readOnly: false,
             }}
             onChange={(e) =>
               setData({
