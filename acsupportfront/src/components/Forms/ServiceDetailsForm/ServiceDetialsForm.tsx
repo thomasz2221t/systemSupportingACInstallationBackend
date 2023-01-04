@@ -55,7 +55,7 @@ export default function ServiceDetailsForm({
   const [isServiceFormEditable, setIsServiceFormEditable] = useState<boolean>(
     !mustCreate
   );
-  const [buildingIdNumber] = useState<number>(buildingId);
+  const [buildingIdNumber, setBuildingIdNumber] = useState<number>(buildingId);
   const [serviceTypeId, setServiceTypeId] = useState<number>(id);
   const [serviceTypeBody, setServiceTypeBody] = useState<ServiceTypeType>({
     id: 0,
@@ -95,17 +95,26 @@ export default function ServiceDetailsForm({
   };
 
   const handleGettingServiceDetails = async (serviceId: number) => {
-    await ServiceService.getFindServiceType(serviceId).then((response) => {
-      console.log(response.data);
-      setServiceTypeBody(response.data);
-      handleGettingRoomDetails(serviceId);
-    });
+    return await ServiceService.getFindServiceType(serviceId).then(
+      (response) => {
+        console.log(response.data);
+        setServiceTypeBody(response.data);
+      }
+    );
   };
 
   const handleGettingRoomDetails = async (serviceId: number) => {
-    await ServiceService.getFindServiceRoom(serviceId).then((response) => {
-      console.log(response.data);
-      setRoomBody(response.data);
+    return await ServiceService.getFindServiceRoom(serviceId).then(
+      (response) => {
+        console.log(response.data);
+        setRoomBody(response.data);
+      }
+    );
+  };
+
+  const handleGettingRoomAndTypeDetails = (id: number) => {
+    handleGettingServiceDetails(id).then(() => {
+      handleGettingRoomDetails(id);
     });
   };
 
@@ -141,11 +150,20 @@ export default function ServiceDetailsForm({
   }, []);
 
   useEffect(() => {
-    handleGettingServiceDetails(id);
-    handleGettingRoomDetails(id);
-  }, [serviceTypeId]); //serviceTypeId
+    console.log('Rerender');
+  }, [id, date, description]);
 
-  console.log(data.date);
+  useEffect(() => {
+    setData({
+      id: id,
+      date: date === '' ? defaultDate : date,
+      description: description,
+    });
+    setBuildingIdNumber(buildingId);
+    handleFindingAllRoomsAssignedToBuilding(buildingId);
+    handleFindingServiceTypes();
+    handleGettingRoomAndTypeDetails(id);
+  }, [id, date, description]);
 
   return isServiceFormEditable === true ? (
     <>
@@ -177,7 +195,7 @@ export default function ServiceDetailsForm({
             label="Wybierz Usługę"
             size="small"
             displayEmpty
-            value={serviceTypeId}
+            value={serviceTypeBody.id}
             inputProps={{ readOnly: true }}
             onChange={onChangeServiceType}
           >
@@ -270,7 +288,7 @@ export default function ServiceDetailsForm({
             label="Wybierz Usługę"
             size="small"
             displayEmpty
-            value={serviceTypeId}
+            value={serviceTypeBody.id}
             inputProps={{ readOnly: false }}
             onChange={onChangeServiceType}
           >

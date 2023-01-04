@@ -8,10 +8,17 @@ import { authHeader } from './auth/AuthHeaders';
   });
 };*/
 
-const getFindServiceByBuildingId = (buildingId: number) => {
-  return axios.get(`${API_URL}/service/building/${buildingId}`, {
-    headers: authHeader(),
-  });
+const getFindServiceByBuildingId = (
+  buildingId: number,
+  page: number,
+  numberOfElements: number
+) => {
+  return axios.get(
+    `${API_URL}/service/building/${buildingId}?page=${page}&size=${numberOfElements}&sort=id`,
+    {
+      headers: authHeader(),
+    }
+  );
 };
 
 const getFindServiceType = (serviceId: number) => {

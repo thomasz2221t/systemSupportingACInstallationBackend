@@ -28,7 +28,6 @@ export function ServicePage() {
   const [userId, setUserId] = useState<number>(0);
   const [userBuildings, setUserBuildings] = useState<BuildingType[]>([]);
   const [servicePage, setServicePage] = useState<ServiceType[]>([]);
-  const [servicePageOffer, setServicePageOffer] = useState<ServiceType[]>([]);
   const flatProps = {
     options: userBuildings
       .sort((a, b) => a.id - b.id)
@@ -50,8 +49,10 @@ export function ServicePage() {
   const [chosenBuildingId, setChosenBuildingId] = useState<number>(0);
   const [serviceFormOpen, setServiceFormOpen] = useState<boolean>(false);
   const [servicePageNumber, setServicePageNumber] = useState(0);
-  const [serviceRowsPerPage, setServiceRowsPerPage] = useState<number>(5);
-  const [serviceRowsPerPageOption] = useState([1, 2, 5, 10, 15]);
+  const [serviceRowsPerPage, setServiceRowsPerPage] = useState<number>(1); //5
+  const [serviceRowsPerPageOption] = useState([1]); //const [serviceRowsPerPageOption] = useState([1, 2, 5, 10, 15]);
+  const [servicePageAllElements, setServicePageAllElements] =
+    useState<number>(0);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -66,32 +67,44 @@ export function ServicePage() {
       console.log(response.data);
       console.log(response.data.content);
       setUserBuildings(response.data.content);
-      setChosenBuilding({
-        label:
-          response.data.content[0].name +
-          ', ' +
-          response.data.content[0].street +
-          ' ' +
-          response.data.content[0].city +
-          ', ' +
-          response.data.content[0].postCode +
-          ', ' +
-          response.data.content[0].region,
-        id: response.data.content[0].id,
-      });
-      setChosenBuildingId(response.data.content[0].id);
+      // setChosenBuilding({
+      //   label:
+      //     response.data.content[0].name +
+      //     ', ' +
+      //     response.data.content[0].street +
+      //     ' ' +
+      //     response.data.content[0].city +
+      //     ', ' +
+      //     response.data.content[0].postCode +
+      //     ', ' +
+      //     response.data.content[0].region,
+      //   id: response.data.content[0].id,
+      // });
+      //setChosenBuildingId(response.data.content[0].id);
       console.log(chosenBuildingId);
     });
   };
 
-  const handleGettingBuildingServices = async (buildingId: number) => {
-    await ServiceService.getFindServiceByBuildingId(buildingId).then(
-      (response) => {
-        console.log(response.data.content);
-        setServicePage(response.data.content);
-        setServicePageOffer(response.data.content);
-      }
-    );
+  const handleGettingBuildingServices = async (
+    buildingId: number,
+    servicePageNumber: number,
+    serviceRowsPerPage: number
+  ) => {
+    await ServiceService.getFindServiceByBuildingId(
+      buildingId,
+      servicePageNumber,
+      serviceRowsPerPage
+    ).then((response) => {
+      console.log(response.data);
+      console.log(response.data.content);
+      console.log(response.data.totalElements);
+      setServicePage(response.data.content);
+      setServicePageAllElements(response.data.totalElements);
+    });
+  };
+
+  const refreshSerivcePage = () => {
+    return servicePage;
   };
 
   const handleClickOpen = () => {
@@ -115,8 +128,13 @@ export function ServicePage() {
   // }, [servicePageNumber]);
 
   useEffect(() => {
-    handleGettingBuildingServices(chosenBuildingId);
-  }, [chosenBuildingId]);
+    console.log(servicePageNumber);
+    handleGettingBuildingServices(
+      chosenBuildingId,
+      servicePageNumber,
+      serviceRowsPerPage
+    );
+  }, [chosenBuildingId, servicePageNumber, serviceRowsPerPage]);
 
   console.log(chosenBuilding);
   return (
@@ -163,7 +181,7 @@ export function ServicePage() {
       <text id="service-details-header">Dane dotyczące zamówienia:</text>
       <TablePagination
         component="div"
-        count={servicePage.length}
+        count={servicePageAllElements}
         page={servicePageNumber}
         rowsPerPageOptions={serviceRowsPerPageOption}
         onPageChange={(_, newPage) => setServicePageNumber(newPage)}
@@ -197,42 +215,46 @@ export function ServicePage() {
         /> 
         </div>*/}
       {servicePage
-        .sort((a, b) => a.id - b.id)
-        .slice(
-          servicePageNumber * serviceRowsPerPage,
-          servicePageNumber * serviceRowsPerPage + serviceRowsPerPage
-        )
-        .map((data) => (
-          <div id={`${data.id}`} className="service-details-component">
-            <ServiceDetailsForm
-              id={data.id}
-              date={data.date}
-              buildingId={chosenBuildingId}
-              description={data.description}
-              mustCreate={false}
-              handleFormClose={() => {
-                return false;
-              }}
-            />
-          </div>
-        ))}
+        // .sort((a, b) => a.id - b.id)
+        // .slice(
+        //   servicePageNumber * serviceRowsPerPage,
+        //   servicePageNumber * serviceRowsPerPage + serviceRowsPerPage
+        // )
+        .map((data) => {
+          console.log(data);
+          return (
+            <div id={`${data.id}`} className="service-details-component">
+              <ServiceDetailsForm
+                id={data.id}
+                date={data.date}
+                buildingId={chosenBuildingId}
+                description={data.description}
+                mustCreate={false}
+                handleFormClose={() => {
+                  return false;
+                }}
+              />
+            </div>
+          );
+        })}
       <div id="chat-component">
-        <Chat buildingId={chosenBuildingId} userId={userId} />
+        {chosenBuildingId !== 0 ? (
+          <Chat buildingId={chosenBuildingId} userId={userId} />
+        ) : null}
       </div>
-      {/* <div id="offer-details-component">
-        <OfferDetailsForm serviceId={0} />
-      </div> */}
-      {servicePageOffer
-        .sort((a, b) => a.id - b.id)
-        .slice(
-          servicePageNumber * serviceRowsPerPage,
-          servicePageNumber * serviceRowsPerPage + serviceRowsPerPage
-        )
-        .map((data) => (
-          <div id={`${data.id}`} className="offer-details-component">
-            <OfferDetailsForm serviceId={data.id} />
-          </div>
-        ))}
+      {servicePage
+        // .sort((a, b) => a.id - b.id)
+        // .slice(
+        //   servicePageNumber * serviceRowsPerPage,
+        //   servicePageNumber * serviceRowsPerPage + serviceRowsPerPage
+        // )
+        .map((data) => {
+          return (
+            <div id={`${data.id}`} className="offer-details-component">
+              <OfferDetailsForm serviceId={data.id} />
+            </div>
+          );
+        })}
       <Footer />
       <Dialog
         sx={{

@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Autocomplete, Button, Checkbox, TextField } from '@mui/material';
+import {
+  Autocomplete,
+  Button,
+  Checkbox,
+  Chip,
+  MenuItem,
+  Select,
+  TextField,
+} from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
@@ -70,33 +78,59 @@ export default function OfferDetailsForm({
   const [equipmentUnit, setEquipmentUnit] = React.useState<any>([]);
 
   const handleGettingUserById = (offerId: number) => {
-    OfferService.getFindUserAssignedToOffer(offerId).then((response) => {
+    return OfferService.getFindUserAssignedToOffer(offerId).then((response) => {
       setUserBody(response.data);
     });
   };
 
   const handleGettingOfferEquipment = (offerId: number) => {
-    OfferService.getFindAllEquipmentInOffer(offerId).then((response) => {
+    return OfferService.getFindAllEquipmentInOffer(offerId).then((response) => {
+      console.log(response.data);
+      console.log(response.data.content);
       setEquipmentPage(response.data.content);
     });
   };
 
   const handleGettingOfferData = (serviceId: number) => {
     OfferService.getFindOfferByServiceId(serviceId).then((response) => {
+      console.log(response.data);
       setOfferBody(response.data);
-      console.log(response.data.id);
-      handleGettingOfferEquipment(response.data.id);
-      //handleGettingUserById(response.data.id);
+      const offerId = response.data.id;
+      handleGettingOfferEquipment(offerId).then(() => {
+        handleGettingUserById(offerId);
+      });
     });
   };
 
   useEffect(() => {
-    handleGettingOfferData(serviceIdNumber);
-  }, [serviceIdNumber]); //serviceId
+    setOfferBody({
+      id: 0,
+      cost: 0,
+      datesBegining: defaultDateBeginning,
+      datesEnd: defaultDateEnd,
+      statusType: '',
+    });
+    setUserBody({
+      id: 0,
+      login: '',
+      password: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      telephone: '',
+    });
+    setEquipmentUnit([]);
+    handleGettingOfferData(serviceId);
+  }, [serviceId]); //serviceId
 
-  /*useEffect(() => {
-    setEquipmentUnit([equipmentPage[0].name]);
-  }, [equipmentPage]);*/
+  useEffect(() => {
+    if (equipmentPage.length > 0) {
+      setEquipmentUnit([equipmentPage[0]]);
+    }
+  }, [equipmentPage]);
+
+  console.log(offerBody);
+  console.log(equipmentPage);
 
   return (
     <>
@@ -107,8 +141,7 @@ export default function OfferDetailsForm({
             label="Operator:"
             variant="filled"
             fullWidth
-            //value={`${userBody.firstName} ${userBody.lastName}`}
-            value={''}
+            value={`${userBody.firstName} ${userBody.lastName}`}
             InputProps={{
               readOnly: true,
             }}
@@ -118,7 +151,7 @@ export default function OfferDetailsForm({
           <text className="offer-form-header">
             Komonenty potrzebne do instalacji
           </text>
-          <TextField
+          {/* <TextField
             label="Komponenty potrzebne do instalacji"
             variant="filled"
             fullWidth
@@ -126,12 +159,12 @@ export default function OfferDetailsForm({
             InputProps={{
               readOnly: true,
             }}
-          />
+          /> */}
           {/* <Autocomplete
             value={equipmentUnit}
-            // onChange={(event, newValue) => {
-            //   setEquipmentUnit(newValue);
-            // }}
+            onChange={(event, newValue) => {
+              setEquipmentUnit(newValue);
+            }}
             multiple
             id="tags-filled"
             options={equipmentPage.map((equipment) => equipment.name)}
@@ -157,11 +190,13 @@ export default function OfferDetailsForm({
               />
             )}
           /> */}
-          {/* <Autocomplete
+          <Autocomplete
+            autoComplete
             multiple
-            id="checkboxes-tags-demo"
-            options={equipmentPage}
-            value={equipmentUnit}
+            fullWidth
+            readOnly
+            options={equipmentPage} //all
+            value={equipmentUnit} //equipmentPage
             disableCloseOnSelect
             getOptionLabel={(option) => {
               if (option) {
@@ -176,18 +211,14 @@ export default function OfferDetailsForm({
                   style={{ marginRight: 8 }}
                   checked={selected}
                 />
-                {option.title}
+                {option.name}
               </li>
             )}
-            style={{ width: 500 }}
+            //style={{ width: 500 }}
             renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Checkboxes"
-                placeholder="Favorites"
-              />
+              <TextField {...params} label="Komponenty" />
             )}
-          /> */}
+          />
         </div>
         <div className="offer-cost-form">
           <text>Szacowany koszt wykonania usługi</text>
@@ -195,8 +226,7 @@ export default function OfferDetailsForm({
             label="Szacowany koszt wykonania usługi"
             variant="filled"
             fullWidth
-            //value={offerBody.cost}
-            value={''}
+            value={offerBody.cost}
             InputProps={{
               readOnly: true,
             }}
@@ -206,10 +236,9 @@ export default function OfferDetailsForm({
           <text>Proponowane rozpoczęcie usługi</text>
           <TextField
             id="datetime-select"
-            label="Wybierz początkowy termin instalacji"
             type="datetime-local"
             //defaultValue="2022-12-31T12:30"
-            defaultValue={offerBody.datesBegining}
+            value={offerBody.datesBegining}
             //sx={{ width: 250 }}
             InputLabelProps={
               {
@@ -223,10 +252,9 @@ export default function OfferDetailsForm({
           <text>Proponowane zakończenie usługi</text>
           <TextField
             id="datetime-select"
-            label="Wybierz końcowy termin instalacji"
             type="datetime-local"
             //defaultValue="2022-12-31T12:30"
-            defaultValue={offerBody.datesEnd}
+            value={offerBody.datesEnd}
             //sx={{ width: 250 }}
             InputLabelProps={
               {
@@ -242,8 +270,7 @@ export default function OfferDetailsForm({
             label="Status oferty"
             variant="filled"
             fullWidth
-            //value={offerBody.statusType}
-            value={''}
+            value={offerBody.statusType}
             InputProps={{
               readOnly: true,
             }}
