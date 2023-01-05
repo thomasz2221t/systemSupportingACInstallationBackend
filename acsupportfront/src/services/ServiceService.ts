@@ -1,12 +1,10 @@
 import axios from 'axios';
+import ServiceType from 'types/ServiceType';
 import API_URL from 'utils/ApiUrl';
-import { authHeader } from './auth/AuthHeaders';
-
-/*const getFindAllServices = () => {
-  return axios.get(`${API_URL}/service`, {
-    headers: authHeader(),
-  });
-};*/
+import {
+  authHeader,
+  authHeaderForPrimitiveTypePatch,
+} from './auth/AuthHeaders';
 
 const getFindServiceByBuildingId = (
   buildingId: number,
@@ -33,11 +31,42 @@ const getFindServiceRoom = (serviceId: number) => {
   });
 };
 
+const postCreateService = (serviceBody: ServiceType) => {
+  return axios.post(`${API_URL}/service`, serviceBody, {
+    headers: authHeader(),
+  });
+};
+
+const patchAssignTypeToService = (serviceId: number, serviceTypeId: number) => {
+  return axios.patch(
+    `${API_URL}/service/assigntype/${serviceId}`,
+    serviceTypeId,
+    authHeaderForPrimitiveTypePatch()
+  );
+};
+
+const patchAssignServiceToRoom = (serviceId: number, roomId: number) => {
+  return axios.patch(
+    `${API_URL}/service/assignroom/${serviceId}`,
+    roomId,
+    authHeaderForPrimitiveTypePatch()
+  );
+};
+
+const patchUpdateService = (serviceBody: ServiceType) => {
+  return axios.patch(`${API_URL}/service/${serviceBody.id}`, serviceBody, {
+    headers: authHeader(),
+  });
+};
+
 const ServiceService = {
-  //getFindAllServices,
   getFindServiceByBuildingId,
   getFindServiceType,
   getFindServiceRoom,
+  postCreateService,
+  patchAssignTypeToService,
+  patchAssignServiceToRoom,
+  patchUpdateService,
 };
 
 export default ServiceService;

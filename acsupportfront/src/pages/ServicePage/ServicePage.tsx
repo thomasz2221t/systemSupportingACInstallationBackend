@@ -103,10 +103,6 @@ export function ServicePage() {
     });
   };
 
-  const refreshSerivcePage = () => {
-    return servicePage;
-  };
-
   const handleClickOpen = () => {
     setServiceFormOpen(true);
   };
@@ -300,6 +296,7 @@ export function ServicePage() {
             buildingId={chosenBuildingId}
             description={''}
             mustCreate={true}
+            //refreshParentData={handleGettingBuildingServices}
             handleFormClose={handleClose}
           />
         </DialogContent>

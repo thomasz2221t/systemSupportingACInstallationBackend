@@ -23,7 +23,7 @@ export type ServiceDetailsFormPropType = {
   buildingId: number;
   description: string;
   mustCreate: boolean;
-  refreshParentData?: (buildingId: number) => void;
+  //refreshParentData?: (buildingId: number) => void;
   handleFormClose?: () => void;
 };
 
@@ -33,7 +33,7 @@ export default function ServiceDetailsForm({
   buildingId,
   description,
   mustCreate,
-  refreshParentData,
+  //refreshParentData,
   handleFormClose,
 }: ServiceDetailsFormPropType) {
   let today = new Date();
@@ -56,7 +56,6 @@ export default function ServiceDetailsForm({
     !mustCreate
   );
   const [buildingIdNumber, setBuildingIdNumber] = useState<number>(buildingId);
-  const [serviceTypeId, setServiceTypeId] = useState<number>(id);
   const [serviceTypeBody, setServiceTypeBody] = useState<ServiceTypeType>({
     id: 0,
     name: '',
@@ -75,6 +74,7 @@ export default function ServiceDetailsForm({
   const [serviceTypesPage, setServiceTypePage] = useState<ServiceTypeType[]>(
     []
   );
+  const [isRequestSent, setIsRequestSent] = useState<boolean>(false);
 
   const handleFindingAllRoomsAssignedToBuilding = async (
     buildingId: number
@@ -118,26 +118,74 @@ export default function ServiceDetailsForm({
     });
   };
 
-  const handleAssigningServiceTypeToService = async () => {};
+  const handleAssigningServiceTypeToService = async (
+    serviceId: number,
+    serviceTypeId: number
+  ) => {
+    return ServiceService.patchAssignTypeToService(serviceId, serviceTypeId);
+  };
 
-  const handleAssigningRoomToService = async () => {};
+  const handleAssigningRoomToService = async (
+    serviceId: number,
+    roomId: number
+  ) => {
+    return ServiceService.patchAssignServiceToRoom(serviceId, roomId);
+  };
 
-  const handleCreatingServiceBody = async () => {};
+  const manageAssignigRoomAndServiceTypeToService = (
+    serviceId: number,
+    serviceTypeId: number,
+    roomId: number
+  ) => {
+    return handleAssigningServiceTypeToService(serviceId, serviceTypeId).then(
+      () => {
+        handleAssigningRoomToService(serviceId, roomId);
+      }
+    );
+  };
 
-  const handleUpdatingServiceBody = async () => {};
+  const handleCreatingServiceBody = async (
+    serviceBody: ServiceType,
+    serviceTypeId: number,
+    roomId: number
+  ) => {
+    ServiceService.postCreateService(serviceBody).then((response) => {
+      manageAssignigRoomAndServiceTypeToService(
+        response.data,
+        serviceTypeId,
+        roomId
+      ).then(() => {
+        setIsRequestSent(true);
+      });
+    });
+  };
+
+  const handleUpdatingServiceBody = async (
+    serviceBody: ServiceType,
+    serviceTypeId: number,
+    roomId: number
+  ) => {
+    ServiceService.patchUpdateService(serviceBody).then(() => {
+      manageAssignigRoomAndServiceTypeToService(
+        serviceBody.id,
+        serviceTypeId,
+        roomId
+      );
+    });
+  };
 
   const handleServiceFormSubmiting = (
     serviceBody: ServiceType,
     serviceTypeId: number,
     roomId: number
   ) => {
-    //mustCreate === true
-    //  ? handleCreatingServiceBody(roomBody, roomTypeId, buildingId)
-    //  : handleUpdatingServiceBody(roomBody, roomTypeId);
+    mustCreate === true
+      ? handleCreatingServiceBody(serviceBody, serviceTypeId, roomId)
+      : handleUpdatingServiceBody(serviceBody, serviceTypeId, roomId);
   };
 
   const onChangeServiceType = (event: SelectChangeEvent<number>) => {
-    setServiceTypeId(Number(event.target.value));
+    setServiceTypeBody({ ...serviceTypeBody, id: Number(event.target.value) });
   };
 
   const onChangeRoom = (event: SelectChangeEvent<number>) => {
@@ -164,6 +212,12 @@ export default function ServiceDetailsForm({
     handleFindingServiceTypes();
     handleGettingRoomAndTypeDetails(id);
   }, [id, date, description]);
+
+  // useEffect(() => {
+  //   if (refreshParentData) {
+  //     refreshParentData(buildingId);
+  //   }
+  // }, [isRequestSent]);
 
   return isServiceFormEditable === true ? (
     <>
@@ -368,6 +422,7 @@ export default function ServiceDetailsForm({
               color: '#ffffff',
             }}
             onClick={() => {
+              handleServiceFormSubmiting(data, serviceTypeBody.id, roomBody.id);
               if (handleFormClose) {
                 handleFormClose();
               }
