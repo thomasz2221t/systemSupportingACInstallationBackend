@@ -254,7 +254,7 @@ export function ServicePage() {
       <Footer />
       <Dialog
         sx={{
-          width: '1200px',
+          width: '1152px',
           height: '612px',
           alignItems: 'center',
           marginLeft: '193px',
@@ -268,28 +268,10 @@ export function ServicePage() {
         <DialogContent
           sx={{
             padding: '0',
-            backgroundColor: '#d6e900',
+            backgroundColor: '#90ff38',
             alignItems: 'center',
           }}
         >
-          {/* <RoomDetailsForm
-            id={0}
-            name={''}
-            purpose={''}
-            areaX={0}
-            areaY={0}
-            height={0}
-            energyGiveOut={0}
-            numberOfPeople={0}
-            description={''}
-            buildingId={roomBuildingId}
-            mustCreate={true}
-            //isEditable={() => {
-            //  return true;
-            //}}
-            refreshParentData={handleGettingAllBuildingsRoomsData}
-            handleFormClose={handleClose}
-          /> */}
           <ServiceDetailsForm
             id={0}
             date={''}

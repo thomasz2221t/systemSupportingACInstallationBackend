@@ -19,10 +19,23 @@ const getFindUserAssignedToOffer = (offerId: number) => {
     headers: authHeader(),
   });
 };
+
+const patchUpdateOfferStatus = (offerId: number, statusCode: string) => {
+  return axios.patch(
+    `${API_URL}/offer/status/${offerId}`,
+    {},
+    {
+      headers: authHeader(),
+      params: { statusCode },
+    }
+  );
+};
+
 const OfferService = {
   getFindOfferByServiceId,
   getFindAllEquipmentInOffer,
   getFindUserAssignedToOffer,
+  patchUpdateOfferStatus,
 };
 
 export default OfferService;

@@ -18,6 +18,7 @@ import OfferType from 'types/OfferType';
 
 import './OfferDetailsForm.scss';
 import InstallerEquipmentType from 'types/InstallerEquipmentType';
+import { OfferStatusType } from 'enums/OfferStatusType';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -76,6 +77,8 @@ export default function OfferDetailsForm({
     []
   );
   const [equipmentUnit, setEquipmentUnit] = React.useState<any>([]);
+  const [didOfferStateChanged, setDidOfferStateChanged] =
+    useState<boolean>(false);
 
   const handleGettingUserById = (offerId: number) => {
     return OfferService.getFindUserAssignedToOffer(offerId).then((response) => {
@@ -102,6 +105,15 @@ export default function OfferDetailsForm({
     });
   };
 
+  const handleChangingOfferStatus = (
+    serviceId: number,
+    statusType: OfferStatusType
+  ) => {
+    OfferService.patchUpdateOfferStatus(serviceId, statusType).then(() => {
+      setDidOfferStateChanged(!didOfferStateChanged);
+    });
+  };
+
   useEffect(() => {
     setOfferBody({
       id: 0,
@@ -121,7 +133,7 @@ export default function OfferDetailsForm({
     });
     setEquipmentUnit([]);
     handleGettingOfferData(serviceId);
-  }, [serviceId]); //serviceId
+  }, [serviceId, didOfferStateChanged]); //serviceId
 
   useEffect(() => {
     if (equipmentPage.length > 0) {
@@ -285,7 +297,9 @@ export default function OfferDetailsForm({
               background: '#90FF38',
               borderRadius: 18,
             }}
-            onClick={() => {}}
+            onClick={() => {
+              handleChangingOfferStatus(serviceId, OfferStatusType.ACCEPTED);
+            }}
           >
             Przyjmij oferte
           </Button>
@@ -297,7 +311,9 @@ export default function OfferDetailsForm({
               background: '#FF0707',
               borderRadius: 18,
             }}
-            onClick={() => {}}
+            onClick={() => {
+              handleChangingOfferStatus(serviceId, OfferStatusType.REJECTED);
+            }}
           >
             Odrzuć oferte
           </Button>
@@ -309,7 +325,12 @@ export default function OfferDetailsForm({
               background: '#D6E900',
               borderRadius: 18,
             }}
-            onClick={() => {}}
+            onClick={() => {
+              handleChangingOfferStatus(
+                serviceId,
+                OfferStatusType.CHANGES_REQUIRED
+              );
+            }}
           >
             Zaproponuj zmiany
           </Button>

@@ -1,0 +1,5 @@
+export const enum OfferStatusType {
+  ACCEPTED = 'OFERTA_PRZYJETA',
+  REJECTED = 'OFERTA_ODRZUCONA',
+  CHANGES_REQUIRED = 'WYMAGANE_ZMIANY',
+}
