@@ -36,4 +36,5 @@ public enum PermissionName {
     CREATE_EQUIPMENT,
     UPDATE_EQUIPMENT,
     DELETE_EQUIPMENT,
+    UPDATE_OFFER_STATUS,
 }

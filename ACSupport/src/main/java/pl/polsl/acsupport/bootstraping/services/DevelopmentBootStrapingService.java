@@ -232,6 +232,7 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         permissionsClient.add(addPermissions(FIND_SERVICE_TYPE));
         permissionsClient.add(addPermissions(FIND_OFFER));
         permissionsClient.add(addPermissions(FIND_EQUIPMENT));
+        permissionsClient.add(addPermissions(UPDATE_OFFER_STATUS));
         roleClient.setPermissions(permissionsClient);
         roleRepository.save(roleClient);
 
@@ -951,7 +952,7 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         offer1.setDatesBegining(LocalDateTime.of(2023,03,10,17,30));
         offer1.setDatesEnd(LocalDateTime.of(2023,03,10,20,00));
         offer1.setCost(BigDecimal.valueOf(10000.00));
-        offer1.setStatusType(OfferStatusType.IN_PROGRESS);
+        offer1.setStatusType(OfferStatusType.W_PRZYGOTOWANIU);
         offer1.setUser(operator1);
         Set<InstallerEquipment> installerEquipments1 = offer1.getInstallerEquipments();
         installerEquipments1.add(installerEquipment1);
@@ -962,7 +963,7 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         offer2.setDatesBegining(LocalDateTime.of(2023,03,10,15,30));
         offer2.setDatesEnd(LocalDateTime.of(2023,03,10,17,30));
         offer2.setCost(BigDecimal.valueOf(500.00));
-        offer2.setStatusType(OfferStatusType.IN_PROGRESS);
+        offer2.setStatusType(OfferStatusType.W_PRZYGOTOWANIU);
         offer2.setUser(operator1);
         Set<InstallerEquipment> installerEquipments2 = offer2.getInstallerEquipments();
         installerEquipments2.add(installerEquipment4);

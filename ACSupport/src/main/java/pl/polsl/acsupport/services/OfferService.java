@@ -12,6 +12,7 @@ import pl.polsl.acsupport.dtos.UserDto;
 import pl.polsl.acsupport.entities.InstallerEquipment;
 import pl.polsl.acsupport.entities.Offer;
 import pl.polsl.acsupport.entities.User;
+import pl.polsl.acsupport.enums.OfferStatusType;
 import pl.polsl.acsupport.repositories.InstallerEquipmentRepository;
 import pl.polsl.acsupport.repositories.OfferRepository;
 import pl.polsl.acsupport.repositories.ServiceRepository;
@@ -184,4 +185,10 @@ public class OfferService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public void updateOfferStatus(Long offerId, String statusCode){
+        Offer offer = findById(offerId);
+        offer.setStatusType(OfferStatusType.valueOf(statusCode));
+        offerRepository.save(offer);
+    }
 }

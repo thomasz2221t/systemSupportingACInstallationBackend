@@ -108,4 +108,11 @@ public class OfferController {
     public void revertAssigningUserFromOffer(@PathVariable Long offerId){
         offerService.revertAssigningUserFromOffer(offerId);
     }
+
+    @PreAuthorize("hasAuthority('UPDATE_OFFER_STATUS')")
+    @PatchMapping("/status/{offerId}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void updateOfferStatus(@PathVariable Long offerId, @RequestParam String statusCode){
+        offerService.updateOfferStatus(offerId, statusCode);
+    }
 }

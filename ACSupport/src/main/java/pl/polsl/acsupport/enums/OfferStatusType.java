@@ -1,13 +1,13 @@
 package pl.polsl.acsupport.enums;
 
 public enum OfferStatusType {
-    ACCEPTED("Oferta przyjęta"),
+    OFERTA_PRZYJETA("Oferta przyjęta"),
 
-    REJECTED("Oferta odrzucona"),
+    OFERTA_ODRZUCONA("Oferta odrzucona"),
 
-    CHANGES_REQUIRED("Wymagane zmiany"),
+    WYMAGANE_ZMIANY("Wymagane zmiany"),
 
-    IN_PROGRESS("W przygotowaniu");
+    W_PRZYGOTOWANIU("W przygotowaniu");
 
     public final String label;
 
