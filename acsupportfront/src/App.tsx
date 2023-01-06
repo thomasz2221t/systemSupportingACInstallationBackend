@@ -1,13 +1,15 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import { LoginPage } from "./pages/LoginPage/LoginPage";
-import { BuildingsPage } from "./pages/BuildingsPage/BuildingsPage";
-import { BuildingPage } from "pages/BuildingPage/BuildingPage";
-import { RoomPage } from "pages/RoomPage/RoomPage";
-import { ServicePage } from "pages/ServicePage/ServicePage";
+import { LoginPage } from './pages/LoginPage/LoginPage';
+import { BuildingsPage } from './pages/BuildingsPage/BuildingsPage';
+import { BuildingPage } from 'pages/BuildingPage/BuildingPage';
+import { RoomPage } from 'pages/RoomPage/RoomPage';
+import { ServicePage } from 'pages/ServicePage/ServicePage';
+import { OperatorServicePage } from 'pages/OperatorServicePage/OperatorServicePage';
+import { AdminOperatorsPage } from 'pages/AdminOperatorsPage/AdminOperatorsPage';
 
-import "./App.css";
+import './App.css';
 //import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
@@ -38,6 +40,8 @@ function App() {
               element={<RoomPage />}
             />
             <Route path="/uslugi" element={<ServicePage />} />
+            <Route path="/operator/uslugi" element={<OperatorServicePage />} />
+            <Route path="/admin/operator" element={<AdminOperatorsPage />} />
           </Routes>
         </Router>
       </div>

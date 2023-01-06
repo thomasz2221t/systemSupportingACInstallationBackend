@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { Icon } from "@iconify/react";
-import { useNavigate } from "react-router-dom";
-import AuthService from "services/auth/AuthService";
-import "./LoginWindow.scss";
-import { UserRoles } from "utils/UserRoles";
+import React, { useState } from 'react';
+import { Icon } from '@iconify/react';
+import { useNavigate } from 'react-router-dom';
+import AuthService from 'services/auth/AuthService';
+import './LoginWindow.scss';
+import { UserRoles } from 'utils/UserRoles';
 
 export const defaultTypeData = {
-  login: "",
-  password: "",
+  login: '',
+  password: '',
   loading: false,
-  message: "",
+  message: '',
 };
 
 function LoginWindow() {
@@ -37,7 +37,7 @@ function LoginWindow() {
 
     AuthService.login(data.login, data.password).then(
       () => {
-        console.log("link");
+        console.log('link');
         console.log(AuthService.getCurrentUser());
         //<Link to="/obiekty" />;
         //<Redirect to="/obiekty" />;
@@ -46,17 +46,17 @@ function LoginWindow() {
         if (AuthService.getCurrentUserRoles()) {
           switch (AuthService.getCurrentUserRoles()[0]) {
             case UserRoles.ADMIN:
-              navigate("/obiekty");
+              navigate('/admin/operator');
               break;
             case UserRoles.OPERATOR:
-              navigate("/obiekty");
+              navigate('/operator/uslugi');
               break;
             case UserRoles.CLIENT:
-              navigate("/obiekty");
+              navigate('/obiekty');
               break;
           }
         } else {
-          console.log("no permission to log");
+          console.log('no permission to log');
         }
       }
       /*(error) => {
