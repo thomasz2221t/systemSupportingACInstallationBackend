@@ -2,6 +2,12 @@ import axios from 'axios';
 import API_URL from 'utils/ApiUrl';
 import { authHeader } from './auth/AuthHeaders';
 
+const getFindAllServices = () => {
+  return axios.get(`${API_URL}/offer`, {
+    headers: authHeader(),
+  });
+};
+
 const getFindOfferByServiceId = (serviceId: number) => {
   return axios.get(`${API_URL}/offer/service/${serviceId}`, {
     headers: authHeader(),
@@ -36,6 +42,7 @@ const OfferService = {
   getFindAllEquipmentInOffer,
   getFindUserAssignedToOffer,
   patchUpdateOfferStatus,
+  getFindAllServices,
 };
 
 export default OfferService;

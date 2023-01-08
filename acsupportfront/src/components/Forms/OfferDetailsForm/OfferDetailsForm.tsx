@@ -1,17 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Autocomplete,
-  Button,
-  Checkbox,
-  Chip,
-  MenuItem,
-  Select,
-  TextField,
-} from '@mui/material';
+import { Autocomplete, Button, Checkbox, TextField } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
-import getUserBody from 'services/UserService';
 import OfferService from 'services/OfferService';
 import { UserType } from 'types/UserType';
 import OfferType from 'types/OfferType';

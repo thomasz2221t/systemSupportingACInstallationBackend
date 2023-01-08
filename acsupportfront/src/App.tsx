@@ -6,11 +6,11 @@ import { BuildingsPage } from './pages/BuildingsPage/BuildingsPage';
 import { BuildingPage } from 'pages/BuildingPage/BuildingPage';
 import { RoomPage } from 'pages/RoomPage/RoomPage';
 import { ServicePage } from 'pages/ServicePage/ServicePage';
-import { OperatorServicePage } from 'pages/OperatorServicePage/OperatorServicePage';
+import { OperatorServicesPage } from 'pages/OperatorServicesPage/OperatorServicesPage';
 import { AdminOperatorsPage } from 'pages/AdminOperatorsPage/AdminOperatorsPage';
+import { OperatorServiceAndOfferPage } from 'pages/OperatorServiceAndOfferPage/OperatorServiceAndOfferPage';
 
 import './App.css';
-//import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
@@ -40,7 +40,11 @@ function App() {
               element={<RoomPage />}
             />
             <Route path="/uslugi" element={<ServicePage />} />
-            <Route path="/operator/uslugi" element={<OperatorServicePage />} />
+            <Route path="/operator/uslugi" element={<OperatorServicesPage />} />
+            <Route
+              path="/operator/uslugi/budynki/:buildingId/serwisy"
+              element={<OperatorServiceAndOfferPage />}
+            />
             <Route path="/admin/operator" element={<AdminOperatorsPage />} />
           </Routes>
         </Router>

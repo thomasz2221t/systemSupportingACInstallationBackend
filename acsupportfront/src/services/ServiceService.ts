@@ -6,6 +6,12 @@ import {
   authHeaderForPrimitiveTypePatch,
 } from './auth/AuthHeaders';
 
+const getFindAllServices = () => {
+  return axios.get(`${API_URL}/service`, {
+    headers: authHeader(),
+  });
+};
+
 const getFindServiceByBuildingId = (
   buildingId: number,
   page: number,
@@ -60,6 +66,7 @@ const patchUpdateService = (serviceBody: ServiceType) => {
 };
 
 const ServiceService = {
+  getFindAllServices,
   getFindServiceByBuildingId,
   getFindServiceType,
   getFindServiceRoom,

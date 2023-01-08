@@ -6,6 +6,12 @@ import {
   authHeaderForPrimitiveTypePatch,
 } from './auth/AuthHeaders';
 
+const getFindAllBuilding = () => {
+  return axios.get(`${API_URL}/building`, {
+    headers: authHeader(),
+  });
+};
+
 const getUserBuildings = (userId: number) => {
   console.log(authHeader());
   return axios.get(`${API_URL}/building/user/${userId}`, {
@@ -70,7 +76,26 @@ const patchAssignRoomToBuilding = (buildingId: number, roomId: number) => {
   );
 };
 
+const getFindUserAssignedToBuilding = (buildingId: number) => {
+  return axios.get(`${API_URL}/building/user/${buildingId}`, {
+    headers: authHeader(),
+  });
+};
+
+const getFindTypeAssignedToBuilding = (buildingId: number) => {
+  return axios.get(`${API_URL}/building/type/${buildingId}`, {
+    headers: authHeader(),
+  });
+};
+
+const getFindBuildingTableData = () => {
+  return axios.get(`${API_URL}/building/table`, {
+    headers: authHeader(),
+  });
+};
+
 const BuildingService = {
+  getFindAllBuilding,
   getUserBuildings,
   getBuilding,
   getFindBuildingType,
@@ -78,8 +103,11 @@ const BuildingService = {
   postCreateBuilding,
   patchUpdateBuilding,
   patchAssignTypeToBuilding,
+  getFindUserAssignedToBuilding,
   patchAssignUserToBuilding,
   patchAssignRoomToBuilding,
+  getFindTypeAssignedToBuilding,
+  getFindBuildingTableData,
 };
 
 export default BuildingService;
