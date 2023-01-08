@@ -6,9 +6,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.polsl.acsupport.dtos.BuildingDto;
-import pl.polsl.acsupport.dtos.BuildingTypeDto;
-import pl.polsl.acsupport.dtos.RoomDto;
+import pl.polsl.acsupport.dtos.*;
 import pl.polsl.acsupport.entities.*;
 import pl.polsl.acsupport.repositories.*;
 
@@ -163,6 +161,11 @@ public class BuildingService {
         buildingTypeRepository.save(type);
     }
 
+    public UserDto findUserAssignedToBuilding(Long buildingId){
+        Building building = findById(buildingId);
+        return new UserDto(building.getUser());
+    }
+
     @Transactional
     public void assignUserToBuilding(Long buildingId, Long userId){
         Building building = findById(buildingId);
@@ -191,5 +194,19 @@ public class BuildingService {
 
         buildingRepository.save(building);
         userRepository.save(user);
+    }
+
+    public Page<BuildingTableDto> getBuildingTableData (Pageable pageable){
+        final Page<Building> buildings = buildingRepository.findAll(pageable);
+        Page<BuildingTableDto> buildingTableDtos = buildings
+                .map(element -> new BuildingTableDto(element.getId(),
+                        element.getName(),
+                        element.getType().getName(),
+                        element.getStreet(),
+                        element.getPostCode(),
+                        element.getCity(),
+                        element.getRegion(),
+                        element.getUser().getFirstName() + " " + element.getUser().getLastName()));
+        return buildingTableDtos;
     }
 }

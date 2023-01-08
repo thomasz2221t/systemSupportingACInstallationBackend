@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 import pl.polsl.acsupport.dtos.InstallerEquipmentDto;
 import pl.polsl.acsupport.dtos.OfferDto;
 import pl.polsl.acsupport.dtos.UserDto;

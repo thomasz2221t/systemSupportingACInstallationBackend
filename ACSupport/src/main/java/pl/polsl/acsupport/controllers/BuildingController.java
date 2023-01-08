@@ -8,9 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import pl.polsl.acsupport.dtos.BuildingDto;
-import pl.polsl.acsupport.dtos.BuildingTypeDto;
-import pl.polsl.acsupport.dtos.RoomDto;
+import pl.polsl.acsupport.dtos.*;
 import pl.polsl.acsupport.services.BuildingService;
 
 @RequiredArgsConstructor
@@ -99,6 +97,12 @@ public class BuildingController {
         buildingService.revertAssigningTypeFromBuilding(buildingId);
     }
 
+    @PreAuthorize("hasAuthority('FIND_BUILDING')")
+    @GetMapping("/user/{buildingId}")
+    public UserDto findUserAssignedToBuilding(@PathVariable Long buildingId){
+        return buildingService.findUserAssignedToBuilding(buildingId);
+    }
+
     @PreAuthorize("hasAuthority('UPDATE_BUILDING')")
     @PatchMapping("/assignuser/{buildingId}")
     public void assignUserToBuilding(@PathVariable Long buildingId, @RequestBody Long userId){
@@ -109,5 +113,11 @@ public class BuildingController {
     @PatchMapping("/revertuser/{buildingId}")
     public void revertAssigningUserFromBuilding(@PathVariable Long buildingId){
         buildingService.revertAssigningUserFromBuilding(buildingId);
+    }
+
+    @PreAuthorize("hasAuthority('FIND_BUILDING')")
+    @GetMapping("/table")
+    public Page<BuildingTableDto> findBuildingTableData(@PageableDefault Pageable pageable){
+        return buildingService.getBuildingTableData(pageable);
     }
 }

@@ -8,7 +8,6 @@ import pl.polsl.acsupport.entities.Offer;
 import pl.polsl.acsupport.enums.OfferStatusType;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter

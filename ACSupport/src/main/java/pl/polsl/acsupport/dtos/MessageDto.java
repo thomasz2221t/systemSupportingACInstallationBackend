@@ -7,7 +7,6 @@ import lombok.Setter;
 import pl.polsl.acsupport.entities.Message;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
