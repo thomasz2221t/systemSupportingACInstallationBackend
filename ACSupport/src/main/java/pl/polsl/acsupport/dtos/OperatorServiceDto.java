@@ -16,7 +16,7 @@ public class OperatorServiceDto {
 
     private Long id;
 
-    private LocalDateTime instalationDate;
+    private String instalationDate;
 
     private String clientsData;
 

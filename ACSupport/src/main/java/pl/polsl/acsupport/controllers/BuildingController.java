@@ -98,7 +98,7 @@ public class BuildingController {
     }
 
     @PreAuthorize("hasAuthority('FIND_BUILDING')")
-    @GetMapping("/user/{buildingId}")
+    @GetMapping("/finduser/{buildingId}")
     public UserDto findUserAssignedToBuilding(@PathVariable Long buildingId){
         return buildingService.findUserAssignedToBuilding(buildingId);
     }

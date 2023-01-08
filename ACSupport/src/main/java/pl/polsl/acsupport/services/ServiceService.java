@@ -178,7 +178,7 @@ public class ServiceService {
         return services.map(service -> {
             OperatorServiceDto operatorServiceDto = new OperatorServiceDto();
             operatorServiceDto.setId(service.getId());
-            operatorServiceDto.setInstalationDate(service.getDate());
+            operatorServiceDto.setInstalationDate(service.getDate().toString());
             String userNames = service.getRoom().getBuilding().getUser().getFirstName() + " " + service.getRoom().getBuilding().getUser().getLastName();
             operatorServiceDto.setClientsData(userNames);
             operatorServiceDto.setRoomId(service.getRoom().getId());
