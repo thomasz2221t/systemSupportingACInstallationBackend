@@ -65,6 +65,19 @@ const patchUpdateService = (serviceBody: ServiceType) => {
   });
 };
 
+const getFindAllOperatorServices = (
+  buildingId: number,
+  page: number,
+  numberOfElements: number
+) => {
+  return axios.get(
+    `${API_URL}/service/operator/${buildingId}?page=${page}&size=${numberOfElements}&sort=id`,
+    {
+      headers: authHeader(),
+    }
+  );
+};
+
 const ServiceService = {
   getFindAllServices,
   getFindServiceByBuildingId,
@@ -74,6 +87,7 @@ const ServiceService = {
   patchAssignTypeToService,
   patchAssignServiceToRoom,
   patchUpdateService,
+  getFindAllOperatorServices,
 };
 
 export default ServiceService;

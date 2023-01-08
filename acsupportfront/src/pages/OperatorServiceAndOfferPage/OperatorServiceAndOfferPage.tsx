@@ -9,14 +9,15 @@ import Chat from 'components/Chat/Chat';
 import AuthService from 'services/auth/AuthService';
 import OfferDetailsForm from 'components/Forms/OfferDetailsForm/OfferDetailsForm';
 import ServiceService from 'services/ServiceService';
-import ServiceType from 'types/ServiceType';
 import ServiceDetailsForm from 'components/Forms/ServiceDetailsForm/ServiceDetialsForm';
+import OperatorServiceType from 'types/OperatorServiceType';
 
 import './OperatorServiceAndOfferPage.scss';
+import ServiceOperatorForm from 'components/Forms/ServiceOperatorForm/ServiceOperatorForm';
 
 export function OperatorServiceAndOfferPage() {
   const [userId, setUserId] = useState<number>(0);
-  const [servicePage, setServicePage] = useState<ServiceType[]>([]);
+  const [servicePage, setServicePage] = useState<OperatorServiceType[]>([]);
   const [servicePageNumber, setServicePageNumber] = useState(0);
   const [serviceRowsPerPage, setServiceRowsPerPage] = useState<number>(1); //5
   const [serviceRowsPerPageOption] = useState([1]); //const [serviceRowsPerPageOption] = useState([1, 2, 5, 10, 15]);
@@ -37,7 +38,7 @@ export function OperatorServiceAndOfferPage() {
     servicePageNumber: number,
     serviceRowsPerPage: number
   ) => {
-    await ServiceService.getFindServiceByBuildingId(
+    await ServiceService.getFindAllOperatorServices(
       buildingId,
       servicePageNumber,
       serviceRowsPerPage
@@ -91,15 +92,15 @@ export function OperatorServiceAndOfferPage() {
           console.log(data);
           return (
             <div id={`${data.id}`} className="service-details-component">
-              <ServiceDetailsForm
+              <ServiceOperatorForm
                 id={data.id}
-                date={data.date}
-                buildingId={Number(buildingId)}
+                instalationDate={data.instalationDate}
+                clientsData={data.clientsData}
+                roomId={data.roomId}
+                buildingId={data.buildingId}
+                roomQubature={data.roomQubature}
+                requiredACPower={data.requiredACPower}
                 description={data.description}
-                mustCreate={false}
-                handleFormClose={() => {
-                  return false;
-                }}
               />
             </div>
           );
