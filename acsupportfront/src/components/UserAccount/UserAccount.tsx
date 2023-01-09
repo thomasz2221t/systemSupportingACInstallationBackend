@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Menu, MenuItem, ListItemIcon, Button } from "@mui/material";
-import Logout from "@mui/icons-material/Logout";
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Menu, MenuItem, ListItemIcon, Button } from '@mui/material';
+import Logout from '@mui/icons-material/Logout';
 
-import { UserType } from "types/UserType";
-import AuthService from "services/auth/AuthService";
-import getUserBody from "services/UserService";
+import { UserType } from 'types/UserType';
+import AuthService from 'services/auth/AuthService';
+import UserService from 'services/UserService';
 
-import "./UserAccount.scss";
+import './UserAccount.scss';
 
 const USER_BODY_ITEMS = {
   id: 0,
-  login: "",
-  password: "",
-  firstName: "",
-  lastName: "",
-  email: "",
-  telephone: "",
+  login: '',
+  password: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  telephone: '',
 };
 
 export default function UserAccount() {
@@ -39,7 +39,7 @@ export default function UserAccount() {
   };
 
   const handleGettingUserBody = async (userId: number) => {
-    await getUserBody(userId).then((response) => {
+    await UserService.getUserBody(userId).then((response) => {
       console.log(response.data);
       setUserBody(response.data);
     });
@@ -60,9 +60,9 @@ export default function UserAccount() {
       <div className="user-menu">
         <Button
           id="basic-button"
-          aria-controls={open ? "basic-menu" : undefined}
+          aria-controls={open ? 'basic-menu' : undefined}
           aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
+          aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
         >
           {`użytkownik ${userBody.firstName} ${userBody.lastName}`}
@@ -76,31 +76,31 @@ export default function UserAccount() {
           PaperProps={{
             elevation: 0,
             sx: {
-              overflow: "visible",
-              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+              overflow: 'visible',
+              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
               mt: 1.5,
-              "& .MuiAvatar-root": {
+              '& .MuiAvatar-root': {
                 width: 32,
                 height: 32,
                 ml: -0.5,
                 mr: 1,
               },
-              "&:before": {
+              '&:before': {
                 content: '""',
-                display: "block",
-                position: "absolute",
+                display: 'block',
+                position: 'absolute',
                 top: 0,
                 right: 14,
                 width: 10,
                 height: 10,
-                bgcolor: "background.paper",
-                transform: "translateY(-50%) rotate(45deg)",
+                bgcolor: 'background.paper',
+                transform: 'translateY(-50%) rotate(45deg)',
                 zIndex: 0,
               },
             },
           }}
-          transformOrigin={{ horizontal: "right", vertical: "top" }}
-          anchorOrigin={{ horizontal: "center", vertical: "center" }}
+          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'center', vertical: 'center' }}
         >
           <MenuItem>
             <ListItemIcon>
@@ -108,7 +108,7 @@ export default function UserAccount() {
                 fontSize="small"
                 onClick={() => {
                   handleLogout();
-                  navigate("/");
+                  navigate('/');
                 }}
               />
             </ListItemIcon>

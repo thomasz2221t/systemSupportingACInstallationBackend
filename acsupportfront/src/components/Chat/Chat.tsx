@@ -108,7 +108,7 @@ export default function Chat({ userId, buildingId }: ChatPropType) {
   };
 
   const handleGettingUserDetails = async (userId: number) => {
-    await UserService(userId).then((response) => {
+    await UserService.getUserBody(userId).then((response) => {
       console.log(response.data);
       setUser(response.data.firstName + ' ' + response.data.lastName);
     });

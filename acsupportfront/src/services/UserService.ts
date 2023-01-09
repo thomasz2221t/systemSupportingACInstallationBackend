@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { UserType } from 'types/UserType';
 import API_URL from 'utils/ApiUrl';
 import { authHeader } from './auth/AuthHeaders';
 
@@ -9,4 +10,22 @@ const getUserBody = (userId: number) => {
   });
 };
 
-export default getUserBody;
+const getFindAllOperators = () => {
+  return axios.get(`${API_URL}/user/operators`, {
+    headers: authHeader(),
+  });
+};
+
+const patchUpdateUserBody = (userBody: UserType) => {
+  return axios.patch(`${API_URL}/user`, {
+    headers: authHeader(),
+  });
+};
+
+const UserService = {
+  getUserBody,
+  getFindAllOperators,
+  patchUpdateUserBody,
+};
+
+export default UserService;
