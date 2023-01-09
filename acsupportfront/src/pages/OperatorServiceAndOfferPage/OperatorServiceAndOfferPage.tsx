@@ -113,7 +113,7 @@ export function OperatorServiceAndOfferPage() {
       {servicePage.map((data) => {
         return (
           <div id={`${data.id}`} className="offer-details-component">
-            <OfferDetailsForm serviceId={data.id} />
+            <OfferDetailsForm serviceId={data.id} isEditable={true} />
           </div>
         );
       })}

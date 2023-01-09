@@ -4,7 +4,6 @@ import {
   Button,
   Dialog,
   DialogContent,
-  Pagination,
   TablePagination,
   TextField,
 } from '@mui/material';
@@ -247,7 +246,7 @@ export function ServicePage() {
         .map((data) => {
           return (
             <div id={`${data.id}`} className="offer-details-component">
-              <OfferDetailsForm serviceId={data.id} />
+              <OfferDetailsForm serviceId={data.id} isEditable={false} />
             </div>
           );
         })}
