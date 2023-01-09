@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.polsl.acsupport.dtos.UserDto;
 import pl.polsl.acsupport.entities.User;
+import pl.polsl.acsupport.enums.RoleName;
+import pl.polsl.acsupport.repositories.RoleRepository;
 import pl.polsl.acsupport.repositories.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
@@ -19,6 +21,8 @@ import javax.persistence.EntityNotFoundException;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    private final RoleRepository roleRepository;
 
     public Page<UserDto> findAll(Pageable pageable){
         final Page<User> users = userRepository.findAll(pageable);
@@ -62,6 +66,11 @@ public class UserService {
     @Transactional
     public void delete(Long id){
         userRepository.delete(findById(id));
+    }
+
+    public Page<UserDto> findAllOperators(Pageable pageable){
+        final Page<User> users = userRepository.findAllByRoles(RoleName.OPERATOR, pageable);
+        return users.map(UserDto::new);
     }
 
 }

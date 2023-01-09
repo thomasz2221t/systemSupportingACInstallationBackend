@@ -53,4 +53,11 @@ public class UserController {
     public void delete(@PathVariable Long id){
         userService.delete(id);
     }
+
+    @PreAuthorize("hasAuthority('FIND_USER')")
+    @GetMapping("/operators")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<UserDto> findAllOperators(@PageableDefault Pageable pageable){
+        return userService.findAllOperators(pageable);
+    }
 }
