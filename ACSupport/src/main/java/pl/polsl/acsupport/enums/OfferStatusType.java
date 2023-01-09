@@ -7,6 +7,7 @@ public enum OfferStatusType {
 
     WYMAGANE_ZMIANY("Wymagane zmiany"),
 
+    NOWA_OFERTA("Nowa oferta"),
     W_PRZYGOTOWANIU("W przygotowaniu");
 
     public final String label;

@@ -67,6 +67,13 @@ public class OfferController {
         offerService.revertAssigningEquipmentFromOffer(offerId, equipmentId);
     }
 
+    @PreAuthorize("hasAuthority('UPDATE_OFFER')")
+    @DeleteMapping("/delete/all/equipment/{offerId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteAllOfferEquipment(@PathVariable Long offerId){
+        offerService.deleteAllOfferEquipment(offerId);
+    }
+
     @PreAuthorize("hasAuthority('FIND_OFFER')")
     @GetMapping("/service/{serviceId}")
     @ResponseStatus(HttpStatus.OK)

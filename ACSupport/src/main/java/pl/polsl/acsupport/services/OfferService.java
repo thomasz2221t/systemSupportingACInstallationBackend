@@ -19,6 +19,7 @@ import pl.polsl.acsupport.repositories.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -188,6 +189,14 @@ public class OfferService {
     public void updateOfferStatus(Long offerId, String statusCode){
         Offer offer = findById(offerId);
         offer.setStatusType(OfferStatusType.valueOf(statusCode));
+        offerRepository.save(offer);
+    }
+
+    @Transactional
+    public void deleteAllOfferEquipment(Long offerId){
+        Offer offer = findById(offerId);
+        Set<InstallerEquipment> empty = new LinkedHashSet<>();
+        offer.setInstallerEquipments(empty);
         offerRepository.save(offer);
     }
 }
