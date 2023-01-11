@@ -2,6 +2,8 @@ import React from 'react';
 
 import { UserDetailsForm } from 'components/Forms/UserDetailsForm/UserDetailsForm';
 
+import './ClientCreateAccountPage.scss';
+
 export function ClientCreateAccountPage() {
   const logoImg = require('../../images/logoImg.png');
 
@@ -24,6 +26,7 @@ export function ClientCreateAccountPage() {
             email={''}
             telephone={''}
             mustCreate={true}
+            isClient={true}
           />
         </div>
       </div>

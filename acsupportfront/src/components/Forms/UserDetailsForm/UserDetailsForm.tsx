@@ -5,6 +5,8 @@ import { Icon } from '@iconify/react';
 import { UserType } from 'types/UserType';
 
 import './UserDetailsForm.scss';
+import { UserRoles } from 'utils/UserRoles';
+import UserService from 'services/UserService';
 
 export type UserDetailsFormType = {
   id: number;
@@ -15,6 +17,7 @@ export type UserDetailsFormType = {
   email: string;
   telephone: string;
   mustCreate: boolean;
+  isClient: boolean;
   handleFormClose?: () => void;
 };
 
@@ -27,6 +30,7 @@ export function UserDetailsForm({
   email,
   telephone,
   mustCreate,
+  isClient,
   handleFormClose,
 }: UserDetailsFormType) {
   const [userBody, setUserBody] = useState<UserType>({
@@ -39,17 +43,23 @@ export function UserDetailsForm({
     telephone: telephone,
   });
   const [userPasswordCheck, setUserPasswordCheck] = useState<String>('');
-  const [isUserFormEditable, setIsUserFormEditable] = useState<boolean>(
-    !mustCreate
-  );
+  const [isUserFormEditable, setIsUserFormEditable] =
+    useState<boolean>(mustCreate);
 
-  const handleCreatingUserBody = async (userBody: UserType) => {};
+  const handleCreatingUserBody = async (
+    userBody: UserType,
+    userType: UserRoles
+  ) => {
+    await UserService.postCreateUserBody(userBody, userType);
+  };
 
-  const handleUpdatingUserBody = async (userBody: UserType) => {};
+  const handleUpdatingUserBody = async (userBody: UserType) => {
+    await UserService.patchUpdateUserBody(userBody);
+  };
 
-  const handleUserFormSubmiting = (userBody: UserType) => {
+  const handleUserFormSubmiting = (userBody: UserType, userType: UserRoles) => {
     mustCreate === true
-      ? handleCreatingUserBody(userBody)
+      ? handleCreatingUserBody(userBody, userType)
       : handleUpdatingUserBody(userBody);
   };
 
@@ -162,7 +172,7 @@ export function UserDetailsForm({
     </>
   ) : (
     <>
-      <div className="user-form">
+      <div id="user-form">
         {mustCreate === false ? (
           <div className="edit-user-button">
             <Icon
@@ -318,6 +328,13 @@ export function UserDetailsForm({
               color: '#ffffff',
             }}
             onClick={() => {
+              if (userPasswordCheck.match(userBody.password)) {
+                console.log('hasla sie zgadzaja');
+                handleUserFormSubmiting(
+                  userBody,
+                  isClient ? UserRoles.CLIENT : UserRoles.OPERATOR
+                );
+              }
               if (handleFormClose) {
                 handleFormClose();
               }

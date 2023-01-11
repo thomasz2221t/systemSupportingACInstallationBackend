@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { UserType } from 'types/UserType';
 import API_URL from 'utils/ApiUrl';
+import { UserRoles } from 'utils/UserRoles';
 import { authHeader } from './auth/AuthHeaders';
 
 const getUserBody = (userId: number) => {
@@ -22,10 +23,18 @@ const patchUpdateUserBody = (userBody: UserType) => {
   });
 };
 
+const postCreateUserBody = (userBody: UserType, userRole: UserRoles) => {
+  return axios.post(`${API_URL}/user`, userBody, {
+    headers: authHeader(),
+    params: { userRole },
+  });
+};
+
 const UserService = {
   getUserBody,
   getFindAllOperators,
   patchUpdateUserBody,
+  postCreateUserBody,
 };
 
 export default UserService;
