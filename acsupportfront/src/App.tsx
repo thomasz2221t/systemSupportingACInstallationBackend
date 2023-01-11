@@ -11,6 +11,7 @@ import { AdminOperatorsPage } from 'pages/AdminOperatorsPage/AdminOperatorsPage'
 import { OperatorServiceAndOfferPage } from 'pages/OperatorServiceAndOfferPage/OperatorServiceAndOfferPage';
 
 import './App.css';
+import { ClientCreateAccountPage } from 'pages/ClientCreateAccountPage/ClientCreateAccountPage';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<LoginPage />} />
+            <Route path="/rejestracja" element={<ClientCreateAccountPage />} />
             <Route path="/obiekty" element={<BuildingsPage />} />
             <Route path="/obiekty/obiekt/:id" element={<BuildingPage />} />
             <Route
