@@ -23,6 +23,12 @@ public class Room extends BaseEntity{
 
     private BigDecimal height;
 
+    @Column(name = "energy_given_out")
+    private BigDecimal energyGivenOut;
+
+    @Column(name = "people_number")
+    private BigDecimal peopleNumber;
+
     private String description;
 
     @ManyToOne
@@ -33,10 +39,6 @@ public class Room extends BaseEntity{
     @JoinColumn(name="room_type_id")
     private RoomType type;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "room_services",
-            joinColumns = { @JoinColumn(name = "room_id") },
-            inverseJoinColumns = { @JoinColumn(name= "service_id") }
-    )
+    @OneToMany(mappedBy = "room")
     private Set<Service> services = new LinkedHashSet<>();
 }

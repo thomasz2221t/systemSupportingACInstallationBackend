@@ -1,0 +1,45 @@
+databaseChangeLog:
+- changeSet:
+    id: 1672151340590-1
+    author: 0_0 (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: message_id
+            type: int8
+        tableName: users
+- changeSet:
+    id: 1672151340590-2
+    author: 0_0 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: message_id
+        baseTableName: users
+        constraintName: FKc7kjmct4bc4ey6uruhbbv2s7e
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: message
+        validate: true
+- changeSet:
+    id: 1672151340590-3
+    author: 0_0 (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: user_messages
+        constraintName: FKcsfdjnij89lpvgno5o6g89nn1
+- changeSet:
+    id: 1672151340590-4
+    author: 0_0 (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: user_messages
+        constraintName: FKsstxxo7oo9kphadgpvg98n8qd
+- changeSet:
+    id: 1672151340590-5
+    author: 0_0 (generated)
+    changes:
+    - dropTable:
+        tableName: user_messages
+

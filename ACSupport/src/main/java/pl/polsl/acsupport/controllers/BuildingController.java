@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import pl.polsl.acsupport.dtos.BuildingDto;
+import pl.polsl.acsupport.dtos.*;
 import pl.polsl.acsupport.services.BuildingService;
 
 @RequiredArgsConstructor
@@ -52,5 +52,72 @@ public class BuildingController {
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable Long id){
         buildingService.delete(id);
+    }
+
+    @PreAuthorize("hasAuthority('FIND_BUILDING')")
+    @GetMapping("/user/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<BuildingDto> findUserBuildings(@PathVariable Long userId){
+        return buildingService.findUserBuildings(userId);
+    }
+
+    @PreAuthorize("hasAuthority('FIND_ROOM')")
+    @GetMapping("/room/{buildingId}")
+    public Page<RoomDto> findAllBuildingsRooms(@PathVariable Long buildingId){
+        return buildingService.findAllBuildingsRooms(buildingId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_BUILDING')")
+    @PatchMapping("/assignroom/{buildingId}")
+    public void assignRoomToBuilding(@PathVariable Long buildingId, @RequestBody Long roomId){
+        buildingService.assignRoomToBuilding(buildingId, roomId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_BUILDING')")
+    @GetMapping("/revertroom/{roomId}")
+    public void revertAssigningRoomFromBuilding(@PathVariable Long roomId){
+        buildingService.revertAssigningRoomFromBuilding(roomId);
+    }
+
+    @PreAuthorize("hasAuthority('FIND_BUILDING')")
+    @GetMapping("/type/{buildingId}")
+    public BuildingTypeDto findBuildingType(@PathVariable Long buildingId){
+        return buildingService.findBuildingType(buildingId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_BUILDING')")
+    @PatchMapping("/assigntype/{buildingId}")
+    public void assignTypeToBuilding(@PathVariable Long buildingId, @RequestBody Long typeId){
+        buildingService.assignTypeToBuilding(buildingId, typeId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_BUILDING')")
+    @PatchMapping("/reverttype/{buildingId}")
+    public void revertAssigningTypeToBuilding(@PathVariable Long buildingId){
+        buildingService.revertAssigningTypeFromBuilding(buildingId);
+    }
+
+    @PreAuthorize("hasAuthority('FIND_BUILDING')")
+    @GetMapping("/finduser/{buildingId}")
+    public UserDto findUserAssignedToBuilding(@PathVariable Long buildingId){
+        return buildingService.findUserAssignedToBuilding(buildingId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_BUILDING')")
+    @PatchMapping("/assignuser/{buildingId}")
+    public void assignUserToBuilding(@PathVariable Long buildingId, @RequestBody Long userId){
+        buildingService.assignUserToBuilding(buildingId, userId);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_BUILDING')")
+    @PatchMapping("/revertuser/{buildingId}")
+    public void revertAssigningUserFromBuilding(@PathVariable Long buildingId){
+        buildingService.revertAssigningUserFromBuilding(buildingId);
+    }
+
+    @PreAuthorize("hasAuthority('FIND_BUILDING')")
+    @GetMapping("/table")
+    public Page<BuildingTableDto> findBuildingTableData(@PageableDefault Pageable pageable){
+        return buildingService.getBuildingTableData(pageable);
     }
 }

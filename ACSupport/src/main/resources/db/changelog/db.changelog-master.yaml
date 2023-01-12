@@ -13,3 +13,13 @@ databaseChangeLog:
       file: db/changelog/add-bootstraping-entry-entity.yaml
   - include:
       file: db/changelog/add-enabled-field-in-user-entity.yaml
+  - include:
+      file: db/changelog/add-changes-in-room-entity.yaml
+  - include:
+      file: db/changelog/changed-user-to-message-relation.yaml
+  - include:
+      file: db/changelog/changed-service-date-format.yaml
+  - include:
+      file: db/changelog/changed-room-service-relation.yaml
+  - include:
+      file: db/changelog/changed-user-to-message-relation-many-to-one.yaml

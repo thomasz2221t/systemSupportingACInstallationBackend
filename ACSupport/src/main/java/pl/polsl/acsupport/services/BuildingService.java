@@ -2,14 +2,18 @@ package pl.polsl.acsupport.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.polsl.acsupport.dtos.BuildingDto;
-import pl.polsl.acsupport.entities.Building;
-import pl.polsl.acsupport.repositories.BuildingRepository;
+import pl.polsl.acsupport.dtos.*;
+import pl.polsl.acsupport.entities.*;
+import pl.polsl.acsupport.repositories.*;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -17,6 +21,20 @@ import javax.persistence.EntityNotFoundException;
 public class BuildingService {
 
     final private BuildingRepository buildingRepository;
+
+    final private UserService userService;
+
+    final private UserRepository userRepository;
+
+    final private RoomService roomService;
+
+    final private RoomRepository roomRepository;
+
+    final private BuildingTypeService buildingTypeService;
+
+    final private BuildingTypeRepository buildingTypeRepository;
+
+    final private ChatRepository chatRepository;
 
     public Page<BuildingDto> findAll(Pageable pageable){
         final Page<Building> buildings = buildingRepository.findAll(pageable);
@@ -35,6 +53,10 @@ public class BuildingService {
     @Transactional
     public Building create(BuildingDto buildingDto){
         Building building = new Building();
+        Chat chat = new Chat();
+        chat.setBuilding(building);
+        building.setChat(chat);
+        chatRepository.save(chat);
         return setDataFromDto(buildingDto, building);
     }
 
@@ -58,5 +80,133 @@ public class BuildingService {
     @Transactional
     public void delete(Long id){
         buildingRepository.delete(findById(id));
+    }
+
+    public Page<BuildingDto>findUserBuildings(Long userId){
+        User user = userService.findById(userId);
+        Set<Building> buildings = user.getBuildings();
+        List<BuildingDto> buildingDtos = buildings.stream().map(BuildingDto::new).collect(Collectors.toList());
+        return new PageImpl<>(buildingDtos);
+    }
+
+    public Page<RoomDto>findAllBuildingsRooms(Long buildingId){
+        Building building = findById(buildingId);
+        Set<Room> rooms = building.getRooms();
+        List<RoomDto> roomDtos = rooms.stream().map(RoomDto::new).collect(Collectors.toList());
+        return new PageImpl<>(roomDtos);
+    }
+
+    @Transactional
+    public void assignRoomToBuilding(Long buildingId, Long roomId){
+        Building building = findById(buildingId);
+        Room room = roomService.findById(roomId);
+
+        Set<Room> buildingRoom = building.getRooms();
+        buildingRoom.add(room);
+        building.setRooms(buildingRoom);
+
+        room.setBuilding(building);
+
+        buildingRepository.save(building);
+        roomRepository.save(room);
+    }
+
+    @Transactional
+    public void revertAssigningRoomFromBuilding(Long roomId){
+        Room room = roomService.findById(roomId);
+        Building building = room.getBuilding();
+        Set<Room> roomSet = building.getRooms();
+        roomSet.remove(room);
+        building.setRooms(roomSet);
+
+        room.setBuilding(null);
+
+        buildingRepository.save(building);
+        roomRepository.save(room);
+    }
+
+    public BuildingTypeDto findBuildingType(Long buildingId){
+        Building building = findById(buildingId);
+        BuildingType type = building.getType();
+        return new BuildingTypeDto(type);
+    }
+
+    @Transactional
+    public void assignTypeToBuilding(Long buildingId, Long typeId){
+        BuildingType type = buildingTypeService.findById(typeId);
+        Building building = findById(buildingId);
+
+        Set<Building> buildingSet = type.getBuilding();
+        buildingSet.add(building);
+        type.setBuilding(buildingSet);
+
+        building.setType(type);
+
+        buildingRepository.save(building);
+        buildingTypeRepository.save(type);
+    }
+
+    @Transactional
+    public void revertAssigningTypeFromBuilding(Long buildingId){
+        Building building = findById(buildingId);
+        BuildingType type = building.getType();
+
+        Set<Building> buildingSet = type.getBuilding();
+        buildingSet.remove(building);
+        type.setBuilding(buildingSet);
+
+        building.setType(null);
+
+        buildingRepository.save(building);
+        buildingTypeRepository.save(type);
+    }
+
+    public UserDto findUserAssignedToBuilding(Long buildingId){
+        Building building = findById(buildingId);
+        return new UserDto(building.getUser());
+    }
+
+    @Transactional
+    public void assignUserToBuilding(Long buildingId, Long userId){
+        Building building = findById(buildingId);
+        User user = userService.findById(userId);
+
+        Set<Building> buildingSet = user.getBuildings();
+        buildingSet.add(building);
+        user.setBuildings(buildingSet);
+
+        building.setUser(user);
+
+        buildingRepository.save(building);
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void revertAssigningUserFromBuilding(Long buildingId){
+        Building building = findById(buildingId);
+        User user = building.getUser();
+
+        Set<Building> buildingSet = user.getBuildings();
+        buildingSet.remove(building);
+        user.setBuildings(buildingSet);
+
+        building.setUser(null);
+
+        buildingRepository.save(building);
+        userRepository.save(user);
+    }
+
+    public Page<BuildingTableDto> getBuildingTableData (Pageable pageable){
+        final Page<Building> buildings = buildingRepository.findAll(pageable);
+        Page<BuildingTableDto> buildingTableDtos = buildings
+                .map(element -> new BuildingTableDto(element.getId(),
+                        element.getName(),
+                        element.getType().getName(),
+                        element.getStreet(),
+                        element.getPostCode(),
+                        element.getCity(),
+                        element.getRegion(),
+                        element.getUser().getFirstName() + " " + element.getUser().getLastName()));
+        return buildingTableDtos;
     }
 }
