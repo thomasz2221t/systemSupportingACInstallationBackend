@@ -8,7 +8,7 @@
   .log-in-label {
     padding-left: 150px;
     padding-top: 36px;
-    font-family: "Arial";
+    font-family: 'Arial';
     font-style: normal;
     font-weight: 700;
     font-size: 24px;
@@ -28,7 +28,7 @@
     background: #d9d9d9;
     border-radius: 18px;
     text-align: center;
-    font-family: "Calibri";
+    font-family: 'Calibri';
     font-style: normal;
     font-weight: 600;
     font-size: 18px;
@@ -61,7 +61,7 @@
     background: #00c0c0;
     border-radius: 129px;
     text-align: center;
-    font-family: "Calibri";
+    font-family: 'Calibri';
     font-weight: 600;
     font-size: 25px;
     line-height: 30px;
@@ -78,14 +78,17 @@
   .create-account-link {
     margin-top: 48px;
     margin-left: 10px;
-    font-family: "Calibri";
+    font-family: 'Calibri';
     font-style: normal;
     font-weight: 800;
     font-size: 22px;
     line-height: 27px;
     align-items: center;
     text-align: center;
+  }
 
+  #account-link {
     color: #29292e;
+    text-decoration: none;
   }
 }

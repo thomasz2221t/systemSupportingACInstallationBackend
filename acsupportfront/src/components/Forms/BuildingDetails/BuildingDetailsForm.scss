@@ -77,6 +77,20 @@
     grid-column: 4/6;
     grid-row: 4;
   }
+
+  .building-form-submit {
+    top: 30px;
+    width: 400px;
+    height: 65px;
+    align-items: center;
+    grid-column: 4/6;
+    grid-row: 6;
+  }
+
+  .building-form-submit-icon {
+    margin-right: 10px;
+    left: 10px;
+  }
 }
 
 .building-form-header {
@@ -84,7 +98,7 @@
 }
 
 .building-details-form text {
-  font-family: "Segoe UI";
+  font-family: 'Segoe UI';
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
