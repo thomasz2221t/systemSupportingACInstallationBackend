@@ -9,9 +9,10 @@ import { ServicePage } from 'pages/ServicePage/ServicePage';
 import { OperatorServicesPage } from 'pages/OperatorServicesPage/OperatorServicesPage';
 import { AdminOperatorsPage } from 'pages/AdminOperatorsPage/AdminOperatorsPage';
 import { OperatorServiceAndOfferPage } from 'pages/OperatorServiceAndOfferPage/OperatorServiceAndOfferPage';
+import { ClientCreateAccountPage } from 'pages/ClientCreateAccountPage/ClientCreateAccountPage';
+import { AdminOperatorPage } from 'pages/AdminOperatorPage/AdminOperatorPage';
 
 import './App.css';
-import { ClientCreateAccountPage } from 'pages/ClientCreateAccountPage/ClientCreateAccountPage';
 
 function App() {
   return (
@@ -48,6 +49,10 @@ function App() {
               element={<OperatorServiceAndOfferPage />}
             />
             <Route path="/admin/operator" element={<AdminOperatorsPage />} />
+            <Route
+              path="/admin/operator/:id/dane"
+              element={<AdminOperatorPage />}
+            />
           </Routes>
         </Router>
       </div>

@@ -18,15 +18,20 @@ const getFindAllOperators = () => {
 };
 
 const patchUpdateUserBody = (userBody: UserType) => {
-  return axios.patch(`${API_URL}/user`, {
+  return axios.patch(`${API_URL}/user/${userBody.id}`, userBody, {
     headers: authHeader(),
   });
 };
 
 const postCreateUserBody = (userBody: UserType, userRole: UserRoles) => {
   return axios.post(`${API_URL}/user`, userBody, {
-    headers: authHeader(),
     params: { userRole },
+  });
+};
+
+const deleteRemoveUserBody = (userId: number) => {
+  return axios.delete(`${API_URL}/user/${userId}`, {
+    headers: authHeader(),
   });
 };
 
@@ -35,6 +40,7 @@ const UserService = {
   getFindAllOperators,
   patchUpdateUserBody,
   postCreateUserBody,
+  deleteRemoveUserBody,
 };
 
 export default UserService;

@@ -160,7 +160,7 @@ export function ServicePage() {
       <div className="add-service-button">
         <Icon
           className="return-icon"
-          icon="material-symbols:meeting-room-outline"
+          icon="mdi:file-document-plus-outline"
           color="#4e4e4e"
           height="21"
         />

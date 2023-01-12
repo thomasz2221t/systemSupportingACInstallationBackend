@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, TextField } from '@mui/material';
 import { Icon } from '@iconify/react';
 
@@ -7,6 +7,7 @@ import { UserType } from 'types/UserType';
 import './UserDetailsForm.scss';
 import { UserRoles } from 'utils/UserRoles';
 import UserService from 'services/UserService';
+import { useNavigate } from 'react-router-dom';
 
 export type UserDetailsFormType = {
   id: number;
@@ -45,6 +46,7 @@ export function UserDetailsForm({
   const [userPasswordCheck, setUserPasswordCheck] = useState<String>('');
   const [isUserFormEditable, setIsUserFormEditable] =
     useState<boolean>(mustCreate);
+  const navigate = useNavigate();
 
   const handleCreatingUserBody = async (
     userBody: UserType,
@@ -63,27 +65,67 @@ export function UserDetailsForm({
       : handleUpdatingUserBody(userBody);
   };
 
+  const handleDeletingUser = async (userId: number) => {
+    await UserService.deleteRemoveUserBody(userId).then(() => {
+      navigate('/admin/operator');
+    });
+  };
+
+  useEffect(() => {
+    setUserBody({
+      id: id,
+      login: login,
+      password: password,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      telephone: telephone,
+    });
+  }, [email, firstName, id, lastName, login, password, telephone]);
+
   return isUserFormEditable === false ? (
     <>
       <div id="user-form">
-        <div className="edit-user-button">
-          <Icon
-            className="return-icon"
-            icon="material-symbols:room-preferences-outline"
-            color="#4e4e4e"
-            height="21"
-          />
-          <Button
-            sx={{
-              color: '#ffffff',
-            }}
-            onClick={() => {
-              setIsUserFormEditable(!isUserFormEditable);
-            }}
-          >
-            Edytuj użytkownika
-          </Button>
-        </div>
+        {mustCreate === false ? (
+          <>
+            <div className="delete-user-button">
+              <Icon
+                className="return-icon"
+                icon="uiw:user-delete"
+                color="#4e4e4e"
+                height="21"
+              />
+              <Button
+                sx={{
+                  color: '#ffffff',
+                }}
+                onClick={() => {
+                  handleDeletingUser(userBody.id);
+                }}
+              >
+                Usuń użytkownika
+              </Button>
+            </div>
+            <div className="edit-user-button">
+              <Icon
+                className="mdi:user-edit"
+                icon="mdi:user-edit"
+                color="#4e4e4e"
+                height="21"
+              />
+              <Button
+                sx={{
+                  color: '#ffffff',
+                }}
+                onClick={() => {
+                  setIsUserFormEditable(!isUserFormEditable);
+                }}
+              >
+                Edytuj użytkownika
+              </Button>
+            </div>
+          </>
+        ) : null}
         <div className="user-first-name-form">
           <text className="user-form-header">Imię</text>
           <TextField
@@ -177,7 +219,7 @@ export function UserDetailsForm({
           <div className="edit-user-button">
             <Icon
               className="return-icon"
-              icon="material-symbols:room-preferences-outline"
+              icon="mdi:user-edit"
               color="#4e4e4e"
               height="21"
             />
@@ -328,8 +370,16 @@ export function UserDetailsForm({
               color: '#ffffff',
             }}
             onClick={() => {
-              if (userPasswordCheck.match(userBody.password)) {
+              if (
+                userPasswordCheck === userBody.password &&
+                mustCreate === true
+              ) {
                 console.log('hasla sie zgadzaja');
+                handleUserFormSubmiting(
+                  userBody,
+                  isClient ? UserRoles.CLIENT : UserRoles.OPERATOR
+                );
+              } else {
                 handleUserFormSubmiting(
                   userBody,
                   isClient ? UserRoles.CLIENT : UserRoles.OPERATOR

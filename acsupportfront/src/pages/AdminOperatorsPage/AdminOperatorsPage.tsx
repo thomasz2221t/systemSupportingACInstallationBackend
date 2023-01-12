@@ -7,13 +7,21 @@ import {
   TableBody,
   TablePagination,
   TableContainer,
+  Dialog,
+  DialogContent,
+  Button,
 } from '@mui/material';
+import { Icon } from '@iconify/react';
+import { useNavigate } from 'react-router-dom';
 
 import Navbar from 'components/Navbar/Navbar';
 import UserAccount from 'components/UserAccount/UserAccount';
 import Footer from 'components/Footer/Footer';
-import { UserType } from 'types/UserType';
 import UserService from 'services/UserService';
+import { UserType } from 'types/UserType';
+import { UserDetailsForm } from 'components/Forms/UserDetailsForm/UserDetailsForm';
+
+import './AdminOperatorsPage.scss';
 
 interface Column {
   id: 'id' | 'login' | 'firstName' | 'lastName' | 'email' | 'telephone';
@@ -62,6 +70,9 @@ export function AdminOperatorsPage() {
   const [pageNumber, setPageNumber] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [RowsPerPageOption] = useState([1, 2, 5, 10, 15]);
+  const [openUserForm, setOpenUserForm] = useState<boolean>(false);
+  const [refreshComponent, setRefreshComponent] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -76,14 +87,43 @@ export function AdminOperatorsPage() {
     });
   };
 
+  const handleRedirectionToUser = (userId: number) => {
+    navigate(`${userId}/dane`);
+  };
+
+  const handleClickOpen = () => {
+    setOpenUserForm(true);
+  };
+
+  const handleClose = () => {
+    setOpenUserForm(false);
+    setRefreshComponent(!refreshComponent);
+  };
+
   useEffect(() => {
     handleGettingAllOperators();
-  });
+  }, [refreshComponent]);
 
   return (
     <>
       <Navbar />
       <UserAccount />
+      <div className="add-user-button">
+        <Icon
+          className="return-icon"
+          icon="mdi:user-check"
+          color="#4e4e4e"
+          height="21"
+        />
+        <Button
+          sx={{
+            color: '#ffffff',
+          }}
+          onClick={handleClickOpen}
+        >
+          Dodaj Operatora
+        </Button>
+      </div>
       <TableContainer
         sx={{
           display: 'flex',
@@ -129,7 +169,7 @@ export function AdminOperatorsPage() {
                             borderStyle: 'groove',
                           }}
                           onClick={() => {
-                            //handleRedirectionToService(row.buildingId);
+                            handleRedirectionToUser(row.id);
                           }}
                         >
                           {value}
@@ -156,6 +196,40 @@ export function AdminOperatorsPage() {
         labelRowsPerPage={'Liczba elementów na stronie:'}
       />
       <Footer />
+      <Dialog
+        sx={{
+          width: '981px',
+          height: '770px',
+          alignItems: 'center',
+          marginLeft: '220px',
+          marginTop: '-20px',
+        }}
+        open={openUserForm}
+        onClose={handleClose}
+        fullWidth
+        maxWidth="lg"
+      >
+        <DialogContent
+          sx={{
+            padding: '0',
+            backgroundColor: '#f5f5f5',
+            alignItems: 'center',
+          }}
+        >
+          <UserDetailsForm
+            id={0}
+            login={''}
+            password={''}
+            firstName={''}
+            lastName={''}
+            email={''}
+            telephone={''}
+            mustCreate={true}
+            isClient={false}
+            handleFormClose={handleClose}
+          />
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

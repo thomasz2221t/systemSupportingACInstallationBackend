@@ -40,12 +40,6 @@ const logout = () => {
   localStorage.removeItem('user');
 };
 
-const register = (props: UserType) => {
-  return axios.post(`${API_URL}`, {
-    props,
-  });
-};
-
 const getCurrentUserId = () => {
   return JSON.parse(localStorage.getItem('userId')!);
 };
@@ -65,7 +59,6 @@ const getWholeToken = () => {
 const AuthService = {
   login,
   logout,
-  register,
   getCurrentUser,
   getCurrentUserRoles,
   getCurrentUserId,

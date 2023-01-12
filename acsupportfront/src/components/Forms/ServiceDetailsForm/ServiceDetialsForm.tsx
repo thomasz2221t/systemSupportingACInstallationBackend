@@ -226,7 +226,7 @@ export default function ServiceDetailsForm({
           <div className="edit-service-button">
             <Icon
               className="return-icon"
-              icon="material-symbols:room-preferences-outline"
+              icon="mdi:file-document-edit-outline"
               color="#4e4e4e"
               height="21"
             />
@@ -319,7 +319,7 @@ export default function ServiceDetailsForm({
           <div className="edit-service-button">
             <Icon
               className="return-icon"
-              icon="material-symbols:room-preferences-outline"
+              icon="mdi:file-document-edit-outline"
               color="#4e4e4e"
               height="21"
             />

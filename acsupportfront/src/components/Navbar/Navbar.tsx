@@ -27,9 +27,6 @@ export default function Navbar() {
               <CustomLinkSingle linky={'/uslugi'}>
                 Usługa i oferta
               </CustomLinkSingle>
-              <CustomLinkSingle linky={'/szczegoly'}>
-                Szczegóły zamówienia
-              </CustomLinkSingle>
             </ul>
           );
           break;
