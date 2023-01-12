@@ -257,7 +257,6 @@ public class DevelopmentBootStrapingService extends BootStrapingService {
         roleAdmin.setName(RoleName.ADMIN);
         Set<Permission> permissionsAdmin = new LinkedHashSet<>();
         permissionsAdmin.addAll(permissionsOperator);
-        permissionsAdmin.add(addPermissions(CREATE_USER));
         roleAdmin.setPermissions(permissionsAdmin);
         roleRepository.save(roleAdmin);
     }
