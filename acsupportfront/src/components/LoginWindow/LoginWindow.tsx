@@ -40,7 +40,7 @@ function LoginWindow() {
     AuthService.login(data.login, data.password).then(
       () => {
         console.log('link');
-        console.log(AuthService.getCurrentUser());
+        //console.log(AuthService.getCurrentUser());
         //<Link to="/obiekty" />;
         //<Redirect to="/obiekty" />;
         //props.history.push("/obiekty");
@@ -60,7 +60,7 @@ function LoginWindow() {
         } else {
           console.log('no permission to log');
         }
-      }
+      },
       /*(error) => {
         const resMessage =
           (error.response &&

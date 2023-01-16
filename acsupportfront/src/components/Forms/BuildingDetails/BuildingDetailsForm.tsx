@@ -77,13 +77,13 @@ export function BuildingDetailsForm({
     chatId: chatId,
   });
   const [buildingTypePage, setBuildingTypePage] = useState<BuildingTypeType[]>(
-    []
+    [],
   );
   const [typeIdNumber, setTypeIdNumber] = useState<number>(0);
   //const [buildingRefreshedBody, setBuildingRefreshedBody] =
   //useState<BuildingType>();
   const editableState = isEditable();
-  const exampleBuilding = require('../../../images/exampleBuilding.jpg');
+  //const exampleBuilding = require('../../../images/exampleBuilding.jpg');
   let isError = false;
   //const style = styles();
 
@@ -96,21 +96,21 @@ export function BuildingDetailsForm({
 
   const handleUpdatingBuildingType = async (
     buildingId: number,
-    buildingTypeId: number
+    buildingTypeId: number,
   ) => {
     return await BuildingService.patchAssignTypeToBuilding(
       buildingId,
-      buildingTypeId
+      buildingTypeId,
     );
   };
 
   const handleUpdatingBuildingBody = async (
     buildingBody: BuildingType,
-    buildingTypeId: number
+    buildingTypeId: number,
   ) => {
     await BuildingService.patchUpdateBuilding(
       buildingBody.id,
-      buildingBody
+      buildingBody,
     ).then(() => {
       handleUpdatingBuildingType(buildingBody.id, buildingTypeId);
     });
@@ -118,7 +118,7 @@ export function BuildingDetailsForm({
 
   const handleAssigningUserIdToBuilding = async (
     buildingId: number,
-    userId: number
+    userId: number,
   ) => {
     return await BuildingService.patchAssignUserToBuilding(buildingId, userId);
   };
@@ -126,7 +126,7 @@ export function BuildingDetailsForm({
   const handleCreatingBuildingBody = async (
     buildingBody: BuildingType,
     buildingTypeId: number,
-    userId: number
+    userId: number,
   ) => {
     await BuildingService.postCreateBuilding(buildingBody)
       .then((response) => {
@@ -167,7 +167,7 @@ export function BuildingDetailsForm({
   const handleBuildingFormSubmit = (
     buildingBody: BuildingType,
     buildingTypeId: number,
-    userId: number
+    userId: number,
   ) => {
     console.log('update');
     mustCreate === true
@@ -378,14 +378,14 @@ export function BuildingDetailsForm({
             }
           />
         </div>
-        <div className="building-form-img">
+        {/* <div className="building-form-img">
           <img
             src={exampleBuilding}
             width="280"
             height="170"
             className="building-form-image"
           />
-        </div>
+        </div> */}
         <div className="building-additional-info">
           <text className="building-form-header">
             Dodatkowe informacje o budynku
@@ -539,14 +539,14 @@ export function BuildingDetailsForm({
             }}
           />
         </div>
-        <div className="building-form-img">
+        {/* <div className="building-form-img">
           <img
             src={exampleBuilding}
             width="280"
             height="170"
             className="building-form-image"
           />
-        </div>
+        </div> */}
         <div className="building-additional-info">
           <text className="building-form-header">
             Dodatkowe informacje o budynku
