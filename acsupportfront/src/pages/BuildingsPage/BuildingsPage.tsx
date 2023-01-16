@@ -20,9 +20,10 @@ export function BuildingsPage() {
   const [pageNumber, setPageNumber] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [RowsPerPageOption] = useState([1, 2, 5, 10, 15]);
+  const [fetchState, setFetchState] = useState(false);
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     console.log(event.target.value);
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -49,12 +50,16 @@ export function BuildingsPage() {
     setUserId(AuthService.getCurrentUserId());
   }, []);
 
+  // useEffect(() => {
+  //   handleGetingUserBuildings(userId!);
+  //   const interval = setInterval(() => {
+  //     handleGetingUserBuildings(userId!);
+  //   }, 10000);
+  //   return () => clearInterval(interval);
+  // }, [userId]);
+
   useEffect(() => {
     handleGetingUserBuildings(userId!);
-    const interval = setInterval(() => {
-      handleGetingUserBuildings(userId!);
-    }, 10000);
-    return () => clearInterval(interval);
   }, [userId]);
 
   const buildingsTable = userBuildings

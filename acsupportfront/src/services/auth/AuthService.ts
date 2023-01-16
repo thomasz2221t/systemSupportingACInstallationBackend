@@ -15,7 +15,7 @@ const login = (login: string, password: string) => {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-      }
+      },
     )
     .then((response) => {
       console.log('then');
