@@ -19,6 +19,7 @@ import pl.polsl.acsupport.repositories.ServiceTypeRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -27,8 +28,8 @@ import java.util.Set;
 @Transactional(readOnly = true)
 public class ServiceService {
 
-    final BigDecimal ENERGY_TO_QUBATURE_RATIO = BigDecimal.valueOf(25l);
-    final BigDecimal ENERGY_TO_HUMAN_RATIO = BigDecimal.valueOf(5l);
+    private final BigDecimal ENERGY_TO_QUBATURE_RATIO = BigDecimal.valueOf(25l);
+    private final BigDecimal ENERGY_TO_HUMAN_RATIO = BigDecimal.valueOf(0.25);
 
     private final ServiceRepository serviceRepository;
 
@@ -168,8 +169,8 @@ public class ServiceService {
 
     private BigDecimal calculateRequiredACPower(Room room){
         BigDecimal roomQubature = calculateRoomQubature(room);
-        BigDecimal personEnergyIntake = room.getPeopleNumber().divide(ENERGY_TO_HUMAN_RATIO);
-        BigDecimal requiredACPower = ((roomQubature.divide(ENERGY_TO_QUBATURE_RATIO)).add(personEnergyIntake)).subtract(room.getEnergyGivenOut());
+        BigDecimal personEnergyIntake = room.getPeopleNumber().multiply(ENERGY_TO_HUMAN_RATIO).round(new MathContext(3));
+        BigDecimal requiredACPower = ((roomQubature.divide(ENERGY_TO_QUBATURE_RATIO)).add(personEnergyIntake)).add(room.getEnergyGivenOut()).round(new MathContext(3));
         return requiredACPower;
     }
 
