@@ -14,8 +14,6 @@ import pl.polsl.acsupport.repositories.RoleRepository;
 import pl.polsl.acsupport.repositories.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 

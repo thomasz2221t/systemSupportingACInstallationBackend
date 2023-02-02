@@ -10,6 +10,7 @@ import pl.polsl.acsupport.dtos.RoomTypeDto;
 import pl.polsl.acsupport.entities.Room;
 import pl.polsl.acsupport.entities.RoomType;
 import pl.polsl.acsupport.repositories.RoomRepository;
+import pl.polsl.acsupport.repositories.RoomTypeRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Set;
@@ -22,6 +23,8 @@ public class RoomService {
     private final RoomRepository roomRepository;
 
     private final RoomTypeService roomTypeService;
+
+    private final RoomTypeRepository roomTypeRepository;
 
     public Page<RoomDto> findAll(Pageable pageable){
         Page<Room> rooms = roomRepository.findAll(pageable);
@@ -84,6 +87,8 @@ public class RoomService {
         roomType.setRooms(roomSet);
 
         room.setType(roomType);
+        roomTypeRepository.save(roomType);
+        roomRepository.save(room);
     }
 
     @Transactional
@@ -96,5 +101,7 @@ public class RoomService {
         roomType.setRooms(roomSet);
 
         room.setType(null);
+        roomTypeRepository.save(roomType);
+        roomRepository.save(room);
     }
 }
