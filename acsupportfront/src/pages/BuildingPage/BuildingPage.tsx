@@ -33,7 +33,7 @@ const DEFAULT_TYPE_OBJECT = {
 export function BuildingPage() {
   const [buildingId, setBuildingId] = useState<number>(0);
   const [buildingBody, setBuildingBody] = useState<BuildingType>(
-    DEFAULT_BUILDING_OBJECT
+    DEFAULT_BUILDING_OBJECT,
   );
   const [buildingTypeBody, setBuildingTypeBody] =
     useState<BuildingTypeType>(DEFAULT_TYPE_OBJECT);
@@ -43,24 +43,20 @@ export function BuildingPage() {
 
   const handleGettingBuildingsData = async (buildingId: number) => {
     await BuildingService.getBuilding(buildingId).then((response) => {
-      console.log(response.data);
-      console.log(response.data.content);
       setBuildingBody(response.data);
     });
   };
 
   const handleGettingBuildingTypeData = async (buildingId: number) => {
     await BuildingService.getFindBuildingType(buildingId).then((response) => {
-      console.log(response.data);
       setBuildingTypeBody(response.data);
       return response.data;
     });
   };
 
   useEffect(() => {
-    console.log(id);
     setBuildingId(Number(id));
-  }, []); //[id]
+  }, []);
 
   useEffect(() => {
     if (buildingId > 0) {
@@ -75,8 +71,6 @@ export function BuildingPage() {
 
   const handleEditFormState = () => {
     setBuildingFormEditState(!buildingFormEditState);
-    console.log(buildingFormEditState);
-    //return buildingFormEditState;
   };
 
   const getFormState = () => {
@@ -98,22 +92,6 @@ export function BuildingPage() {
           <Button
             style={{
               color: '#ffffff',
-              /*position: 'relative',
-              marginTop: 5,
-              marginBottom: 5,
-              left: 330,
-              width: 200,
-              height: 30,
-              backgroundColor: '#3298d1',
-              color: '#ffffff',
-              borderRadius: 18,
-              padding: '18px 36px',
-              fontSize: '16px',
-              fontFamily: 'Segoe UI',
-              fontStyle: 'normal',
-              borderStyle: 'solid',
-              borderWidth: 1,
-              borderColor: '#000000',*/
             }}
             onClick={() => {
               handleEditFormState();
@@ -132,12 +110,10 @@ export function BuildingPage() {
           region={buildingBody.region}
           description={buildingBody.description}
           chatId={buildingBody.chatId}
-          //isEditable={handleEditFormState}
           mustCreate={false}
           userId={0}
           isEditable={getFormState}
           refreshParentData={handleGettingBuildingsData}
-          //isEditable={buildingFormEditState}
         />
         <Button
           style={{

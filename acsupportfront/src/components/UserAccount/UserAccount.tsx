@@ -40,7 +40,6 @@ export default function UserAccount() {
 
   const handleGettingUserBody = async (userId: number) => {
     await UserService.getUserBody(userId).then((response) => {
-      console.log(response.data);
       setUserBody(response.data);
     });
   };

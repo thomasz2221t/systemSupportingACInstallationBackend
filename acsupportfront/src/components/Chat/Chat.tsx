@@ -57,16 +57,7 @@ export default function Chat({ userId, buildingId }: ChatPropType) {
     description: '',
     chatId: 0,
   });
-  //const [chat, setChat] = useState<number>(0);
   const [user, setUser] = useState<String>('');
-  const [data, setData] = useState<MessageTypeWithUser>({
-    id: 0,
-    message: '',
-    date: '',
-    userName: '',
-    userLastName: '',
-  });
-
   const handleSendingMessage = () => {
     setMessage({
       id: message.id,
@@ -76,17 +67,14 @@ export default function Chat({ userId, buildingId }: ChatPropType) {
       userId: userId,
     });
     if (message.message && message.chatId !== 0 && message.userId !== 0) {
-      console.log('send');
       handleUploadingMessage(message);
     } else {
-      console.log('Error while sending message!');
     }
   };
 
   const handleDownloadingMessages = async (chatId: number) => {
     if (chatId !== 0) {
       await ChatService.getFindChatMessage(chatId).then((response) => {
-        console.log(response.data.content);
         setChatMessages(response.data.content);
       });
     }
@@ -101,56 +89,34 @@ export default function Chat({ userId, buildingId }: ChatPropType) {
   const handleGettingBuildingDetails = async (buildingId: number) => {
     await BuildingService.getBuilding(buildingId).then((response) => {
       setBuilding(response.data);
-      console.log(building);
-      //setChat(building.id);
-      //console.log(chat);
     });
   };
 
   const handleGettingUserDetails = async (userId: number) => {
     await UserService.getUserBody(userId).then((response) => {
-      console.log(response.data);
       setUser(response.data.firstName + ' ' + response.data.lastName);
     });
-    console.log(user);
   };
 
   const listChatMessages = chatMessages
     .sort((a, b) => a.id - b.id)
     .map((chatMessageDto, index) => {
       //handleGettingUserDetails(chatMessageDto.userId);
-      console.log(chatMessageDto.date);
       const date: Date = new Date(chatMessageDto.date);
-      console.log(date.getFullYear());
-      //String(chatMessageDto.date.getHours()).padStart(2, '0') +
-      //':' +
-      //String(chatMessageDto.date.getMinutes()).padStart(2, '0');
       return (
         <ListItem key={index}>
           <ListItemText
             primary={`${chatMessageDto.userId}: ${
               chatMessageDto.message
             } wysłano: ${String(date.getDay()).padStart(2, '0')}.${String(
-              date.getMonth() + 1
+              date.getMonth() + 1,
             ).padStart(2, '0')}.${date.getFullYear()} ${String(
-              date.getHours()
+              date.getHours(),
             ).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')} `}
           />
         </ListItem>
       );
     });
-
-  //let today = new Date();
-  //let defaultDate =
-  // chatMessageDto.date.getDate() +
-  // '-' +
-  // (chatMessageDto.date.getMonth() + 1) +
-  // '-' +
-  // chatMessageDto.date.getFullYear() +
-  // 'T' +
-  // String(chatMessageDto.date.getHours()).padStart(2, '0') +
-  // ':' +
-  // String(chatMessageDto.date.getMinutes()).padStart(2, '0');
 
   useEffect(() => {
     handleGettingBuildingDetails(buildingId);
@@ -163,15 +129,6 @@ export default function Chat({ userId, buildingId }: ChatPropType) {
     return () => clearInterval(interval);
   }, [building]);
 
-  // useEffect(() => {
-  //   console.log('updated chat');
-  //   handleDownloadingMessages(building.chatId);
-  // }, [building]);
-
-  console.log(userId);
-  console.log(buildingId);
-  console.log(building.chatId);
-  console.log(user);
   return (
     <>
       <Fragment>
@@ -187,15 +144,6 @@ export default function Chat({ userId, buildingId }: ChatPropType) {
                   <List id="chat-window-messages">{listChatMessages}</List>
                   <ListItem ref={scrollBottomRef}></ListItem>
                 </Grid>
-                {/* <Grid xs={2} item>
-                  <FormControl fullWidth>
-                    <TextField
-                      value={user}
-                      label="Nickname"
-                      variant="outlined"
-                    />
-                  </FormControl>
-                </Grid> */}
                 <Grid xs={11} item>
                   <FormControl fullWidth>
                     <TextField

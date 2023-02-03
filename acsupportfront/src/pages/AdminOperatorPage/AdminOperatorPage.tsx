@@ -39,8 +39,6 @@ export function AdminOperatorPage() {
     handleGettingUserData(Number(id));
   }, [id]);
 
-  console.log(userData);
-
   return (
     <>
       <UserAccount />

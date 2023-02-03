@@ -38,7 +38,6 @@ export function RoomPage() {
   const [pageNumber, setPageNumber] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [RowsPerPageOption] = useState([1, 2, 5, 10, 15]);
-  //const [isRoomFormEditable, setIsRoomFormEditable] = useState<boolean>(true);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -47,9 +46,8 @@ export function RoomPage() {
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    console.log(event.target.value);
     setRowsPerPage(parseInt(event.target.value, 10));
     setPageNumber(0);
   };
@@ -61,28 +59,20 @@ export function RoomPage() {
   const handleGettingAllBuildingsRoomsData = async (buildingId: number) => {
     await BuildingService.getFindAllBuildingsRooms(buildingId).then(
       (response) => {
-        console.log('Odswiezam');
-        console.log(response.data.content);
-        /*for (const parameter of getData.data) {
-          const parameterType = await parameterService.parameterTypeGet(parameter);
-          parameter.title = parameterType.data.title;
-        }*/
         for (const room of response.data.content) {
           handleGettingRoomTypeData(room.id, room);
         }
-        console.log(response.data.content);
         setRoomPage(response.data.content);
         return response.data.content;
-      }
+      },
     );
   };
 
   const handleGettingRoomTypeData = async (
     roomId: number,
-    room: RoomTypeWithName
+    room: RoomTypeWithName,
   ) => {
     await RoomService.getFindRoomType(roomId).then((response) => {
-      console.log(response.data);
       setRoomType(response.data);
       room.roomTypeName = response.data.name;
       return response.data;

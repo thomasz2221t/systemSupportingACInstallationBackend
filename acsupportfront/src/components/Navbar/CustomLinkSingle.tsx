@@ -1,5 +1,5 @@
-import React from "react";
-import { Link, useMatch, useNavigate, useResolvedPath } from "react-router-dom";
+import React from 'react';
+import { Link, useMatch, useResolvedPath } from 'react-router-dom';
 
 export default function CustomLinkSingle({ linky, children, ...props }: any) {
   const resolvedPath = useResolvedPath(linky);
@@ -7,7 +7,7 @@ export default function CustomLinkSingle({ linky, children, ...props }: any) {
   return (
     <li
       className={
-        isActive ? "navbar-element-single active" : "navbar-element-single"
+        isActive ? 'navbar-element-single active' : 'navbar-element-single'
       }
     >
       <Link className="" to={linky}>

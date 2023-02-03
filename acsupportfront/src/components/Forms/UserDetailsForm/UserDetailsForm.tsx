@@ -50,7 +50,7 @@ export function UserDetailsForm({
 
   const handleCreatingUserBody = async (
     userBody: UserType,
-    userType: UserRoles
+    userType: UserRoles,
   ) => {
     await UserService.postCreateUserBody(userBody, userType);
   };
@@ -374,15 +374,14 @@ export function UserDetailsForm({
                 userPasswordCheck === userBody.password &&
                 mustCreate === true
               ) {
-                console.log('hasla sie zgadzaja');
                 handleUserFormSubmiting(
                   userBody,
-                  isClient ? UserRoles.CLIENT : UserRoles.OPERATOR
+                  isClient ? UserRoles.CLIENT : UserRoles.OPERATOR,
                 );
               } else {
                 handleUserFormSubmiting(
                   userBody,
-                  isClient ? UserRoles.CLIENT : UserRoles.OPERATOR
+                  isClient ? UserRoles.CLIENT : UserRoles.OPERATOR,
                 );
               }
               if (handleFormClose) {

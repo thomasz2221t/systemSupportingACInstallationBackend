@@ -11,12 +11,6 @@ import ServiceService from 'services/ServiceService';
 import BuildingService from 'services/BuildingService';
 import RoomService from 'services/RoomService';
 
-//dane klienta  //termin instalacji
-//typ budynku   //typ pomieszczenia
-//kubatura pomieszczenia //moc klimatyzatora
-//wybrane usługi
-//opis usługi
-
 export type OperatorServiceDetailsFormPropType = {
   id: number;
   instalationDate: string;
@@ -128,7 +122,6 @@ export default function ServiceOperatorForm({
             label="Termin instalacji"
             type="datetime-local"
             value={data.instalationDate}
-            //defaultValue={defaultDate}
             inputProps={{ readOnly: true }}
           />
         </div>

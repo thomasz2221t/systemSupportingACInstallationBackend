@@ -19,7 +19,6 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 export type OfferDetailsFormPropType = {
   serviceId: number;
   isEditable: boolean;
-  //refreshParentData?: (buildingId: number) => void;
   handleFormClose?: () => void;
 };
 
@@ -69,7 +68,7 @@ export default function OfferDetailsForm({
     telephone: '',
   });
   const [equipmentPage, setEquipmentPage] = useState<InstallerEquipmentType[]>(
-    []
+    [],
   );
   const [equipmentUnit, setEquipmentUnit] = useState<any>([]);
   const [didOfferStateChanged, setDidOfferStateChanged] =
@@ -79,23 +78,20 @@ export default function OfferDetailsForm({
     return await OfferService.getFindUserAssignedToOffer(offerId).then(
       (response) => {
         setUserBody(response.data);
-      }
+      },
     );
   };
 
   const handleGettingOfferEquipment = async (offerId: number) => {
     return await OfferService.getFindAllEquipmentInOffer(offerId).then(
       (response) => {
-        console.log(response.data);
-        console.log(response.data.content);
         setEquipmentUnit(response.data.content);
-      }
+      },
     );
   };
 
   const handleGettingOfferData = async (serviceId: number) => {
     await OfferService.getFindOfferByServiceId(serviceId).then((response) => {
-      console.log(response.data);
       setOfferBody(response.data);
       const offerId = response.data.id;
       handleGettingOfferEquipment(offerId).then(() => {
@@ -108,18 +104,18 @@ export default function OfferDetailsForm({
     return await InstallerEquipmentService.getFindAllInstallerEquipment().then(
       (response) => {
         setEquipmentPage(response.data.content);
-      }
+      },
     );
   };
 
   const handleChangingOfferStatus = async (
     serviceId: number,
-    statusType: OfferStatusType
+    statusType: OfferStatusType,
   ) => {
     await OfferService.patchUpdateOfferStatus(serviceId, statusType).then(
       () => {
         setDidOfferStateChanged(!didOfferStateChanged);
-      }
+      },
     );
   };
 
@@ -129,7 +125,7 @@ export default function OfferDetailsForm({
 
   const handleUpdatingOfferInstallerEquipment = async (
     offerId: number,
-    equipmentId: number
+    equipmentId: number,
   ) => {
     return await OfferService.patchAssignEquipmentToOffer(offerId, equipmentId);
   };
@@ -155,7 +151,7 @@ export default function OfferDetailsForm({
               description: string;
             }) => {
               handleUpdatingOfferInstallerEquipment(offerBody.id, equipment.id);
-            }
+            },
           );
         });
       });
@@ -183,21 +179,11 @@ export default function OfferDetailsForm({
     setEquipmentUnit([]);
     handleGettingOfferData(serviceId);
     handleGettingAllInstallerEquipment();
-  }, [serviceId, didOfferStateChanged]); //serviceId
+  }, [serviceId, didOfferStateChanged]);
 
   useEffect(() => {
     setCurrentUserId(AuthService.getCurrentUserId());
   }, []);
-
-  // useEffect(() => {
-  //   if (equipmentPage.length > 0) {
-  //     setEquipmentUnit([equipmentPage[0]]);
-  //   }
-  // }, [equipmentPage]);
-
-  console.log(offerBody);
-  console.log(equipmentPage);
-  console.log(equipmentUnit);
 
   return !isEditable ? (
     <>
@@ -218,52 +204,13 @@ export default function OfferDetailsForm({
           <text className="offer-form-header">
             Komonenty potrzebne do instalacji
           </text>
-          {/* <TextField
-            label="Komponenty potrzebne do instalacji"
-            variant="filled"
-            fullWidth
-            value={''}
-            InputProps={{
-              readOnly: true,
-            }}
-          /> */}
-          {/* <Autocomplete
-            value={equipmentUnit}
-            onChange={(event, newValue) => {
-              setEquipmentUnit(newValue);
-            }}
-            multiple
-            id="tags-filled"
-            options={equipmentPage.map((equipment) => equipment.name)}
-            freeSolo
-            renderTags={(value: string[], getTagProps) =>
-              value.map((option: string, index: number) => (
-                <Chip
-                  variant="outlined"
-                  label={option}
-                  {...getTagProps({ index })}
-                />
-              ))
-            }
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Komponenty potrzebne do instalacji"
-                variant="filled"
-                fullWidth
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
-            )}
-          /> */}
           <Autocomplete
             autoComplete
             multiple
             fullWidth
             readOnly
-            options={equipmentPage} //all
-            value={equipmentUnit} //equipmentPage
+            options={equipmentPage}
+            value={equipmentUnit}
             disableCloseOnSelect
             getOptionLabel={(option) => {
               if (option) {
@@ -281,7 +228,6 @@ export default function OfferDetailsForm({
                 {option.name}
               </li>
             )}
-            //style={{ width: 500 }}
             renderInput={(params) => (
               <TextField {...params} label="Komponenty" />
             )}
@@ -304,14 +250,7 @@ export default function OfferDetailsForm({
           <TextField
             id="datetime-select"
             type="datetime-local"
-            //defaultValue="2022-12-31T12:30"
             value={offerBody.datesBegining}
-            //sx={{ width: 250 }}
-            InputLabelProps={
-              {
-                //shrink: true,
-              }
-            }
             inputProps={{ readOnly: true }}
           />
         </div>
@@ -320,14 +259,7 @@ export default function OfferDetailsForm({
           <TextField
             id="datetime-select"
             type="datetime-local"
-            //defaultValue="2022-12-31T12:30"
             value={offerBody.datesEnd}
-            //sx={{ width: 250 }}
-            InputLabelProps={
-              {
-                //shrink: true,
-              }
-            }
             inputProps={{ readOnly: true }}
           />
         </div>
@@ -383,7 +315,7 @@ export default function OfferDetailsForm({
             onClick={() => {
               handleChangingOfferStatus(
                 serviceId,
-                OfferStatusType.CHANGES_REQUIRED
+                OfferStatusType.CHANGES_REQUIRED,
               );
             }}
           >
@@ -438,7 +370,6 @@ export default function OfferDetailsForm({
                 {option.name}
               </li>
             )}
-            //style={{ width: 500 }}
             renderInput={(params) => (
               <TextField {...params} label="Komponenty" />
             )}
@@ -467,14 +398,7 @@ export default function OfferDetailsForm({
           <TextField
             id="datetime-select"
             type="datetime-local"
-            //defaultValue="2022-12-31T12:30"
             value={offerBody.datesBegining}
-            //sx={{ width: 250 }}
-            InputLabelProps={
-              {
-                //shrink: true,
-              }
-            }
             inputProps={{ readOnly: false }}
             onChange={(e) =>
               setOfferBody({
@@ -489,14 +413,7 @@ export default function OfferDetailsForm({
           <TextField
             id="datetime-select"
             type="datetime-local"
-            //defaultValue="2022-12-31T12:30"
             value={offerBody.datesEnd}
-            //sx={{ width: 250 }}
-            InputLabelProps={
-              {
-                //shrink: true,
-              }
-            }
             inputProps={{ readOnly: false }}
             onChange={(e) =>
               setOfferBody({

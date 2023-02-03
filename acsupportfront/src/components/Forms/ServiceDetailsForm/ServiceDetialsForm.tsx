@@ -23,7 +23,6 @@ export type ServiceDetailsFormPropType = {
   buildingId: number;
   description: string;
   mustCreate: boolean;
-  //refreshParentData?: (buildingId: number) => void;
   handleFormClose?: () => void;
 };
 
@@ -33,7 +32,6 @@ export default function ServiceDetailsForm({
   buildingId,
   description,
   mustCreate,
-  //refreshParentData,
   handleFormClose,
 }: ServiceDetailsFormPropType) {
   let today = new Date();
@@ -53,7 +51,7 @@ export default function ServiceDetailsForm({
     description: description,
   });
   const [isServiceFormEditable, setIsServiceFormEditable] = useState<boolean>(
-    !mustCreate
+    !mustCreate,
   );
   const [buildingIdNumber, setBuildingIdNumber] = useState<number>(buildingId);
   const [serviceTypeBody, setServiceTypeBody] = useState<ServiceTypeType>({
@@ -72,24 +70,22 @@ export default function ServiceDetailsForm({
   });
   const [roomPage, setRoomPage] = useState<RoomType[]>([]);
   const [serviceTypesPage, setServiceTypePage] = useState<ServiceTypeType[]>(
-    []
+    [],
   );
   const [isRequestSent, setIsRequestSent] = useState<boolean>(false);
 
   const handleFindingAllRoomsAssignedToBuilding = async (
-    buildingId: number
+    buildingId: number,
   ) => {
     await BuildingService.getFindAllBuildingsRooms(buildingId).then(
       (response) => {
-        console.log(response.data.content);
         setRoomPage(response.data.content);
-      }
+      },
     );
   };
 
   const handleFindingServiceTypes = async () => {
     await ServiceTypeService.getFindAllServiceTypes().then((response) => {
-      console.log(response.data.content);
       setServiceTypePage(response.data.content);
     });
   };
@@ -97,18 +93,16 @@ export default function ServiceDetailsForm({
   const handleGettingServiceDetails = async (serviceId: number) => {
     return await ServiceService.getFindServiceType(serviceId).then(
       (response) => {
-        console.log(response.data);
         setServiceTypeBody(response.data);
-      }
+      },
     );
   };
 
   const handleGettingRoomDetails = async (serviceId: number) => {
     return await ServiceService.getFindServiceRoom(serviceId).then(
       (response) => {
-        console.log(response.data);
         setRoomBody(response.data);
-      }
+      },
     );
   };
 
@@ -120,14 +114,14 @@ export default function ServiceDetailsForm({
 
   const handleAssigningServiceTypeToService = async (
     serviceId: number,
-    serviceTypeId: number
+    serviceTypeId: number,
   ) => {
     return ServiceService.patchAssignTypeToService(serviceId, serviceTypeId);
   };
 
   const handleAssigningRoomToService = async (
     serviceId: number,
-    roomId: number
+    roomId: number,
   ) => {
     return ServiceService.patchAssignServiceToRoom(serviceId, roomId);
   };
@@ -135,25 +129,25 @@ export default function ServiceDetailsForm({
   const manageAssignigRoomAndServiceTypeToService = (
     serviceId: number,
     serviceTypeId: number,
-    roomId: number
+    roomId: number,
   ) => {
     return handleAssigningServiceTypeToService(serviceId, serviceTypeId).then(
       () => {
         handleAssigningRoomToService(serviceId, roomId);
-      }
+      },
     );
   };
 
   const handleCreatingServiceBody = async (
     serviceBody: ServiceType,
     serviceTypeId: number,
-    roomId: number
+    roomId: number,
   ) => {
     ServiceService.postCreateService(serviceBody).then((response) => {
       manageAssignigRoomAndServiceTypeToService(
         response.data,
         serviceTypeId,
-        roomId
+        roomId,
       ).then(() => {
         setIsRequestSent(true);
       });
@@ -163,13 +157,13 @@ export default function ServiceDetailsForm({
   const handleUpdatingServiceBody = async (
     serviceBody: ServiceType,
     serviceTypeId: number,
-    roomId: number
+    roomId: number,
   ) => {
     ServiceService.patchUpdateService(serviceBody).then(() => {
       manageAssignigRoomAndServiceTypeToService(
         serviceBody.id,
         serviceTypeId,
-        roomId
+        roomId,
       );
     });
   };
@@ -177,7 +171,7 @@ export default function ServiceDetailsForm({
   const handleServiceFormSubmiting = (
     serviceBody: ServiceType,
     serviceTypeId: number,
-    roomId: number
+    roomId: number,
   ) => {
     mustCreate === true
       ? handleCreatingServiceBody(serviceBody, serviceTypeId, roomId)
@@ -198,10 +192,6 @@ export default function ServiceDetailsForm({
   }, []);
 
   useEffect(() => {
-    console.log('Rerender');
-  }, [id, date, description]);
-
-  useEffect(() => {
     setData({
       id: id,
       date: date === '' ? defaultDate : date,
@@ -212,12 +202,6 @@ export default function ServiceDetailsForm({
     handleFindingServiceTypes();
     handleGettingRoomAndTypeDetails(id);
   }, [id, date, description]);
-
-  // useEffect(() => {
-  //   if (refreshParentData) {
-  //     refreshParentData(buildingId);
-  //   }
-  // }, [isRequestSent]);
 
   return isServiceFormEditable === true ? (
     <>
@@ -286,15 +270,8 @@ export default function ServiceDetailsForm({
             id="datetime-select"
             label="Wybierz termin instalacji"
             type="datetime-local"
-            //defaultValue="2022-12-31T12:30"
             value={data.date}
             defaultValue={defaultDate}
-            //sx={{ width: 250 }}
-            InputLabelProps={
-              {
-                //shrink: true,
-              }
-            }
             inputProps={{ readOnly: true }}
           />
         </div>
@@ -377,17 +354,9 @@ export default function ServiceDetailsForm({
           <text className="service-form-header">Wybierz termin instalacji</text>
           <TextField
             id="datetime-select"
-            //label="Wybierz termin instalacji"
             type="datetime-local"
-            //defaultValue="2022-12-31T12:30"
             value={data.date}
             defaultValue={defaultDate}
-            //sx={{ width: 250 }}
-            InputLabelProps={
-              {
-                //shrink: true,
-              }
-            }
             inputProps={{ readOnly: false }}
             onChange={(e) =>
               setData({

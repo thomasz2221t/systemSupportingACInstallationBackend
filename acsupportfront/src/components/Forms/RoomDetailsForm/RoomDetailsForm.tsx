@@ -28,7 +28,6 @@ export type roomDetailsFormProp = {
   description: string;
   buildingId: number;
   mustCreate: boolean;
-  //isEditable: () => boolean;
   refreshParentData?: (buildingId: number) => void;
   handleFormClose?: () => void;
 };
@@ -47,9 +46,7 @@ export function RoomDetailsForm({
   mustCreate,
   refreshParentData,
   handleFormClose,
-}: //isEditable,
-//refreshParentData,
-roomDetailsFormProp) {
+}: roomDetailsFormProp) {
   const [data, setData] = useState<RoomType>({
     id: id,
     name: name,
@@ -63,7 +60,7 @@ roomDetailsFormProp) {
   const [roomTypeId, setRoomTypeId] = useState<number>(0);
   const [roomTypePage, setRoomTypePage] = useState<RoomTypeType[]>([]);
   const [isRoomFormEditable, setIsRoomFormEditable] = useState<boolean>(
-    !mustCreate
+    !mustCreate,
   );
   const [isRequestSent, setIsRequestSent] = useState<boolean>(false);
   let isError = false;
@@ -76,14 +73,14 @@ roomDetailsFormProp) {
 
   const handleAssigningRoomTypeToBody = async (
     roomId: number,
-    roomTypeId: number
+    roomTypeId: number,
   ) => {
     return await RoomService.patchAssignTypeToRoom(roomId, roomTypeId);
   };
 
   const handleAssigningBuildingToRoom = async (
     buildingId: number,
-    roomId: number
+    roomId: number,
   ) => {
     return await BuildingService.patchAssignRoomToBuilding(buildingId, roomId);
   };
@@ -91,32 +88,27 @@ roomDetailsFormProp) {
   const handleCreatingRoomBody = async (
     roomBody: RoomType,
     roomTypeId: number,
-    buildingId: number
+    buildingId: number,
   ) => {
     await RoomService.postCreateRoom(roomBody)
       .then((response) => {
         handleAssigningRoomTypeToBody(response.data, roomTypeId)
           .then(() => {
-            console.log(response.data);
             handleAssigningBuildingToRoom(buildingId, response.data).then(
               () => {
                 setIsRequestSent(true);
-              }
+              },
             );
           })
           .catch((error) => console.log(error));
         return response.data;
       })
       .catch((error) => console.log(error));
-    //handleAssigningRoomTypeToBody(roomId, roomTypeId);
-    //handleAssigningBuildingToRoom(buildingId, roomId);
-    //await BuildingService.patchAssignRoomToBuilding(buildingId, roomId);
-    //return roomId;
   };
 
   const handleUpdatingRoomBody = async (
     roomBody: RoomType,
-    roomTypeId: number
+    roomTypeId: number,
   ) => {
     await RoomService.patchUpdateRoom(roomBody.id, roomBody).then(() => {
       handleAssigningRoomTypeToBody(roomBody.id, roomTypeId);
@@ -126,7 +118,7 @@ roomDetailsFormProp) {
   const handleRoomFormSubmiting = (
     roomBody: RoomType,
     roomTypeId: number,
-    buildingId: number
+    buildingId: number,
   ) => {
     mustCreate === true
       ? handleCreatingRoomBody(roomBody, roomTypeId, buildingId)
@@ -414,16 +406,6 @@ roomDetailsFormProp) {
               </MenuItem>
             ))}
           </Select>
-          {/*<TextField
-            label="Przeznaczenie pomieszczenia"
-            variant="filled"
-            size="small"
-            fullWidth
-            value={purpose}
-            InputProps={{
-              readOnly: true,
-            }}
-          />*/}
         </div>
         <div className="room-area-x">
           <text>Długość pomieszczenia</text>

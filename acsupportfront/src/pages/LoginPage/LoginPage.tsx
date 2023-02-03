@@ -1,9 +1,9 @@
-import React from "react";
-import LoginWindow from "components/LoginWindow/LoginWindow";
-import "./LoginPage.scss";
+import React from 'react';
+import LoginWindow from 'components/LoginWindow/LoginWindow';
+import './LoginPage.scss';
 
 export function LoginPage() {
-  const logoImg = require("../../images/logoImg.png");
+  const logoImg = require('../../images/logoImg.png');
 
   return (
     <>
@@ -14,7 +14,6 @@ export function LoginPage() {
           <p className="logo-company">Silent Air Industries</p>
           <img src={logoImg} width="84" height="84" className="login-logo" />
         </div>
-        {/*<div className="login-company"></div>*/}
         <div className="login-component">
           <LoginWindow />
         </div>

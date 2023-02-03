@@ -6,7 +6,6 @@ import {
   SelectChangeEvent,
   TextField,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Icon } from '@iconify/react';
 
 import BuildingTypeType from 'types/BuildingTypeType';
@@ -31,13 +30,7 @@ export type buildingDetailsFormProp = {
   isEditable: () => boolean;
   refreshParentData?: (buildingId: number) => void;
   handleFormClose?: () => void;
-
-  //isEditable: boolean;
 };
-
-/*const styles = makeStyles({
-  notchedOutline: { borderColor: '#f0f !important' },
-});*/
 
 export function BuildingDetailsForm({
   id,
@@ -55,16 +48,6 @@ export function BuildingDetailsForm({
   refreshParentData,
   handleFormClose,
 }: buildingDetailsFormProp) {
-  /*const defaultvalue = {
-    id: id,
-    name: name,
-    imagePath: '',
-    street: street,
-    postCode: postCode,
-    city: city,
-    region: region,
-    descirpiton: additionalInfo,
-  };*/
   const [data, setData] = useState<BuildingType>({
     id: id,
     name: name,
@@ -80,12 +63,8 @@ export function BuildingDetailsForm({
     [],
   );
   const [typeIdNumber, setTypeIdNumber] = useState<number>(0);
-  //const [buildingRefreshedBody, setBuildingRefreshedBody] =
-  //useState<BuildingType>();
   const editableState = isEditable();
-  //const exampleBuilding = require('../../../images/exampleBuilding.jpg');
   let isError = false;
-  //const style = styles();
 
   const handleGettingAllBuildingTypes = async () => {
     await BuildingTypeService.getFindAllBuildingType().then((response) => {
@@ -130,56 +109,28 @@ export function BuildingDetailsForm({
   ) => {
     await BuildingService.postCreateBuilding(buildingBody)
       .then((response) => {
-        //const buildingId = response.data;
-        //buildingId = response.data;
-        console.log(response.data);
         handleUpdatingBuildingType(response.data, buildingTypeId)
           .then(() => {
             handleAssigningUserIdToBuilding(response.data, userId);
           })
           .catch((error) => console.log(error));
 
-        //handleAssigningUserIdToBuilding(Number(buildingId), userId);
         return response.data;
       })
       .catch((error) => console.log(error));
-
-    //handleUpdatingBuildingType(buildingId, buildingTypeId);
-    //handleAssigningUserIdToBuilding(buildingId, userId);
-    //await BuildingService.patchAssignTypeToBuilding(buildingId, buildingTypeId);
-    //await BuildingService.patchAssignUserToBuilding(buildingId, userId);
   };
-
-  /*const createBuilding = (
-    buildingBody: BuildingType,
-    buildingTypeId: number,
-    userId: number
-  ) => {
-    handleCreatingBuildingBody(buildingBody, buildingTypeId);
-    if (newBuildingId > 0) {
-      console.log('jest');
-      console.log(newBuildingId);
-    }
-    handleUpdatingBuildingType(newBuildingId, buildingTypeId);
-    handleAssigningUserIdToBuilding(newBuildingId, userId);
-  };*/
 
   const handleBuildingFormSubmit = (
     buildingBody: BuildingType,
     buildingTypeId: number,
     userId: number,
   ) => {
-    console.log('update');
     mustCreate === true
       ? handleCreatingBuildingBody(buildingBody, buildingTypeId, userId)
       : handleUpdatingBuildingBody(buildingBody, buildingTypeId);
   };
 
   const validate = () => {
-    console.log(data.street);
-    console.log(data.city);
-    console.log(data.postCode);
-    console.log(data.region);
     if (
       data.street === '' ||
       data.city === '' ||
@@ -197,10 +148,8 @@ export function BuildingDetailsForm({
   }, []);
 
   useEffect(() => {
-    //odśwież dane u rodzica !!!! !!!!!
     if (refreshParentData !== undefined) {
       refreshParentData(data.id);
-      //console.log(buildingRefreshedBody);
       setData({
         id: id,
         name: name,
@@ -221,33 +170,6 @@ export function BuildingDetailsForm({
 
   return editableState === false ? (
     <>
-      {/*<div className="building-form-close">
-        <Icon />
-        <Button
-          // style={{
-          //   position: 'relative',
-          //   marginTop: 32,
-          //   left: -82,
-          //   width: 1064,
-          //   height: 53,
-          //   backgroundColor: '#D6E900',
-          //   color: '#ffffff',
-          //   borderRadius: 18,
-          //   padding: '18px 36px',
-          //   fontSize: '18px',
-          //   fontFamily: 'Segoe UI',
-          //   fontStyle: 'normal',
-          //   fontWeight: 500,
-          //   lineHeight: 24,
-          // }}
-          variant="contained"
-          onClick={() => {
-            isEditable();
-          }}
-        >
-          Edytuj budynek
-        </Button>
-      </div>*/}
       <div className="building-details-form">
         <div className="building-name-form">
           <text className="building-form-header">Nazwa budynku</text>
@@ -378,14 +300,6 @@ export function BuildingDetailsForm({
             }
           />
         </div>
-        {/* <div className="building-form-img">
-          <img
-            src={exampleBuilding}
-            width="280"
-            height="170"
-            className="building-form-image"
-          />
-        </div> */}
         <div className="building-additional-info">
           <text className="building-form-header">
             Dodatkowe informacje o budynku
@@ -417,7 +331,6 @@ export function BuildingDetailsForm({
             style={{
               position: 'relative',
               top: 20,
-              //left: 500,
               width: 300,
               height: 50,
               backgroundColor: '#D6E900',
@@ -539,14 +452,6 @@ export function BuildingDetailsForm({
             }}
           />
         </div>
-        {/* <div className="building-form-img">
-          <img
-            src={exampleBuilding}
-            width="280"
-            height="170"
-            className="building-form-image"
-          />
-        </div> */}
         <div className="building-additional-info">
           <text className="building-form-header">
             Dodatkowe informacje o budynku

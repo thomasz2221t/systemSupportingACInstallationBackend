@@ -13,7 +13,6 @@ const getFindAllBuilding = () => {
 };
 
 const getUserBuildings = (userId: number) => {
-  console.log(authHeader());
   return axios.get(`${API_URL}/building/user/${userId}`, {
     headers: authHeader(),
   });
@@ -45,7 +44,7 @@ const postCreateBuilding = (buildingBody: BuildingType) => {
 
 const patchUpdateBuilding = (
   buildingId: number,
-  buildingBody: BuildingType
+  buildingBody: BuildingType,
 ) => {
   return axios.patch(`${API_URL}/building/${buildingId}`, buildingBody, {
     headers: authHeader(),
@@ -56,7 +55,7 @@ const patchAssignTypeToBuilding = (buildingId: number, typeId: number) => {
   return axios.patch(
     `${API_URL}/building/assigntype/${buildingId}`,
     typeId,
-    authHeaderForPrimitiveTypePatch()
+    authHeaderForPrimitiveTypePatch(),
   );
 };
 
@@ -64,7 +63,7 @@ const patchAssignUserToBuilding = (buildingId: number, userId: number) => {
   return axios.patch(
     `${API_URL}/building/assignuser/${buildingId}`,
     userId,
-    authHeaderForPrimitiveTypePatch()
+    authHeaderForPrimitiveTypePatch(),
   );
 };
 
@@ -72,7 +71,7 @@ const patchAssignRoomToBuilding = (buildingId: number, roomId: number) => {
   return axios.patch(
     `${API_URL}/building/assignroom/${buildingId}`,
     roomId,
-    authHeaderForPrimitiveTypePatch()
+    authHeaderForPrimitiveTypePatch(),
   );
 };
 

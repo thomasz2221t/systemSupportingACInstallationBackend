@@ -29,7 +29,6 @@ export default function Navbar() {
               </CustomLinkSingle>
             </ul>
           );
-          break;
         case UserRoles.OPERATOR:
           return (
             <ul>
@@ -38,7 +37,6 @@ export default function Navbar() {
               </CustomLinkFirst>
             </ul>
           );
-          break;
         case UserRoles.ADMIN:
           return (
             <ul>
@@ -47,7 +45,6 @@ export default function Navbar() {
               </CustomLinkFirst>
             </ul>
           );
-          break;
         default:
           return null;
       }

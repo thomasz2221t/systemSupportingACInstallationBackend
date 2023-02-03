@@ -3,11 +3,9 @@
   width: 218px;
   position: fixed;
   top: 0px;
-  //float: left;
   background-color: #3298d1;
   color: white;
   display: flex;
-  //justify-content: space-between;
   box-shadow: 3px 0 5px -2px rgb(0, 0, 0);
 
   .navbar-elements {
@@ -23,7 +21,6 @@
     padding: 15px 0 0 0;
     margin: 0;
     list-style: none;
-    //display: flex;
   }
 
   .navbar-elements ul :hover {

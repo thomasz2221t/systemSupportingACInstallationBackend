@@ -9,7 +9,6 @@ import Chat from 'components/Chat/Chat';
 import AuthService from 'services/auth/AuthService';
 import OfferDetailsForm from 'components/Forms/OfferDetailsForm/OfferDetailsForm';
 import ServiceService from 'services/ServiceService';
-import ServiceDetailsForm from 'components/Forms/ServiceDetailsForm/ServiceDetialsForm';
 import OperatorServiceType from 'types/OperatorServiceType';
 
 import './OperatorServiceAndOfferPage.scss';
@@ -19,16 +18,15 @@ export function OperatorServiceAndOfferPage() {
   const [userId, setUserId] = useState<number>(0);
   const [servicePage, setServicePage] = useState<OperatorServiceType[]>([]);
   const [servicePageNumber, setServicePageNumber] = useState(0);
-  const [serviceRowsPerPage, setServiceRowsPerPage] = useState<number>(1); //5
-  const [serviceRowsPerPageOption] = useState([1]); //const [serviceRowsPerPageOption] = useState([1, 2, 5, 10, 15]);
+  const [serviceRowsPerPage, setServiceRowsPerPage] = useState<number>(1);
+  const [serviceRowsPerPageOption] = useState([1]);
   const [servicePageAllElements, setServicePageAllElements] =
     useState<number>(0);
   const { buildingId } = useParams();
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    console.log(event.target.value);
     setServiceRowsPerPage(parseInt(event.target.value, 10));
     setServicePageNumber(0);
   };
@@ -36,16 +34,13 @@ export function OperatorServiceAndOfferPage() {
   const handleGettingBuildingServices = async (
     buildingId: number,
     servicePageNumber: number,
-    serviceRowsPerPage: number
+    serviceRowsPerPage: number,
   ) => {
     await ServiceService.getFindAllOperatorServices(
       buildingId,
       servicePageNumber,
-      serviceRowsPerPage
+      serviceRowsPerPage,
     ).then((response) => {
-      console.log(response.data);
-      console.log(response.data.content);
-      console.log(response.data.totalElements);
       setServicePage(response.data.content);
       setServicePageAllElements(response.data.totalElements);
     });
@@ -56,12 +51,11 @@ export function OperatorServiceAndOfferPage() {
   }, []);
 
   useEffect(() => {
-    console.log(servicePageNumber);
     if (buildingId) {
       handleGettingBuildingServices(
         Number(buildingId),
         servicePageNumber,
-        serviceRowsPerPage
+        serviceRowsPerPage,
       );
     }
   }, [buildingId, servicePageNumber, serviceRowsPerPage]);
@@ -82,29 +76,22 @@ export function OperatorServiceAndOfferPage() {
           labelRowsPerPage={'Liczba elementów na stronie:'}
         />
       </div>
-      {servicePage
-        // .sort((a, b) => a.id - b.id)
-        // .slice(
-        //   servicePageNumber * serviceRowsPerPage,
-        //   servicePageNumber * serviceRowsPerPage + serviceRowsPerPage
-        // )
-        .map((data) => {
-          console.log(data);
-          return (
-            <div id={`${data.id}`} className="service-details-component">
-              <ServiceOperatorForm
-                id={data.id}
-                instalationDate={data.instalationDate}
-                clientsData={data.clientsData}
-                roomId={data.roomId}
-                buildingId={data.buildingId}
-                roomQubature={data.roomQubature}
-                requiredACPower={data.requiredACPower}
-                description={data.description}
-              />
-            </div>
-          );
-        })}
+      {servicePage.map((data) => {
+        return (
+          <div id={`${data.id}`} className="service-details-component">
+            <ServiceOperatorForm
+              id={data.id}
+              instalationDate={data.instalationDate}
+              clientsData={data.clientsData}
+              roomId={data.roomId}
+              buildingId={data.buildingId}
+              roomQubature={data.roomQubature}
+              requiredACPower={data.requiredACPower}
+              description={data.description}
+            />
+          </div>
+        );
+      })}
       {buildingId ? (
         <div id="chat-operator">
           <Chat userId={userId} buildingId={Number(buildingId)} />

@@ -18,65 +18,28 @@ function LoginWindow() {
   const [data, setData] = useState(defaultTypeData);
   const [, setIsTypeRequestSent] = useState<boolean>(false);
   const navigate = useNavigate();
-  //let location = useLocation();
-
-  /*useEffect(() => {
-    setState(AuthService.checkIfUserLogged());
-  }, []);
-
-  useEffect(() => {
-    console.log(state.redirect);
-    if (state.redirect) {
-      navigate(`${state.redirect}`);
-    }
-  }, []);*/
 
   async function handleUpdateData(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log(data.login);
-    console.log(data.password);
     setIsTypeRequestSent(true);
 
-    AuthService.login(data.login, data.password).then(
-      () => {
-        console.log('link');
-        //console.log(AuthService.getCurrentUser());
-        //<Link to="/obiekty" />;
-        //<Redirect to="/obiekty" />;
-        //props.history.push("/obiekty");
-        //<Navigate to="/obiekty" state={{ from: location }} />;
-        if (AuthService.getCurrentUserRoles()) {
-          switch (AuthService.getCurrentUserRoles()[0]) {
-            case UserRoles.ADMIN:
-              navigate('/admin/operator');
-              break;
-            case UserRoles.OPERATOR:
-              navigate('/operator/uslugi');
-              break;
-            case UserRoles.CLIENT:
-              navigate('/obiekty');
-              break;
-          }
-        } else {
-          console.log('no permission to log');
+    AuthService.login(data.login, data.password).then(() => {
+      if (AuthService.getCurrentUserRoles()) {
+        switch (AuthService.getCurrentUserRoles()[0]) {
+          case UserRoles.ADMIN:
+            navigate('/admin/operator');
+            break;
+          case UserRoles.OPERATOR:
+            navigate('/operator/uslugi');
+            break;
+          case UserRoles.CLIENT:
+            navigate('/obiekty');
+            break;
         }
-      },
-      /*(error) => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-
-        setData({
-          login: data.login,
-          password: data.password,
-          loading: false,
-          message: resMessage,
-        });
-      }*/
-    );
+      } else {
+        console.log('no permission to log');
+      }
+    });
   }
 
   return (

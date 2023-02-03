@@ -90,7 +90,7 @@ export type TableOperatorBuildingType = {
 
 export function OperatorServicesPage() {
   const [buildingPage, setBuildingPage] = useState<TableOperatorBuildingType[]>(
-    []
+    [],
   );
   const [pageNumber, setPageNumber] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
@@ -98,7 +98,7 @@ export function OperatorServicesPage() {
   const navigate = useNavigate();
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPageNumber(0);
@@ -110,7 +110,6 @@ export function OperatorServicesPage() {
 
   const handleFindingAllBuildings = () => {
     BuildingService.getFindBuildingTableData().then((response) => {
-      console.log(response.data.content);
       setBuildingPage(response.data.content);
     });
   };
@@ -153,7 +152,7 @@ export function OperatorServicesPage() {
             {buildingPage
               .slice(
                 pageNumber * rowsPerPage,
-                pageNumber * rowsPerPage + rowsPerPage
+                pageNumber * rowsPerPage + rowsPerPage,
               )
               .map((row) => {
                 return (

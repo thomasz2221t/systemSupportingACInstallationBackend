@@ -48,55 +48,34 @@ export function ServicePage() {
   const [chosenBuildingId, setChosenBuildingId] = useState<number>(0);
   const [serviceFormOpen, setServiceFormOpen] = useState<boolean>(false);
   const [servicePageNumber, setServicePageNumber] = useState(0);
-  const [serviceRowsPerPage, setServiceRowsPerPage] = useState<number>(1); //5
-  const [serviceRowsPerPageOption] = useState([1]); //const [serviceRowsPerPageOption] = useState([1, 2, 5, 10, 15]);
+  const [serviceRowsPerPage, setServiceRowsPerPage] = useState<number>(1);
+  const [serviceRowsPerPageOption] = useState([1]);
   const [servicePageAllElements, setServicePageAllElements] =
     useState<number>(0);
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    console.log(event.target.value);
     setServiceRowsPerPage(parseInt(event.target.value, 10));
     setServicePageNumber(0);
   };
 
   const handleGetingUserBuildings = async (userId: number) => {
     await BuildingService.getUserBuildings(userId).then((response) => {
-      console.log(response.data);
-      console.log(response.data.content);
       setUserBuildings(response.data.content);
-      // setChosenBuilding({
-      //   label:
-      //     response.data.content[0].name +
-      //     ', ' +
-      //     response.data.content[0].street +
-      //     ' ' +
-      //     response.data.content[0].city +
-      //     ', ' +
-      //     response.data.content[0].postCode +
-      //     ', ' +
-      //     response.data.content[0].region,
-      //   id: response.data.content[0].id,
-      // });
-      //setChosenBuildingId(response.data.content[0].id);
-      console.log(chosenBuildingId);
     });
   };
 
   const handleGettingBuildingServices = async (
     buildingId: number,
     servicePageNumber: number,
-    serviceRowsPerPage: number
+    serviceRowsPerPage: number,
   ) => {
     await ServiceService.getFindServiceByBuildingId(
       buildingId,
       servicePageNumber,
-      serviceRowsPerPage
+      serviceRowsPerPage,
     ).then((response) => {
-      console.log(response.data);
-      console.log(response.data.content);
-      console.log(response.data.totalElements);
       setServicePage(response.data.content);
       setServicePageAllElements(response.data.totalElements);
     });
@@ -118,20 +97,14 @@ export function ServicePage() {
     handleGetingUserBuildings(userId);
   }, [userId]);
 
-  // useEffect(() => {
-  //   handleGettingBuildingServices(chosenBuildingId);
-  // }, [servicePageNumber]);
-
   useEffect(() => {
-    console.log(servicePageNumber);
     handleGettingBuildingServices(
       chosenBuildingId,
       servicePageNumber,
-      serviceRowsPerPage
+      serviceRowsPerPage,
     );
   }, [chosenBuildingId, servicePageNumber, serviceRowsPerPage]);
 
-  console.log(chosenBuilding);
   return (
     <>
       <Navbar />
@@ -149,8 +122,6 @@ export function ServicePage() {
           onChange={(event, newValue) => {
             setChosenBuilding(newValue);
             setChosenBuildingId(newValue.id);
-            console.log(newValue);
-            console.log(newValue.id);
           }}
           renderInput={(params) => (
             <TextField {...params} label="Buildings" id={params.id} />
@@ -184,72 +155,34 @@ export function ServicePage() {
         rowsPerPage={serviceRowsPerPage}
         labelRowsPerPage={'Liczba elementów na stronie:'}
       />
-      {/* <Pagination
-        sx={{
-          width: '300px',
-          marginLeft: '250px',
-        }}
-        count={servicePage.length}
-        showFirstButton
-        showLastButton
-      /> */}
-      {/* <div id="service-details-component">
-        <ServiceDetailsForm
-          id={0}
-          date={new Date()}
-          serviceId={0}
-          serviceTypeName={''}
-          buildingId={0}
-          roomId={0}
-          roomName={''}
-          description={''}
-          mustCreate={false}
-          handleFormClose={() => {
-            return false;
-          }}
-        /> 
-        </div>*/}
-      {servicePage
-        // .sort((a, b) => a.id - b.id)
-        // .slice(
-        //   servicePageNumber * serviceRowsPerPage,
-        //   servicePageNumber * serviceRowsPerPage + serviceRowsPerPage
-        // )
-        .map((data) => {
-          console.log(data);
-          return (
-            <div id={`${data.id}`} className="service-details-component">
-              <ServiceDetailsForm
-                id={data.id}
-                date={data.date}
-                buildingId={chosenBuildingId}
-                description={data.description}
-                mustCreate={false}
-                handleFormClose={() => {
-                  return false;
-                }}
-              />
-            </div>
-          );
-        })}
+      {servicePage.map((data) => {
+        return (
+          <div id={`${data.id}`} className="service-details-component">
+            <ServiceDetailsForm
+              id={data.id}
+              date={data.date}
+              buildingId={chosenBuildingId}
+              description={data.description}
+              mustCreate={false}
+              handleFormClose={() => {
+                return false;
+              }}
+            />
+          </div>
+        );
+      })}
       <div id="chat-component">
         {chosenBuildingId !== 0 ? (
           <Chat buildingId={chosenBuildingId} userId={userId} />
         ) : null}
       </div>
-      {servicePage
-        // .sort((a, b) => a.id - b.id)
-        // .slice(
-        //   servicePageNumber * serviceRowsPerPage,
-        //   servicePageNumber * serviceRowsPerPage + serviceRowsPerPage
-        // )
-        .map((data) => {
-          return (
-            <div id={`${data.id}`} className="offer-details-component">
-              <OfferDetailsForm serviceId={data.id} isEditable={false} />
-            </div>
-          );
-        })}
+      {servicePage.map((data) => {
+        return (
+          <div id={`${data.id}`} className="offer-details-component">
+            <OfferDetailsForm serviceId={data.id} isEditable={false} />
+          </div>
+        );
+      })}
       <Footer />
       <Dialog
         sx={{
@@ -277,7 +210,6 @@ export function ServicePage() {
             buildingId={chosenBuildingId}
             description={''}
             mustCreate={true}
-            //refreshParentData={handleGettingBuildingServices}
             handleFormClose={handleClose}
           />
         </DialogContent>
