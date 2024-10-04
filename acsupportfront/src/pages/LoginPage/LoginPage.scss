@@ -1,0 +1,63 @@
+.login-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #3298d1;
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+  .white-polygon {
+    position: absolute;
+    top: -180px;
+    transform: rotate(45.08deg);
+    border-left: 400px solid transparent;
+    border-right: 400px solid transparent;
+    border-bottom: 800px solid #fafafa;
+  }
+
+  .red-polygon {
+    position: absolute;
+    left: 309px;
+    top: 130px;
+    transform: rotate(45.08deg);
+    height: -10px;
+    border-left: 400px solid transparent;
+    border-right: 400px solid transparent;
+    border-bottom: 800px solid #fd3131;
+  }
+
+  .company-symbols {
+    margin-top: 32px;
+    margin-left: 1117px;
+    display: flex;
+  }
+
+  .login-logo {
+    width: 84px;
+    height: 84px;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .logo-company {
+    width: 248px;
+    height: 58px;
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 700;
+    display: flex;
+    font-size: 24px;
+    line-height: 29px;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+  }
+
+  .login-component {
+    display: flex;
+    margin-left: 917px;
+    margin-top: 0px;
+    align-items: center;
+  }
+}

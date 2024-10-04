@@ -1,0 +1,94 @@
+.login-panel {
+  width: 432px;
+  height: 545px;
+  background: #f5f5f5;
+  border-radius: 76px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+  .log-in-label {
+    padding-left: 150px;
+    padding-top: 36px;
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 29px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #000000;
+  }
+
+  input {
+    width: 328px;
+    height: 32px;
+    margin-top: 40px;
+    padding: 5px 5px 5px 5px;
+    align-items: center;
+    background: #d9d9d9;
+    border-radius: 18px;
+    text-align: center;
+    font-family: 'Calibri';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 22px;
+    letter-spacing: 0.05em;
+    color: #545353;
+  }
+
+  .login-icon {
+    position: relative;
+    top: 9px;
+    right: 3px;
+  }
+
+  .password-icon {
+    position: relative;
+    top: 10px;
+    right: 4px;
+  }
+
+  .password-input {
+    margin-top: 60px;
+  }
+
+  .log-in-button {
+    width: 332px;
+    height: 60px;
+    margin-top: 60px;
+    margin-left: 10px;
+    background: #00c0c0;
+    border-radius: 129px;
+    text-align: center;
+    font-family: 'Calibri';
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 30px;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+  }
+
+  .log-in-button:hover {
+    background-color: #15fbfb;
+  }
+
+  .create-account-link {
+    margin-top: 48px;
+    margin-left: 10px;
+    font-family: 'Calibri';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 22px;
+    line-height: 27px;
+    align-items: center;
+    text-align: center;
+  }
+
+  #account-link {
+    color: #29292e;
+    text-decoration: none;
+  }
+}

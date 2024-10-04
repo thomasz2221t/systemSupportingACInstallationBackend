@@ -1,0 +1,101 @@
+#operator-service-form {
+  position: relative;
+  width: 1088px;
+  height: 520px;
+  display: grid;
+  background: #90ff38;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 18px;
+  grid-template-columns: 20px 1fr 1fr 20px;
+  grid-template-rows: 20px 1fr 1fr 1fr 1fr 1fr 20px;
+  gap: 10px;
+
+  #operator-service-client {
+    height: 85px;
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    align-items: center;
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  #operator-installation-date {
+    height: 85px;
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    align-items: center;
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  #operator-service-building-type {
+    height: 85px;
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    align-items: center;
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  #operator-service-room-type {
+    height: 85px;
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    align-items: center;
+    grid-column: 3;
+    grid-row: 3;
+  }
+
+  #operator-service-room-area {
+    height: 85px;
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    align-items: center;
+    grid-column: 2;
+    grid-row: 4;
+  }
+
+  #operator-service-required-power {
+    height: 85px;
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    align-items: center;
+    grid-column: 3;
+    grid-row: 4;
+  }
+
+  #operator-service-type {
+    height: 85px;
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    align-items: center;
+    grid-column: 2/4;
+    grid-row: 5;
+  }
+
+  #operator-service-description {
+    height: 85px;
+    display: inline-grid;
+    flex-direction: column;
+    text-align: left;
+    align-items: center;
+    grid-column: 2/4;
+    grid-row: 6;
+  }
+}
+
+.operator-service-form-header {
+  font-family: 'Segoe UI';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: #6a6767;
+}

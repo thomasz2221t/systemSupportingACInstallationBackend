@@ -1,0 +1,65 @@
+.navbar-body {
+  height: 100%;
+  width: 218px;
+  position: fixed;
+  top: 0px;
+  background-color: #3298d1;
+  color: white;
+  display: flex;
+  box-shadow: 3px 0 5px -2px rgb(0, 0, 0);
+
+  .navbar-elements {
+    position: absolute;
+    top: 135px;
+    left: 1px;
+    width: 100%;
+    height: 50px;
+  }
+
+  .navbar-elements ul {
+    width: 99%;
+    padding: 15px 0 0 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .navbar-elements ul :hover {
+    background-color: #15fbfb;
+  }
+
+  .navbar-elements a {
+    color: white;
+    text-decoration: none;
+  }
+
+  .navbar-element-first {
+    padding: 5px 5px 5px 5px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #000000;
+  }
+
+  .navbar-element-single {
+    padding: 5px 5px 5px 5px;
+    border-style: solid;
+    border-top-style: none;
+    border-width: 2px;
+    border-color: #000000;
+  }
+
+  .active {
+    border-left-color: #ee0202;
+    border-left-width: 5px;
+
+    a {
+      color: #fbde37;
+    }
+  }
+}
+
+.company-logo {
+  height: 84px;
+  width: 84px;
+  margin-top: 36px;
+  margin-left: 69px;
+}
